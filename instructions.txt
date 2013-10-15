@@ -12,8 +12,36 @@ Commit your changes locally:
 	$ git add <file-name>
 	- then commit
 	$ git commit -m "Type a descriptive message that represents your changes."
-	- shorthand
-	- sho$ git commit -am "message"
+	- shorthand: add and commit in one fell swoop (I want to say this only adds existing, but edited files in the repo)
+	$ git commit -am "message"
 
 Push your changes (what you have committed) to the server:
 	$git push origin master
+
+Step-by-Step
+	$ git pull origin master
+		then
+	$ git add IChangedThisFile.ext
+		or
+	$ git add IAddedThisNewFile.ext
+		then
+	$ git commit -m "These are the changes that I made!"
+		now that you've committed, you can push to the server
+	$ git push origin master
+
+Setting up git for the first time
+	- set up your username and/or email
+		- this is a global setting that is applied once
+		$ git config --global user.name "My name is..."
+		- this is important - it's what will show up with your commits
+	- create a new directory for the project
+	- change prompt (current working directory) to project directory
+	- run
+		$ git init
+		- this initializes the working directory as a git directory
+	- set up the origin
+		- add "origin" as an alias for the project URI (so that you don't have to type it each time)
+		$ git remote add origin https://github.com/RogerGee/AdventureGame
+		- note (I believe) the URI is case-sensitive
+	- pull down the repo
+		$ git pull origin master
