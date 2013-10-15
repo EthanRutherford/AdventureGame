@@ -1,0 +1,19 @@
+Instructions for GitHub
+
+origin: https://github.com/RogerGee/AdventureGame.git
+working branch: [just] master
+
+Get lastest version:
+	- do this before working on project so that everything is up-to-date
+	$ git pull origin master
+
+Commit your changes locally:
+	- do this when you edit/create file
+	$ git add <file-name>
+	- then commit
+	$ git commit -m "Type a descriptive message that represents your changes."
+	- shorthand
+	- sho$ git commit -am "message"
+
+Push your changes (what you have committed) to the server:
+	$git push origin master
