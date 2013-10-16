@@ -26,7 +26,9 @@ List tasks for each member of the group. Feel free to make changes. I may have f
 	1. markup system for adventure text file
 	2. room class design
 	3. io system design
-		* I'll use conditional compilation to do terminal/console buffering/coloring
+		* I'll use conditional compilation to do terminal/console buffering/coloring (Ethan: actually, if
+		we follow the game's original design there is no menu rendering or screen clearing. We can continue
+		this idea if you want though.)
 		* libraries:
 			* Linux: curses/ANSI color codes
 			* Windows: win32 api console objects
