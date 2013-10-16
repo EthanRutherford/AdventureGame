@@ -1,14 +1,28 @@
 //so, players, I guess?
 
-class player{
+class player{		//the player. Has health and inventory
 	public:
-		void move();
-		void take();
-		int attack() const;
-		void takedamage(int);
+		void move(string whereto);	//move between rooms
+		int gethealth() const;	//returns current health
+		void take(Item item);		//take an item
+		void use(int id, Object object);	//use an item(id) on an object
+		int attack() const;	//for giving damage
+		void takedamage(int);	//for receiving damage
 	private:
-		int health;
-		int maxhealth;
-		Item[?] items; //eh
-		<something> currentroom;
+		int health;	//current health level
+		int maxhealth;	//health maximum
+		Item[?] items;	//? = however many different items we have.
+		<something> currentroom;	//however we are going to track room
+}
+
+///////////////nextfile
+
+class object{		//objects are static things in the world that need to be
+	public:			//activated to progress. Can only be activated by correct item
+		string getdesc() const;	//returns description
+		void activate(int id);	//activates, but only if id of item is correct
+	private:
+		string description;	//text description of object
+		bool activated;		//status of object
+		int activatorItem;	//Item id to be used on object to activate it
 }
