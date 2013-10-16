@@ -1,1 +1,14 @@
-Cool stuff that is awesome.
+//so, players, I guess?
+
+class player{
+	public:
+		void move();
+		void take();
+		int attack() const;
+		void takedamage(int);
+	private:
+		int health;
+		int maxhealth;
+		Item[?] items; //eh
+		<something> currentroom;
+}
