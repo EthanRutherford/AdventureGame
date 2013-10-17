@@ -63,8 +63,10 @@ class Creature
  public:
 	
 	CreatureType getType();
-	void setType(CreatureType);
+	void setType(CreatureType); 
+
+	//we may or may not make a creature's behavior part of a subclass
 
  private: 
-	CreatureType Cname;
+	CreatureType Cname; 
  };
