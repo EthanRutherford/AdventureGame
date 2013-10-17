@@ -1,9 +1,11 @@
 # Adventure Game Project - CS 230
 
-## Members:
-	Ethan R.
-	Ethan W.
-	Roger G.
+## Group Members:
+| Member | Email Prefix |
+| ------ | ------------ |
+| EthanR | epr12a       |
+| EthanW | eaw09c       |
+| RogerG | rpg11a       |
 
 ## Links from Canvas:
 [Wikipedia Article](http://en.wikipedia.org/wiki/Colossal_Cave_Adventure)
