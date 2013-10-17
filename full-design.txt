@@ -1,0 +1,244 @@
+/* Roger Gee Design Document
+ * Project: Adventure Game
+ * Note: I will have more to add to this later but have NO TIME because of LES MISERABLES ... I feel miserable quite frankly
+ * Items in this document: 
+ *  1.) adventure text file format
+ *   - this will be a companion file that uses a markup
+ *  language-like format to represent rooms, items, creatures,
+ *  objects, ETC. that are variable. In other words, it represents
+ *  specific instantiations of game structures represented by the
+ *  classes in this document.
+ *  2.) room type
+ *  3.) io model
+ *   - this consists of any classes that may be needed
+ *  to read in and parse user input/display output
+ */
+
+/* Adventure Game Text File Format
+ *  - Any kind of parameterized data will go into a
+ *  companion text file. This text file will utilize a 
+ *  simple markup format that will represent maps, items, everything, ETC.
+ */
+
+/* class tag
+ *  - the tag class will represent a markup tag and will
+ *  provide the behavior required to parse a tag, its content,
+ *  and any of its subtags
+ */
+
+class tag
+{
+    friend istream& operator >>(istream&,tag&); // completeness, call member functions...
+    friend ostream& operator <<(ostream&,const tag&);
+    typedef tag* _Child;
+    using std::string;
+    using std::list;
+    using std::stack;
+    using std::size_t;
+    using std::ostream;
+    using std::istream;
+public:
+    tag();
+    tag(const string& name);
+    tag(const string& name,const string& content);
+    tag(const string& name,const string& attribute);
+    ~tag(); // sub-tags allocated on heap
+
+    string get_name() const;
+    string get_content() const;
+    string get_attribute() const;
+
+    void read(istream&);
+    void set_name(const string&);
+    void set_content(const string&); //recursive
+    void set_content(istream&); // 
+    void set_attribute(const string&);
+
+    // I have more stuff to add but not enough time...
+private:
+    string _name;
+    string _content;
+    string _attribute;
+    list<_Child> _subTags;
+    size_t _pos; // position within parent tag content stream; init=0
+};
+
+// define directions - 8-directional
+// I might later change these values
+// so that they can form a bitmask
+// for easy conversions
+//   
+enum direction
+{
+    NORTH,
+    NORTHWEST,
+    NORTHEAST,
+    SOUTH,
+    SOUTHWEST,
+    SOUTHEAST,
+    EAST,
+    WEST
+};
+
+/* class gamemap
+ *  a gamemap will coordinate all the maps, plus
+ *  load them all from the companion file; the gamemap
+ *  object (only one should have to be created per game)
+ *  will manage the maps plus each 
+ */
+// class room is in scope...
+extern const char* const COMPANION_FILE; // store pointer to literal that represents companion file device ID
+class gamemap
+{
+    using std::string;
+public:
+    gamemap();
+    ~gamemap(); // delete dbl-l-list
+
+    string get_current_room_id()
+    { return _pCurRoom->get_id/name(); }
+
+    void advance(direction); // ...
+
+    // load up those specific room instantiations defined in the companion file
+    bool load_from_file(const char* fileName); // return success, use tag type, ...
+
+    // I probably would have more stuff to add if I had more time!
+private:
+    room* _pCurRoom;
+    room* _pRoomHead; // dbl-list of rooms; could cheat and use std::list<room>; just used for storage
+};
+
+/* class room
+ *  A room will represent an area that the player is currently in, plus
+ *  any actions that the the player can take while in the room.
+ */
+
+class room
+{
+    friend class gamemap; // allow gamemap to access neighbors
+    using std::string;
+    using std::map;
+public:
+    room(); // create a room + any useful constructor overloads...
+
+    // get/set name/id
+    string get_name() const;
+    void set_name(const string& n);
+    
+    void print_text() const; // do something fancy...
+
+    // I probably would have more stuff to add if I had more time!
+private: // some things may need to be made protected if specific room functionality needs to be built into sub-classes...
+    string _id;
+    string _text; // text for room
+    room* _neighbors[8]; // lookup by: _neighbors[ (int) direction ]
+};
+
+
+
+
+//Ethan Rutherford
+
+class player{		//the player. Has health and inventory
+	public:
+		void move(string whereto);	//move between rooms
+		int gethealth() const;	//returns current health
+		void take(Item item);		//take an item
+		void use(int id, Object object);	//use an item(id) on an object
+		int attack() const;	//for giving damage
+		void takedamage(int);	//for receiving damage
+	private:
+		int health;	//current health level
+		int maxhealth;	//health maximum
+		Item[?] items;	//? = however many different items we have.
+		string/*?*/ currentroom;	//however we are going to save current room
+}
+
+///////////////nextfile
+
+class object{		//objects are static things in the world that need to be
+	public:			//activated to progress. Can only be activated by correct item
+		string getdesc() const;	//returns description
+		void activate(int id);	//activates, but only if id of item is correct
+	private:
+		string description;	//text description of object
+		bool activated;		//status of object
+		int activatorItem;	//Item id to be used on object to activate it
+}
+
+
+
+
+Ethan W. Design Document
+
+enum Effect {INVISIBLE, FIREPROOF, CURED, QUENCHED, LIT}; //This is an example of an enumeration, for disposables, if we so choose to implement disposables that way.  For example, water's effect is QUENCHED, Invisibility Potion's effect is INVISIBLE
+
+enum CreatureType { DWARF, BEAR, PIRATE, DRAGON}; //since this is very basic, meaning we cannot be certain at this point what enumerations we might use. 
+
+class Item
+{
+ public:
+	Item();
+	~Item();
+	
+	virtual bool can_take_()const
+	{return true;}	
+
+	void setName(string);
+	string getName()const;
+	
+	virtual void useItem();// May or may not implement item usage within to 
+
+private:
+	
+	string Name;
+	
+	};
+
+class Immovable: public Item
+{
+ virtual bool can_take_()const
+	{return false;}	
+ };
+
+
+class Disposable: public Item //potions, etc.
+{
+ public:
+			
+	Effect getEffect()const;
+	void setEffect(Effect);
+	
+	
+	bool getStatus()const;
+	void setStatus(bool);
+	
+ private:
+	bool Status; //can be initialized to true, meaning can be used.  For example, a potion in inventory that has not been drunk will be true.
+	Effect x;
+ };
+
+class Treasure: public Item //a Treasure Item has a value
+{
+ public:
+	double getValue()const;
+ 	void setValue(double);
+	
+ private:
+	double Value;	
+ };
+p
+
+class Creature
+{
+ public:
+	
+	CreatureType getType();
+	void setType(CreatureType); 
+
+	//we may or may not make a creature's behavior part of a subclass
+
+ private: 
+	CreatureType Cname; 
+ };

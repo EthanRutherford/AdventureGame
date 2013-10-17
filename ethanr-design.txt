@@ -12,7 +12,7 @@ class player{		//the player. Has health and inventory
 		int health;	//current health level
 		int maxhealth;	//health maximum
 		Item[?] items;	//? = however many different items we have.
-		<something> currentroom;	//however we are going to track room
+		string/*?*/ currentroom;	//however we are going to save current room
 }
 
 ///////////////nextfile
