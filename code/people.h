@@ -16,7 +16,7 @@ class Player: public Person{	//Players have inventory, and ability to "use"
 	public:
 		Item getItem(int id) const;
 		int getItemCount(int id) const;
-		void use(int id, Interactive object);	//attempt to use item on object
+		void use(int id, Interactive& object);	//attempt to use item on object
 		void use(int id);						//use consumable item
 	private:
 		Item inventory[25];		//placeholder number

@@ -30,8 +30,10 @@ class Interactive: public Object{	//an object that an item can be used on
 	public:
 		bool isActive() const {return activated;};
 		bool activate(int id); //if correct item id, change activated state, return true if correct item
-		Interactive(int id): activatorId(id), activated(false);
+		Interactive();
 	private:
 		int activatorId;
 		bool activated;
+		std::string successMessage;
+		std::string failureMessage;
 };
