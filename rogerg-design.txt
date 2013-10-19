@@ -24,6 +24,33 @@
  *  - the tag class will represent a markup tag and will
  *  provide the behavior required to parse a tag, its content,
  *  and any of its subtags
+
+Markup Example:
+
+<room>
+	<! Names will be case-insensitive />
+	<name> Tombs </name>
+	<north Dungeon1/>
+	<south Dungeon2/>
+	<east Dungeon3/>
+	<west Dungeon4/>
+	<northw Forest of Sharp Objects/>
+	<northe Forest of Dull Objects/>
+	<southw Forest of Semi-Dangerous Objects/>
+	<southe Abyss version 1.01/>
+	
+	<! A text tag will preserve all formatting. />
+	<text>You are currently in the tombs. Watch out for ghosts and other NPCs that may or may not want to kill you.</text>
+</room>
+
+<room>
+	<! flexible syntax/>
+	<name Dungeon1/>
+	<! Yes, the directions can logically make no sense. Go back the way you came and 
+	<south> Littleroot Town </south>
+
+	<text>You are currently in Dungeon1. Make sure that you don't feed a key to any of the prisoners, or cheese puffs for that matter.</text>
+</room>
  */
 
 class tag
@@ -31,12 +58,6 @@ class tag
     friend istream& operator >>(istream&,tag&); // completeness, call member functions...
     friend ostream& operator <<(ostream&,const tag&);
     typedef tag* _Child;
-    using std::string;
-    using std::list;
-    using std::stack;
-    using std::size_t;
-    using std::ostream;
-    using std::istream;
 public:
     tag();
     tag(const string& name);
@@ -64,10 +85,6 @@ private:
 };
 
 // define directions - 8-directional
-// I might later change these values
-// so that they can form a bitmask
-// for easy conversions
-//   
 enum direction
 {
     NORTH,
@@ -90,7 +107,6 @@ enum direction
 extern const char* const COMPANION_FILE; // store pointer to literal that represents companion file device ID
 class gamemap
 {
-    using std::string;
 public:
     gamemap();
     ~gamemap(); // delete dbl-l-list
@@ -98,12 +114,11 @@ public:
     string get_current_room_id()
     { return _pCurRoom->get_id/name(); }
 
-    void advance(direction); // ...
+    bool advance(direction); // return false if no room lies to the specified direction
 
     // load up those specific room instantiations defined in the companion file
     bool load_from_file(const char* fileName); // return success, use tag type, ...
 
-    // I probably would have more stuff to add if I had more time!
 private:
     room* _pCurRoom;
     room* _pRoomHead; // dbl-list of rooms; could cheat and use std::list<room>; just used for storage
@@ -117,8 +132,6 @@ private:
 class room
 {
     friend class gamemap; // allow gamemap to access neighbors
-    using std::string;
-    using std::map;
 public:
     room(); // create a room + any useful constructor overloads...
 
@@ -128,7 +141,6 @@ public:
     
     void print_text() const; // do something fancy...
 
-    // I probably would have more stuff to add if I had more time!
 private: // some things may need to be made protected if specific room functionality needs to be built into sub-classes...
     string _id;
     string _text; // text for room

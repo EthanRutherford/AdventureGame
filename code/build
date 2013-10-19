@@ -1,0 +1,6 @@
+#!/bin/bash
+# This file is owned by Roger. It will compile the AdventureGame project if you
+# are using a bash shell on Linux.
+
+# compile the project with the ADVENTUREGAME_LINUX symbol defined
+g++ *.cpp -o adventure -Wall -Werror -Wextra -Wshadow -Wfatal-errors -Wno-unused-variable -pedantic-errors -DADVENTUREGAME_LINUX
