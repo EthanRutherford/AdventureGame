@@ -1,9 +1,5 @@
 #include "people.h"
-
-Item Player::getItem(int id) const
-{
-	return inventory[id];
-}
+#include "game.h"
 
 int Player::getItemCount(int id) const
 {
@@ -11,21 +7,31 @@ int Player::getItemCount(int id) const
 }
 
 void Player::use(int id, Interactive& object)
-{			//may need to rewrite this to use roger's output methods
+{
 	if (invAmt[id])
-	{									//unless different method
-		std::cout << "You use the " << Inventory[id].getName() << " on the "
+	{
+		exCout << "You use the " << strItem(id) << " on the "
 			<< oject.getName << ", ";
 		if (object.activate(id))		//activate has more output
-		{
 			invAmt[id]--;
-		}
 	}
 	else
-		std::cout << "You don't have any of those.\n";
+		exCout << "You don't have any of those.\n";
 }
 
 void Player::use(int id)
 {
 	//Not sure how consumables work yet
+}
+
+void take(Room& room, int id)
+{
+	room.take(id);
+	invAmt[id]++;
+}
+
+void take(Container& thing)
+{
+	while (!thing.isEmpty)
+		invAmt[thing.take]++;
 }

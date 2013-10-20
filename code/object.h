@@ -1,5 +1,6 @@
 //Ethan Rutherford
 //Interface for objects
+#include "custom_io.h"
 
 class Object{		//Objects are physical things that exist in (belong to) rooms
 	public:
@@ -19,11 +20,13 @@ class Aesthetic: public Object{		//as name suggests, merely aesthetic
 class Container: public Object{		//an object that has item(s) in it
 	public:
 		std::string peek() const;	//see what's inside
-		Item take();				//take what's inside (and remove from contents)
+		int take();				//take what's inside (and remove from contents)
+		bool isEmpty();				//is it empty?
 		Container();				//figure out initialization later.
 		~Container();
 	private:
-		Item* contents();
+		int* contents;				//contents are item ids
+		int size;
 };
 
 class Interactive: public Object{	//an object that an item can be used on
