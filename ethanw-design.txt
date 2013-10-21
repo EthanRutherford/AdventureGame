@@ -2,8 +2,6 @@ Ethan W. Design Document
 
 enum Effect {INVISIBLE, FIREPROOF, CURED, QUENCHED, LIT}; //This is an example of an enumeration, for disposables, if we so choose to implement disposables that way.  For example, water's effect is QUENCHED, Invisibility Potion's effect is INVISIBLE
 
-enum CreatureType { DWARF, BEAR, PIRATE, DRAGON, OBESE_MANCHILD, SONICHU}; //since this is very basic, meaning we cannot be certain at this point what enumerations we might use. 
-
 class Item
 {
  public:
@@ -56,20 +54,4 @@ class Treasure: public Item //a Treasure Item has a value
  private:
 	double Value;	
  };
-p
 
-class Creature
-{
- public:
-	
-	CreatureType getType();
-	void setType(CreatureType); 
-
-	//we may or may not make a creature's behavior part of a subclass
-	
-	bool CheckPulse()const; //we need some way of tracking if the creature is alive or dead.  This is one option we might use.
-	void Kill(); //Set the IsAlive status to false.  
- private: 
-	CreatureType Cname; 
-	bool IsAlive;
- };
