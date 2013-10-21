@@ -1,3 +1,4 @@
+// not meant to be included in final build
 #include "custom_io.h"
 using namespace std;
 using namespace adventure_game;
@@ -18,9 +19,9 @@ int main()
     int times = 0;
     for (size_t i = 0;i<input.length();i++)
 	if (input[i] == ch)
-	    exCout << consolea_fore_blue << ch, times++;
+	    exCout << consolea_fore_blue << ch << consolea_normal, times++;
 	else
-	    exCout << consolea_normal << input[i];
+	    exCout.put( input[i] );
 
     exCout << consolea_normal << "\nFound the symbol " << times << " times.\n";
 }

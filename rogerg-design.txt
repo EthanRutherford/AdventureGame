@@ -28,28 +28,28 @@
 Markup Example:
 
 <room>
-	<! Names will be case-insensitive />
-	<name> Tombs </name>
-	<north Dungeon1/>
-	<south Dungeon2/>
-	<east Dungeon3/>
-	<west Dungeon4/>
-	<northw Forest of Sharp Objects/>
-	<northe Forest of Dull Objects/>
-	<southw Forest of Semi-Dangerous Objects/>
-	<southe Abyss version 1.01/>
-	
-	<! A text tag will preserve all formatting. />
-	<text>You are currently in the tombs. Watch out for ghosts and other NPCs that may or may not want to kill you.</text>
+        <! Names will be case-insensitive />
+        <name> Tombs </name>
+        <north Dungeon1/>
+        <south Dungeon2/>
+        <east Dungeon3/>
+        <west Dungeon4/>
+        <northw Forest of Sharp Objects/>
+        <northe Forest of Dull Objects/>
+        <southw Forest of Semi-Dangerous Objects/>
+        <southe Abyss version 1.01/>
+        
+        <! A text tag will preserve all formatting. />
+        <text>You are currently in the tombs. Watch out for ghosts and other NPCs that may or may not want to kill you.</text>
 </room>
 
 <room>
-	<! flexible syntax/>
-	<name Dungeon1/>
-	<! Yes, the directions can logically make no sense. Go back the way you came and 
-	<south> Littleroot Town </south>
+        <! flexible syntax/>
+        <name Dungeon1/>
+        <! Yes, the directions can logically make no sense. Go back the way you came and 
+        <south> Littleroot Town </south>
 
-	<text>You are currently in Dungeon1. Make sure that you don't feed a key to any of the prisoners, or cheese puffs for that matter.</text>
+        <text>You are currently in Dungeon1. Make sure that you don't feed a key to any of the prisoners, or cheese puffs for that matter.</text>
 </room>
  */
 

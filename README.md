@@ -1,5 +1,19 @@
 # Adventure Game Project - CS 230
 
+## Bulletin
+(Put stuff here that you want people to see...)
+* Please only commit code that compiles! This will allow the people using the Windows build script to not go crazy. When a module compiles, I'll add it to the makefile.
+* Place puesdo-code in the root directory (AdventureGame), not AdventureGame/code. Place only things that compile, please!
+* Try to include your name in the commit message for readibility.
+* If you're getting annoyed prefixing std:: and don't want to pollute a file with using directives, consider using a private member typedef:
+	`class myClass
+	{
+		typedef std::string _String;
+	public:
+		_String get_name() const
+		{ return "Blaarg"; }
+	};`
+
 ## Group Members:
 | Member | Email Prefix |
 | ------ | ------------ |

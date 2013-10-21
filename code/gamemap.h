@@ -10,9 +10,21 @@
 
 namespace adventure_game
 {
+    enum direction
+    {
+        north,
+        northwest,
+        northeast,
+        south,
+        southwest,
+        southeast,
+        east,
+        west
+    };
+
     class room
     {
-	friend class gamemap;
+        friend class gamemap;
     public:
 
     private:
