@@ -68,6 +68,8 @@ namespace adventure_game
     private:
 #ifdef ADVENTUREGAME_WIN32
 	void* _hOutput; // HANDLE
+	unsigned short _wAttributesOriginal;
+	unsigned short _colCnt, _rowCnt;
 #else
 	int _fdOutput; // descriptor
 #endif

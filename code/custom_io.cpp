@@ -18,6 +18,21 @@ our_ostream_buffer::our_ostream_buffer()
     _fdOutput = 0; // assign stdout descriptor
 #else
     _hOutput = ::GetStdHandle(STD_OUTPUT_HANDLE); // get stdout handle
+    // cache console specifications for
+    // later use
+    CONSOLE_SCREEN_BUFFER_INFO info;
+    if ( ::GetConsoleScreenBufferInfo(_hOutput,&info) )
+    {
+	_wAttributesOriginal = info.wAttributes;
+	_colCnt = info.dwSize.X;
+	_rowCnt = info.dwSize.Y;
+    }
+    else
+    {
+	_wAttributesOriginal = 0;
+	_colCnt = 0;
+	_rowCnt = 0;
+    }
 #endif
     _attrib = consolea_normal;
     _trigger = false;
@@ -54,15 +69,11 @@ streamsize our_ostream_buffer::xsputn(const char* data,streamsize n)
     if (_trigger) // handle color
     {
 	if (_attrib == consolea_normal)
-	{
-	    CONSOLE_SCREEN_BUFFER_INFO info;
-	    if ( ::GetConsoleScreenBufferInfo(_hOutput,&info) )
-		_attrib = info.wAttributes;
-	}
+	    _attrib = (console_attribute) _wAttributesOriginal;
 	::SetConsoleTextAttribute(_hOutput,_attrib);
 	_trigger = false;
     }
-    ::WriteFile(_hOutput,&data,n,&bytesOut,NULL);
+    ::WriteFile(_hOutput,data,n,&bytesOut,NULL);
     return streamsize(bytesOut);
 #endif
 }
@@ -74,7 +85,36 @@ our_ostream::our_ostream(our_ostream_buffer& buffer)
 }
 void our_ostream::clear_screen()
 {
-    // TODO: clear screen
+#ifdef ADVENTUREGAME_WIN32
+    CHAR_INFO* clearBuffer;
+    COORD sz, origin;
+    SMALL_RECT writeRect;
+    int bufSz = _pBuf->_colCnt*_pBuf->_rowCnt;
+    try {
+	clearBuffer = new CHAR_INFO[bufSz];
+    }
+    catch (std::bad_alloc)
+    {
+	return;
+    }
+    origin.X = 0;
+    origin.Y = 0;
+    sz.X = _pBuf->_colCnt;
+    sz.Y = _pBuf->_rowCnt;
+    writeRect.Left = 0;
+    writeRect.Top = 0;
+    writeRect.Right = _pBuf->_colCnt-1;
+    writeRect.Bottom = _pBuf->_rowCnt-1;
+    for (int i = 0;i<bufSz;i++)
+    {
+	clearBuffer[i].Attributes = _pBuf->_wAttributesOriginal;
+	clearBuffer[i].Char.AsciiChar = ' ';
+    }
+    ::WriteConsoleOutput(_pBuf->_hOutput,clearBuffer,sz,origin,&writeRect);
+    delete[] clearBuffer;
+#else
+    *this << "\033[2J";
+#endif
 }
 void our_ostream::set_attribute(console_attribute a)
 {
