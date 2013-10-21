@@ -1,0 +1,148 @@
+/* Roger Gee Design Document
+ * Project: Adventure Game
+ * Note: I will have more to add to this later but have NO TIME because of LES MISERABLES ... I feel miserable quite frankly
+ * Items in this document: 
+ *  1.) adventure text file format
+ *   - this will be a companion file that uses a markup
+ *  language-like format to represent rooms, items, creatures,
+ *  objects, ETC. that are variable. In other words, it represents
+ *  specific instantiations of game structures represented by the
+ *  classes in this document.
+ *  2.) room type
+ *  3.) io model
+ *   - this consists of any classes that may be needed
+ *  to read in and parse user input/display output
+ */
+
+/* Adventure Game Text File Format
+ *  - Any kind of parameterized data will go into a
+ *  companion text file. This text file will utilize a 
+ *  simple markup format that will represent maps, items, everything, ETC.
+ */
+
+/* class tag
+ *  - the tag class will represent a markup tag and will
+ *  provide the behavior required to parse a tag, its content,
+ *  and any of its subtags
+
+Markup Example:
+
+<room>
+        <! Names will be case-insensitive />
+        <name> Tombs </name>
+        <north Dungeon1/>
+        <south Dungeon2/>
+        <east Dungeon3/>
+        <west Dungeon4/>
+        <northw Forest of Sharp Objects/>
+        <northe Forest of Dull Objects/>
+        <southw Forest of Semi-Dangerous Objects/>
+        <southe Abyss version 1.01/>
+        
+        <! A text tag will preserve all formatting. />
+        <text>You are currently in the tombs. Watch out for ghosts and other NPCs that may or may not want to kill you.</text>
+</room>
+
+<room>
+        <! flexible syntax/>
+        <name Dungeon1/>
+        <! Yes, the directions can logically make no sense. Go back the way you came and 
+        <south> Littleroot Town </south>
+
+        <text>You are currently in Dungeon1. Make sure that you don't feed a key to any of the prisoners, or cheese puffs for that matter.</text>
+</room>
+ */
+
+class tag
+{
+    friend istream& operator >>(istream&,tag&); // completeness, call member functions...
+    friend ostream& operator <<(ostream&,const tag&);
+    typedef tag* _Child;
+public:
+    tag();
+    tag(const string& name);
+    tag(const string& name,const string& content);
+    tag(const string& name,const string& attribute);
+    ~tag(); // sub-tags allocated on heap
+
+    string get_name() const;
+    string get_content() const;
+    string get_attribute() const;
+
+    void read(istream&);
+    void set_name(const string&);
+    void set_content(const string&); //recursive
+    void set_content(istream&); // 
+    void set_attribute(const string&);
+
+    // I have more stuff to add but not enough time...
+private:
+    string _name;
+    string _content;
+    string _attribute;
+    list<_Child> _subTags;
+    size_t _pos; // position within parent tag content stream; init=0
+};
+
+// define directions - 8-directional
+enum direction
+{
+    NORTH,
+    NORTHWEST,
+    NORTHEAST,
+    SOUTH,
+    SOUTHWEST,
+    SOUTHEAST,
+    EAST,
+    WEST
+};
+
+/* class gamemap
+ *  a gamemap will coordinate all the maps, plus
+ *  load them all from the companion file; the gamemap
+ *  object (only one should have to be created per game)
+ *  will manage the maps plus each 
+ */
+// class room is in scope...
+extern const char* const COMPANION_FILE; // store pointer to literal that represents companion file device ID
+class gamemap
+{
+public:
+    gamemap();
+    ~gamemap(); // delete dbl-l-list
+
+    string get_current_room_id()
+    { return _pCurRoom->get_id/name(); }
+
+    bool advance(direction); // return false if no room lies to the specified direction
+
+    // load up those specific room instantiations defined in the companion file
+    bool load_from_file(const char* fileName); // return success, use tag type, ...
+
+private:
+    room* _pCurRoom;
+    room* _pRoomHead; // dbl-list of rooms; could cheat and use std::list<room>; just used for storage
+};
+
+/* class room
+ *  A room will represent an area that the player is currently in, plus
+ *  any actions that the the player can take while in the room.
+ */
+
+class room
+{
+    friend class gamemap; // allow gamemap to access neighbors
+public:
+    room(); // create a room + any useful constructor overloads...
+
+    // get/set name/id
+    string get_name() const;
+    void set_name(const string& n);
+    
+    void print_text() const; // do something fancy...
+
+private: // some things may need to be made protected if specific room functionality needs to be built into sub-classes...
+    string _id;
+    string _text; // text for room
+    room* _neighbors[8]; // lookup by: _neighbors[ (int) direction ]
+};
