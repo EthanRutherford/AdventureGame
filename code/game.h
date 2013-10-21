@@ -26,7 +26,6 @@ namespace adventure_game{
 		
 			// let's just always use the 'exCout' stream object declared in custom_io.h
 			// which is #included into this class's implementation file
-			//void render(ostream& stream) const;	//render (needs to use Roger's stuff)
 			void render() const; // perform rendering for current place in game
 			void getInput();					//read input and translate
 			void take();						//friends functions maybe?

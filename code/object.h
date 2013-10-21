@@ -9,19 +9,18 @@
 namespace adventure_game{
 	class Object{		//Objects are physical things that exist in (belong to) rooms
 		public:
+			typedef std::string String; // Ethan doesn't like underscores...
 			std::string getName() const {return name;};
 			std::string getDesc() const {return desc;};
 			virtual ~Object() {};
 		protected:
-			std::string name;
-			std::string desc;
+			String name;
+			String desc;
 	};
 
 	class Aesthetic: public Object{		//as name suggests, merely aesthetic
-		typedef std::string String; // Ethan doesn't like underscores...
 		public:
-			Aesthetic(String Name, String Desc): name(Name), desc(Desc) {}
-
+			Aesthetic(String Name, String Desc): name(Name), desc(Desc) {};
 		private:
 			String name, desc;
 	};
@@ -46,8 +45,8 @@ namespace adventure_game{
 		private:
 			int activatorId;
 			bool activated;
-			std::string successMessage;
-			std::string failureMessage;
+			String successMessage;
+			String failureMessage;
 	};
 }
 

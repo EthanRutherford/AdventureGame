@@ -18,6 +18,7 @@ void Game::run()
 /* static */string Game::strItem(int id)
 {
 	/* unimplemented */
+	//item[id].getName();
 	UNREFERENCED_PARAMETER(id);
 	return ""; // get it to compile
 }
