@@ -5,14 +5,32 @@
 * Please only commit code that compiles! This will allow the people using the Windows build script to not go crazy. When a module compiles, I'll add it to the makefile.
 * Place puesdo-code in the root directory (AdventureGame), not AdventureGame/code. Place only things that compile, please!
 * Try to include your name in the commit message for readibility.
-* If you're getting annoyed prefixing std:: and don't want to pollute a file with using directives, consider using a private member typedef:
-	`class myClass
-	{
-		typedef std::string _String;
-	public:
-		_String get_name() const
-		{ return "Blaarg"; }
-	};`
+* If you're getting annoyed prefixing std:: and don't want to pollute a file with using directives, consider using a private or protected member typedef:
+
+```cpp
+class myClass
+{
+	typedef std::string _String;
+public:
+	_String get_name() const
+	{ return "Blaarg"; }
+};
+```
+
+* Header file format: Use include guards around header files so that they can be ``` #include```d multiple times. Place everything within ```namespace adventure_game { /* ... */ }```. Refer to the following example:
+
+```cpp
+// MyHeader.h
+#ifndef ADVENTUREGAME_MYHEADER_H // ADVENTUREGAME_NAMEOFHEADERFILE_H
+#define ADVENTUREGAME_MYHEADER_H
+
+// header contents here
+namespace adventure_game
+{
+}
+
+#endif
+```
 
 ## Group Members:
 | Member | Email Prefix |
