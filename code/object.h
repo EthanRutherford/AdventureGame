@@ -9,6 +9,7 @@
 namespace adventure_game{
 	class Object{		//Objects are physical things that exist in (belong to) rooms
 		public:
+			//virtual 
 			typedef std::string String; // Ethan doesn't like underscores...
 			std::string getName() const {return name;};
 			std::string getDesc() const {return desc;};
@@ -35,6 +36,7 @@ namespace adventure_game{
 		private:
 			int* contents;				//contents are item ids
 			int size;
+			bool locked;
 	};
 
 	class Interactive: public Object{	//an object that an item can be used on

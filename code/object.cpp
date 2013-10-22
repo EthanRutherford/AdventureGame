@@ -8,18 +8,24 @@ using namespace adventure_game;
 
 string Container::peek() const	//returns string list of contents
 {
-	String ans = "";
-	for (int i = 0; i < size; i++)
-		ans += Game::getItem(i)->getName() + ((i != size-1)? ", ": "");
-	return ans;
+	if (!locked)
+	{
+		String ans = "";
+		for (int i = 0; i < size; i++)
+			ans += Game::getItem(i)->getName() + ((i != size-1)? ", ": "");
+		return ans;
+	}
 }
 
 int Container::take()		//sends items to player::take; Nulls contents
 {
-	int ans = contents[--size];
-	if (size == 0)
-		contents = NULL;
-	return ans;
+	if (!locked)
+	{
+		//int ans = contents[--size];
+		//if (size == 0)
+		//	contents = NULL;
+		//return ans;
+	}
 }
 
 Container::Container()
