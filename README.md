@@ -2,12 +2,15 @@
 
 ## Bulletin
 (Put stuff here that you want people to see...)
+* Roger, read this: my idea for the item array works like this: we have an item array, containing every item to be in the game. The index in the array is the item ID. When we get input, the string is translated into int by finding the item with matching name (case insensitive) by the game class. Then, we pass IDs to the room, or the player (depending on the function we are using) and the player and room don't do further lookups, they merely use the id. Their int arrays for numItems have the same idea: the index of the array is the id. that way, we simply can check value at numItems[id] and go on from there. If items interact with objects the way I've written objects, then the object needs nothing from item except the id, which has been translated by game already. If you think they need to work differently, do that, and make it work, I don't have a problem with that, so long as it all works, this is just the way I was thinking about it.
+* Message for EthanR: I've almost finished implementing items. I made a bunch of different changes. Items are managed in the item module. Every game element (Person, Object, Room, ETC.) refers to an item via its ID. You can query the name of the item via a static interface in the Item class. If you later need a pointer to the actual item, you can do several things:
+	1. Get a plain old Item* (if one exists) for the name/id (you can query with either name or id)
+	2. Query to see if the id/name matches a sub-type of Item (like Disposable or Treasure), in which case you can get a Treasure* or Disposable*
 * Please only commit code that compiles! This will allow the people using the Windows build script to not go crazy. When a module compiles, I'll add it to the makefile.
 * Place puesdo-code in the root directory (AdventureGame), not AdventureGame/code. Place only things that compile, please!
 * Try to include your name in the commit message for readibility.
 * If you're getting annoyed prefixing std:: and don't want to pollute a file with using directives, consider using a private or protected member typedef:
-* Roger, read this: my idea for the item array works like this: we have an item array, containing every item to be in the game. The index in the array is the item ID. When we get input, the string is translated into int by finding the item with matching name (case insensitive) by the game class. Then, we pass IDs to the room, or the player (depending on the function we are using) and the player and room don't do further lookups, they merely use the id. Their int arrays for numItems have the same idea: the index of the array is the id. that way, we simply can check value at numItems[id] and go on from there. If items interact with objects the way I've written objects, then the object needs nothing from item except the id, which has been translated by game already. If you think they need to work differently, do that, and make it work, I don't have a problem with that, so long as it all works, this is just the way I was thinking about it.
- 
+
 ```cpp
 class myClass
 {
