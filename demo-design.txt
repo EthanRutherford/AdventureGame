@@ -6,7 +6,7 @@ The demo will have four items. A consumable key, a non consumable crowbar, gold,
 and a rod of success.
 Keys open doors.
 Crowbar opens crates.
-Coins effect score.
+Coins affect score.
 Rod of success wins game when placed on pedestal.
 
 There will be one NPC named guide. When spoken to He will give general how to
