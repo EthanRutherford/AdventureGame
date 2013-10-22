@@ -31,11 +31,13 @@ namespace adventure_game{
 			std::string peek() const;	//see what's inside
 			int take();				//take what's inside (and remove from contents)
 			bool isEmpty() {return false; /*unimplemented*/}			//is it empty?
+			bool unlock(int ID);
 			Container();				//figure out initialization later.
 			~Container();
 		private:
 			int* contents;				//contents are item ids
 			int size;
+			int unlockID;
 			bool locked;
 	};
 

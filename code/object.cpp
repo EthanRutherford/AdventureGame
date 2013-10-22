@@ -15,6 +15,7 @@ string Container::peek() const	//returns string list of contents
 			ans += Game::getItem(i)->getName() + ((i != size-1)? ", ": "");
 		return ans;
 	}
+	return "I haven't opened it yet.";
 }
 
 int Container::take()		//sends items to player::take; Nulls contents
@@ -26,6 +27,17 @@ int Container::take()		//sends items to player::take; Nulls contents
 		//	contents = NULL;
 		//return ans;
 	}
+	return 0;//get to compile
+}
+
+bool Container::unlock(int ID)
+{
+	if (ID == unlockID)
+	{
+		locked = false;
+		return true;
+	}
+	return false;
 }
 
 Container::Container()
