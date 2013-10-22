@@ -6,7 +6,8 @@
 * Place puesdo-code in the root directory (AdventureGame), not AdventureGame/code. Place only things that compile, please!
 * Try to include your name in the commit message for readibility.
 * If you're getting annoyed prefixing std:: and don't want to pollute a file with using directives, consider using a private or protected member typedef:
-
+* Roger, read this: my idea for the item array works like this: we have an item array, containing every item to be in the game. The index in the array is the item ID. When we get input, the string is translated into int by finding the item with matching name (case insensitive) by the game class. Then, we pass IDs to the room, or the player (depending on the function we are using) and the player and room don't do further lookups, they merely use the id. Their int arrays for numItems have the same idea: the index of the array is the id. that way, we simply can check value at numItems[id] and go on from there. If items interact with objects the way I've written objects, then the object needs nothing from item except the id, which has been translated by game already. If you think they need to work differently, do that, and make it work, I don't have a problem with that, so long as it all works, this is just the way I was thinking about it.
+ 
 ```cpp
 class myClass
 {
