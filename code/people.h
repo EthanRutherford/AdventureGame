@@ -7,10 +7,10 @@
 #define ADVENTUREGAME_PEOPLE_H
 #include <string> // just need std::string for header
 #include "object.h" // get classes 'Interactive' and 'Container'
-#include "gamemap.h" // get class 'room'
+//#include "gamemap.h" // get class 'room'
 
 namespace adventure_game{
-	class Person{	//Person is pure virtual, has name and health
+	class Person{	//Person is abstract, has name and health
 		public:
 			std::string getName() const {return name;};
 			int getHealth() const {return health;};
@@ -34,7 +34,7 @@ namespace adventure_game{
 		public:
 			int getItemCount(int id) const;
 			void use(int id, Interactive& object);	//attempt to use item on object
-			void take(room& room, int id);			//take from room
+			//void take(room& room, int id);			//take from room
 			void talk(NPC npc) const;
 			Player();
 			~Player();

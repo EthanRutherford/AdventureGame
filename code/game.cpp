@@ -7,6 +7,7 @@ using namespace std;
 using namespace adventure_game;
 
 Game::Game()
+	: map("markup.txt")
 {
 }
 
@@ -23,12 +24,12 @@ void Game::run()
 	}
 }
 
-/* static */string Game::getItem(int id)
+/* static */Item* Game::getItem(int id)
 {
 	/* unimplemented */
 	//return item[id];			//return pointer to item
 	UNREFERENCED_PARAMETER(id);
-	return ""; // get it to compile
+	return NULL; // get it to compile
 }
 
 void Game::render() const
@@ -50,7 +51,7 @@ void Game::take()
 
 void Game::use()
 {
-	player.use();
+	//player.use(); // no such member function
 }
 
 void Game::look()

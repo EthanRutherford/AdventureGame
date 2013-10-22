@@ -5,7 +5,7 @@ using namespace adventure_game;
 
 int main()
 {
-	exCout.clear_screen();
+    exCout.clear_screen();
     exCout << "This program counts the number of symbols found in an input string.\n";
 
     string input;
