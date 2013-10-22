@@ -12,9 +12,66 @@
 using namespace std;
 using namespace adventure_game;
 
+// console_attributes
+console_attribute::console_attribute(unsigned short initial)
+{
+    value = initial;
+}
+console_attribute& console_attribute::operator =(unsigned short us)
+{
+    value = us;
+    return *this;
+}
+bool adventure_game::operator ==(console_attribute left,console_attribute right)
+{
+    return left.value == right.value;
+}
+bool adventure_game::operator !=(console_attribute left,console_attribute right)
+{
+    return left.value != right.value;
+}
+#ifdef ADVENTUREGAME_LINUX
+const console_attribute adventure_game::consolea_normal(0);
+const console_attribute adventure_game::consolea_fore_black(30);
+const console_attribute adventure_game::consolea_fore_red(31);
+const console_attribute adventure_game::consolea_fore_green(32);
+const console_attribute adventure_game::consolea_fore_yellow(33);
+const console_attribute adventure_game::consolea_fore_blue(34);
+const console_attribute adventure_game::consolea_fore_magenta(35);
+const console_attribute adventure_game::consolea_fore_cyan(36);
+const console_attribute adventure_game::consolea_fore_white(37);
+const console_attribute adventure_game::consolea_back_black(40);
+const console_attribute adventure_game::consolea_back_red(41);
+const console_attribute adventure_game::consolea_back_green(42);
+const console_attribute adventure_game::consolea_back_yellow(43);
+const console_attribute adventure_game::consolea_back_blue(44);
+const console_attribute adventure_game::consolea_back_magenta(45);
+const console_attribute adventure_game::consolea_back_cyan(46);
+const console_attribute adventure_game::consolea_back_white(47);
+#else
+const console_attribute adventure_game::consolea_normal(77777);
+const console_attribute adventure_game::consolea_fore_black(0);
+const console_attribute adventure_game::consolea_fore_red(12);
+const console_attribute adventure_game::consolea_fore_green(10);
+const console_attribute adventure_game::consolea_fore_yellow(14);
+const console_attribute adventure_game::consolea_fore_blue(9);
+const console_attribute adventure_game::consolea_fore_magenta(13);
+const console_attribute adventure_game::consolea_fore_cyan(11);
+const console_attribute adventure_game::consolea_fore_white(15);
+const console_attribute adventure_game::consolea_back_black(0);
+const console_attribute adventure_game::consolea_back_red(0);
+const console_attribute adventure_game::consolea_back_green(0);
+const console_attribute adventure_game::consolea_back_yellow(0);
+const console_attribute adventure_game::consolea_back_blue(0);
+const console_attribute adventure_game::consolea_back_magenta(0);
+const console_attribute adventure_game::consolea_back_cyan(0);
+const console_attribute adventure_game::consolea_back_white(0);
+#endif
+
 #if defined(ADVENTUREGAME_LINUX) || defined(ADVENTUREGAME_WIN32)
 
 our_ostream_buffer::our_ostream_buffer()
+    : _attrib(consolea_normal)
 {
     // open resource for writing to the standard output
     // note: don't have to close these since they're standard
@@ -38,7 +95,6 @@ our_ostream_buffer::our_ostream_buffer()
         _rowCnt = 0;
     }
 #endif
-    _attrib = consolea_normal;
     _trigger = false;
 }
 streambuf::int_type our_ostream_buffer::overflow(int_type ch)
@@ -75,14 +131,14 @@ void our_ostream_buffer::_applyAttribute()
 #ifdef ADVENTUREGAME_LINUX
     string s = "\033[1;";
     stringstream ss;
-    ss << int(_attrib);
+    ss << int(_attrib.value);
     s += ss.str();
     s.push_back('m');
     write(_fdOutput,s.c_str(),s.length());
 #else
    if (_attrib == consolea_normal)
-       _attrib = (console_attribute) _wAttributesOriginal;
-   ::SetConsoleTextAttribute(_hOutput,_attrib);
+       _attrib = _wAttributesOriginal;
+   ::SetConsoleTextAttribute(_hOutput,_attrib.value);
 #endif
    _trigger = false;
 }
@@ -133,6 +189,7 @@ void our_ostream::set_attribute(console_attribute a)
     {
         _pBuf->_attrib = a;
         _pBuf->_trigger = true;
+        *this << ""; // put blank buffer to enforce attribute change
     }
 }
 
@@ -147,27 +204,46 @@ our_ostream adventure_game::exCout( cout.rdbuf() );
 
 // shared functionality for all compile-modes
 // class adventure_game::our_stream
-our_ostream& our_ostream::operator <<(char c)
+our_ostream& adventure_game::operator <<(our_ostream& stream,char c)
 {
-    static_cast<ostream*>(this)->put(c);
-    return *this;
+    static_cast<ostream&>(stream).put(c);
+    return stream;
 }
-our_ostream& our_ostream::operator <<(short s)
+our_ostream& adventure_game::operator <<(our_ostream& stream,unsigned char c)
 {
-    static_cast<ostream*>(this)->operator<<(s);
-    return *this;
+    static_cast<ostream&>(stream).put(c);
+    return stream;
 }
-our_ostream& our_ostream::operator <<(int i)
+our_ostream& adventure_game::operator <<(our_ostream& stream,short s)
 {
-    static_cast<ostream*>(this)->operator<<(i);
-    return *this;
+    static_cast<ostream&>(stream) << s;
+    return stream;
 }
-our_ostream& our_ostream::operator <<(long l)
+our_ostream& adventure_game::operator <<(our_ostream& stream,unsigned short c)
 {
-    static_cast<ostream*>(this)->operator<<(l);
-    return *this;
+    static_cast<ostream&>(stream).put(c);
+    return stream;
 }
-
+our_ostream& adventure_game::operator <<(our_ostream& stream,int i)
+{
+    static_cast<ostream&>(stream) << i;
+    return stream;
+}
+our_ostream& adventure_game::operator <<(our_ostream& stream,unsigned int c)
+{
+    static_cast<ostream&>(stream).put(c);
+    return stream;
+}
+our_ostream& adventure_game::operator <<(our_ostream& stream,long l)
+{
+    static_cast<ostream&>(stream) << l;
+    return stream;
+}
+our_ostream& adventure_game::operator <<(our_ostream& stream,unsigned long c)
+{
+    static_cast<ostream&>(stream).put(c);
+    return stream;
+}
 our_ostream& adventure_game::operator <<(our_ostream& stream,const char* pStr)
 {
     static_cast<ostream&>(stream) << pStr;

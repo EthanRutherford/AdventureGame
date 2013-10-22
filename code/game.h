@@ -15,13 +15,9 @@ namespace adventure_game{
 			void run();		//runs the game
 			Game();
 			~Game();
-			static Item* getItem(int id);	//uses id to get item
-			
 		private:
 			Player player;
 			gamemap map;						//managed the rooms of the game world
-			//Item* items;						//list of items from markup
-			int numItems;
 			std::string help;					//contents of help
 			bool gameover;
 		

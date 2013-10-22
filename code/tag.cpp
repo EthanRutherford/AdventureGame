@@ -101,4 +101,5 @@ void tag::read(istream& stream)
         }
         _content.push_back(c);
     }
+    _iter = _childTags.begin(); // set iterator to beginning of new child tags
 }

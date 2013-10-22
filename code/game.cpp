@@ -7,7 +7,7 @@ using namespace std;
 using namespace adventure_game;
 
 Game::Game()
-	: map("markup.txt")
+	: map("markup.txt") // hard code the dependency name in (we can always change it later to be passed in on the command-line)
 {
 }
 
@@ -17,19 +17,11 @@ Game::~Game()
 
 void Game::run()
 {
-	while (!gameover)
+	/*while (!gameover)
 	{
 		render();
 		getInput();
-	}
-}
-
-/* static */Item* Game::getItem(int id)
-{
-	/* unimplemented */
-	//return item[id];			//return pointer to item
-	UNREFERENCED_PARAMETER(id);
-	return NULL; // get it to compile
+	}*/
 }
 
 void Game::render() const

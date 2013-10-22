@@ -18,19 +18,19 @@ namespace adventure_game
      */
     class game_element
     {
-        typedef std::string _String;
+        typedef std::string String;
     public:
-        bool load(const tag& t)
-        { return _loadFromMarkup(t); }
+        void load(const tag& t)
+        { _loadFromMarkup(t); }
         void look() const
-        { return _writeDescription(); }
-        _String name() const
-        { return _name; }
+        { _writeDescription(); }
+        String get_name() const
+        { return name; }
     protected:
-        _String _name;
+        String name;
     private:
         // implement this interface
-        virtual bool _loadFromMarkup(const tag&) = 0;
+        virtual void _loadFromMarkup(const tag&) = 0;
         virtual void _writeDescription() const = 0;
     };
 }

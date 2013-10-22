@@ -1,0 +1,16 @@
+<room>
+	<name>Room1</name>
+	<text>This is a room built for testing. It's pretty bland.</text>
+	<north Room2/>
+	<east Dungeon of Despair/>
+</room>
+<room>
+	<name>Room2</name>
+	<text>This is Room2</text>
+	<south>Room1</south>
+</room>
+<room>
+	<name>Dungeon of Despair</name>
+	<text>You are going to get really sad in here.</text>
+	<west>Room1</west>
+</room>

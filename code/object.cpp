@@ -4,57 +4,70 @@
 using namespace std;
 using namespace adventure_game;
 
+void Aesthetic::_loadFromMarkup(const tag& tagObj)
+{
+	UNREFERENCED_PARAMETER(tagObj);
+}
+void Aesthetic::_writeDescription() const
+{
+}
+
 //Container functions
-
-string Container::peek() const	//returns string list of contents
+Container::Container()
 {
-	if (!locked)
-	{
-		String ans = "";
-		for (int i = 0; i < size; i++)
-			ans += Game::getItem(i)->getName() + ((i != size-1)? ", ": "");
-		return ans;
-	}
-	return "I haven't opened it yet.";
+	unlockId = -1; // default not-lockable
+	locked = false; // default unlocked
 }
-
-int Container::take()		//sends items to player::take; Nulls contents
+bool Container::take(int itemId)
 {
-	if (!locked)
+	if (!locked) // can only take if unlocked
 	{
-		//int ans = contents[--size];
-		//if (size == 0)
-		//	contents = NULL;
-		//return ans;
+		list<int>::iterator iter = contents.begin(), end = contents.end();
+		while (iter != end)
+		{
+			if (*iter == itemId)
+			{
+				contents.erase(iter);
+				return true;
+			}
+			iter++;
+		}
 	}
-	return 0;//get to compile
+	return false;
 }
-
+void Container::put(int itemId)
+{
+	contents.push_back(itemId);
+}
 bool Container::unlock(int ID)
 {
-	if (ID == unlockID)
+	if (isLockable() && ID==unlockId)
 	{
 		locked = false;
 		return true;
 	}
 	return false;
 }
-
-Container::Container()
+void Container::_loadFromMarkup(const tag& tagObj)
 {
-	//Roger's markup stuff -- will derive into Object a type that handles this
-	// and then override a virtual function in this class
-	contents = NULL;
+	UNREFERENCED_PARAMETER(tagObj);
 }
-
-Container::~Container()
+void Container::_writeDescription() const
 {
-	if (contents != NULL)
-		delete [] contents;
+	if (!locked)
+	{
+		
+		exCout << "Hey! I unlocked this or something...?";
+	}
+	exCout << "I haven't opened it yet.";
 }
 
 //Interactive functions
-
+Interactive::Interactive()
+{
+	activatorId = -1;
+	activated = false;
+}
 bool Interactive::activate(int id)
 {
 	if (id == activatorId)
@@ -66,8 +79,10 @@ bool Interactive::activate(int id)
 		exCout << failureMessage;
 	return activated;
 }
-
-Interactive::Interactive()
+void Interactive::_loadFromMarkup(const tag& tagObj)
 {
-	
+	UNREFERENCED_PARAMETER(tagObj);
+}
+void Interactive::_writeDescription() const
+{
 }

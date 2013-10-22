@@ -16,8 +16,9 @@
 
 namespace adventure_game
 {
-    enum direction
+    enum direction // DO NOT change the order of elements in this enumeration!
     {
+        bad_direction = -1,
         north,
         northwest,
         northeast,
@@ -31,47 +32,55 @@ namespace adventure_game
     class room : public game_element
     {
         friend class gamemap;
-        typedef std::string _String;
+        typedef std::string String;
     public:
         room();
-        ~room();
 
-        int get_item_count() // number of items in the room
-        { return _items.size(); }
-        bool take_item(_String itemName); // if the item exists, remove it and return true; else return false
+        int get_item_count() const; // number of items in the room (including those in containers)
+        bool take_item(int itemId); // if the item exists, remove it and return true; else return false
     private:
-        _String _text; // text the user sees when they look at a room
+        // gets 'name' from game_element (protected member)
+        String _text; // text the user sees when they look at a room
 
         // rooms adjacent to this room
         // look up by _neighbors[ direction enum value ]
         room* _neighbors[8];
 
         // implement game_element interface
-        virtual bool _loadFromMarkup(const tag&);
+        virtual void _loadFromMarkup(const tag&);
         virtual void _writeDescription() const;
 
-        std::list<int> _items; // ids of items currently in room
-        std::list<Object*> _objects; // objects in room
-        std::list<NPC> _npcs; // any NPCs in the room
+        Container _roomItems; // I just used Container as a container for the items!
+        std::list<Aesthetic> _statics; // Aesthetic objects in the room
+        std::list<Container> _containers; // objects that contain items
+        std::list<Interactive> _interactives; // other objects that are in the room
+        std::list<NPC> _npcs;
     };
 
     class gamemap
     {
     public:
         gamemap(const char* markupFile); // load everything from markup
-        ~gamemap();
 
-        room* get_current_room() const // get pointer to current room object
+        bool is_valid_current_room() const
+        { return _pCurRoom!=NULL; }
+        // get pointer to current room object
+        const room* get_current_room() const
+        { return _pCurRoom; }
+        room* get_current_room()
         { return _pCurRoom; }
         unsigned int get_number_of_rooms() const
-        { return _pRooms.size(); }
+        { return _rooms.size(); }
+
+        // prints a description that describes the map to the user
+        // probably only going to use this for testing
+        void print() const;
         
         bool travel(direction go); // change the current room by walking in the specified direction
         bool can_travel(direction go) const; // determine if a room lies to the specified direction
     private:
         room* _pCurRoom;
-        std::list<room*> _pRooms;
-        std::list<Item*> _pItems;
+        std::list<room> _rooms;
     };
 }
 

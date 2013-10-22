@@ -8,45 +8,49 @@
 using namespace std;
 using namespace adventure_game;
 
-Player::Player()
+void NPC::_loadFromMarkup(const tag& tagObject)
+{
+	UNREFERENCED_PARAMETER(tagObject);
+	// needs to support the following tags
+	// <name>
+	// <desc>
+}
+void NPC::_writeDescription() const
 {
 }
-Player::~Player()
-{
-}
+
 int Player::getItemCount(int id) const
 {
-	return invAmt[id];
+	int cnt = 0;
+	for (list<int>::const_iterator iter = inventory.begin(), end = inventory.end();iter!=end;iter++)
+		if (*iter == id)
+			cnt++;
+	return cnt;
 }
-
-void Player::use(int id, Interactive& object)
+bool Player::use(int itemId, Interactive& object)
 {
-	if (invAmt[id])
-	{
-		exCout << "You used the " << consolea_fore_blue << Game::getItem(id)->getName() << consolea_normal << " on the "
-			<< object.getName() << ", ";
-		if (object.activate(id))		//activate has more output
-			invAmt[id]--;
-	}
-	else
-		exCout << "You don't have any of those.\n";
+	UNREFERENCED_PARAMETER(itemId);
+	UNREFERENCED_PARAMETER(object);
+	return false; // unimplemented
 }
-
-/*
-There's a dependency problem that I'll try to fix
-Essentially,
-	people.h includes gamemap.h
-		and
-	gamemap.h includes people.h
-*/
-/*void Player::take(room& r, int id)
+void Player::stow(int itemId)
 {
-	UNREFERENCED_PARAMETER(r); // prevent compiler warning
-	//r.take(id); // until such time as the room class supports this...
-	invAmt[id]++;
-}*/
-
-void Player::talk(NPC npc) const
+	inventory.push_back(itemId);
+}
+void Player::talk(string characterName) const
 {
-	exCout << npc.talk();
+	NPC* pCharacter;
+	// ask the current map if an NPC exists with the specified name;
+	// if so, get a pointer to the NPC and have it talk or do whatever it does
+	UNREFERENCED_PARAMETER(characterName);
+}
+void Player::_loadFromMarkup(const tag& tagObject)
+{
+	UNREFERENCED_PARAMETER(tagObject);
+}
+void Player::_writeDescription() const
+{
+	// may just leave this blank
+	// but is called when using the 
+	// look() member function from game_element
 }

@@ -9,8 +9,8 @@
 # $ make clean
 ############################################################################################
 
-CXX = g++ -Wall -pedantic-errors -Werror -Wextra -Wshadow -Wfatal-errors -Wno-unused-variable
-CXX_obj = g++ -c -Wall -pedantic-errors -Werror -Wextra -Wshadow -Wfatal-errors -Wno-unused-variable
+CXX = g++ -Wall -pedantic-errors -Werror -Wextra -Wshadow -Wfatal-errors -Wno-unused-variable --std=gnu++0x
+CXX_obj = g++ -c -Wall -pedantic-errors -Werror -Wextra -Wshadow -Wfatal-errors -Wno-unused-variable --std=gnu++0x
 OUTX = -o ../adventure
 OUTOBJ = -o obj/
 OBJDIR = obj

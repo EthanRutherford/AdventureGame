@@ -16,49 +16,40 @@
 
 namespace adventure_game
 {
-#ifdef ADVENTUREGAME_LINUX
-    enum console_attribute
+    struct console_attribute
     {
-        consolea_normal = 0,
-        consolea_fore_black = 30,
-        consolea_fore_red = 31,
-        consolea_fore_green = 32,
-        consolea_fore_yellow = 33,
-        consolea_fore_blue = 34,
-        consolea_fore_magneta = 35,
-        consolea_fore_cyan = 36,
-        consolea_fore_white = 37,
-        consolea_back_black = 40,
-        consolea_back_red = 41,
-        consolea_back_green = 42,
-        consolea_back_yellow = 43,
-        consolea_back_blue = 44,
-        consolea_back_magenta = 45,
-        consolea_back_cyan = 46,
-        consolea_back_white = 47
+        friend class our_ostream_buffer;
+        friend bool operator ==(console_attribute,console_attribute);
+        friend bool operator !=(console_attribute,console_attribute);
+
+        console_attribute(unsigned short initial);
+        console_attribute& operator =(unsigned short);
+    private:
+        unsigned short value;
     };
-#else
-    enum console_attribute
-    {
-        consolea_normal = 77777, // some value greater than 2^sizeof(WORD)
-        consolea_fore_black = 0,
-        consolea_fore_red = 12,
-        consolea_fore_green = 10,
-        consolea_fore_yellow = 14,
-        consolea_fore_blue = 9,
-        consolea_fore_magneta = 13,
-        consolea_fore_cyan = 11,
-        consolea_fore_white = 15,
-        consolea_back_black = 0,
-        consolea_back_red = 0,
-        consolea_back_green = 0,
-        consolea_back_yellow = 0,
-        consolea_back_blue = 0,
-        consolea_back_magenta = 0,
-        consolea_back_cyan = 0,
-        consolea_back_white = 0
-    };
-#endif
+
+    // operator support
+    bool operator ==(console_attribute,console_attribute);
+    bool operator !=(console_attribute,console_attribute);
+
+    // supported color constants
+    extern const console_attribute consolea_normal;
+    extern const console_attribute consolea_fore_black;
+    extern const console_attribute consolea_fore_red;
+    extern const console_attribute consolea_fore_green;
+    extern const console_attribute consolea_fore_yellow;
+    extern const console_attribute consolea_fore_blue;
+    extern const console_attribute consolea_fore_magenta;
+    extern const console_attribute consolea_fore_cyan;
+    extern const console_attribute consolea_fore_white;
+    extern const console_attribute consolea_back_black;
+    extern const console_attribute consolea_back_red;
+    extern const console_attribute consolea_back_green;
+    extern const console_attribute consolea_back_yellow;
+    extern const console_attribute consolea_back_blue;
+    extern const console_attribute consolea_back_magenta;
+    extern const console_attribute consolea_back_cyan;
+    extern const console_attribute consolea_back_white;
 
 #if defined(ADVENTUREGAME_LINUX) || defined(ADVENTUREGAME_WIN32)
     class our_ostream;
@@ -94,13 +85,6 @@ namespace adventure_game
         void set_attribute(console_attribute attrib);
         void restore_attribute()
         { set_attribute(consolea_normal); }
-
-        // allow support for color codes in middle of 
-        // ostream output expression
-        our_ostream& operator <<(char);
-        our_ostream& operator <<(short);
-        our_ostream& operator <<(int);
-        our_ostream& operator <<(long);
     private:
         our_ostream_buffer* _pBuf;
     };
@@ -124,11 +108,6 @@ namespace adventure_game
         { } // do nothing
         void restore_attribute()
         { } // do nothing
-
-        our_stream& operator <<(char);
-        our_stream& operator <<(short);
-        our_stream& operator <<(int);
-        our_stream& operator <<(long);
     };
 
 #endif
@@ -138,6 +117,14 @@ namespace adventure_game
     extern our_ostream exCout; // extended cout
 
     // stream output overloads
+    our_ostream& operator <<(our_ostream&,char);
+    our_ostream& operator <<(our_ostream&,unsigned char);
+    our_ostream& operator <<(our_ostream&,short);
+    our_ostream& operator <<(our_ostream&,unsigned short);
+    our_ostream& operator <<(our_ostream&,int);
+    our_ostream& operator <<(our_ostream&,unsigned int);
+    our_ostream& operator <<(our_ostream&,long);
+    our_ostream& operator <<(our_ostream&,unsigned long);
     our_ostream& operator <<(our_ostream&,const char*);
     our_ostream& operator <<(our_ostream&,const std::string&);
     our_ostream& operator <<(our_ostream&,console_attribute);
