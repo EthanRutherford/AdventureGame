@@ -1,57 +1,12 @@
 Ethan W. Design Document
+ 
+ 
+Items for Roger to load in his markup
 
-enum Effect {INVISIBLE, FIREPROOF, CURED, QUENCHED, LIT}; //This is an example of an enumeration, for disposables, if we so choose to implement disposables that way.  For example, water's effect is QUENCHED, Invisibility Potion's effect is INVISIBLE
+There is a virtual function, presumably, called when the user enters the string: "Use <itemname
+Keys --a key is disposable.  Using a key on a door sets the door's status to unlocked.  Is a derived class from item.
 
-class Item
-{
- public:
-	Item();
-	~Item();
+Crowbars --a crowbar is not disposable.  Using a crowbar on a crate or other crowbar-oriented item
+	sets the crate's status to unlocked.  Is a derived class from item.
 	
-	virtual bool can_take_()const
-	{return true;}	
-
-	void setName(string);
-	string getName()const;
-	
-	virtual void useItem();// May or may not implement item usage within to 
-
-private:
-	
-	string Name;
-	
-	};
-
-class Immovable: public Item
-{
- virtual bool can_take_()const
-	{return false;}	
- };
-
-
-class Disposable: public Item //potions, etc.
-{
- public:
-			
-	Effect getEffect()const;
-	void setEffect(Effect);
-	
-	
-	bool getStatus()const;
-	void setStatus(bool);
-	
- private:
-	bool Status; //can be initialized to true, meaning can be used.  For example, a potion in inventory that has not been drunk will be true.
-	Effect x;
- };
-
-class Treasure: public Item //a Treasure Item has a value
-{
- public:
-	double getValue()const;
- 	void setValue(double);
-	
- private:
-	double Value;	
- };
-
+Treasure --derived class from item.  has a point value for that treasure.  Presumably, cannot be used.
