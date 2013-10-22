@@ -67,6 +67,27 @@ you could pry it open..."
 "look at stalactites"
 etc.
 
+Objects also have a success message, so that when you use the right item, it 
+displays what happens. It'll be something of the likes of "You unlock the door,
+and see a vast cave beyond."
+There's also a failure message, which is split between item and object, so that it
+works for any combination. Such as
+
+Key "You try to unlock "
+Crate "the crate, but it doesn't work."
+
+or
+
+Gold "You try to bribe "
+Door "the door, but it's useless."
+
+or
+
+Gold "You try to bribe "
+Pedestal "the Pedestal, but feel stupid when it doesn't do anything."
+
+Be generic with the messages, and they'll fit together no matter the combination.
+
 Rooms will have a description that displays when you enter them, or type "look"
 so make appropriate descriptions.
 
