@@ -1,0 +1,76 @@
+Ethan Rutherford
+
+this is my idea for the demo, in order to have a goal for what to do for Thursday.
+
+The demo will have four items. A consumable key, a non consumable crowbar, gold,
+and a rod of success.
+Keys open doors.
+Crowbar opens crates.
+Coins effect score.
+Rod of success wins game when placed on pedestal.
+
+There will be one NPC named guide. When spoken to He will give general how to
+play information.
+
+The map will comprise of six rooms.
+The layout will look like this:
+                            -------------------------
+                            |room:treasure chamber  |
+                            |object:crate           |
+                            |item:rod of success    |
+                            |:crate must be smashed:|
+                            |:the rod must be taken:|
+                            -------------------------
+                            -------------------------
+                            |room:northern corridor |
+                            |object:final door      |
+                            |item:crowbar           |
+                            |:crowbar must be taken:|
+                            |:door must be unlocked:|
+                            -------------------------
+-------------------------   -------------------------
+|room:western cavern    |   |room:cave mouth        |
+|object:crate           |   |object:stalactites     |
+|items:key(inside crate)|   |object:pedestal        |
+|                       |   |items:none             |
+|:crate must be smashed:|   |:rod on pedestal = win:|
+-------------------------   -------------------------
+                            -------------------------   -------------------------
+                            |room:entrance to cave  |   |room:gatehouse         |
+                            |object:cave door       |   |object:desk            |
+                            |items:none             |   |item:key               |
+                            |NPC:guide              |   |                       |
+                            |:door must be unlocked:|   |:key needs to be taken:|
+                            -------------------------   -------------------------
+
+The objects are defined per room, doors are objects that take keys, crates take
+crowbar, and pedestal takes rod of success. I will make a victory object, derived
+from interactive that will "win" the game when activated. Spread amounts of gold 
+around the map, in crates where the player might not usually go after getting the
+crowbar, and the total gold the player ends up with will be displayed after the game
+is won.
+
+The descriptions of objects should vaguely hint at what should be done to them. 
+The description will only be displayed when look at directly, so the input 
+"look at pedestal"
+would display something like 
+"There is a pedestal in the center of the room with a round slot on top. You get the
+feeling something grand would happen if you put the right thing in the slot."
+"look at crate"
+would say something like
+"There's a crate against the Northern wall. I bet there's nice stuff in it, if only
+you could pry it open..."
+"look at desk"
+"You rummage through the drawers, but find nothing of a useful quality."
+"look at door"
+"This door bars your way. Surely there's a key somewhere..."
+"look at stalactites"
+etc.
+
+Rooms will have a description that displays when you enter them, or type "look"
+so make appropriate descriptions.
+
+Items will similarly have descriptions, vaguely referencing their use. For example,
+"look at rod" could say "It seems like it would fit inside something..."
+
+That is everything we need to cover for the purpose of the demo, I think.
