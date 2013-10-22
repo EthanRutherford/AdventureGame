@@ -23,19 +23,13 @@ void Player::use(int id, Interactive& object)
 {
 	if (invAmt[id])
 	{
-		exCout << "You used the " << consolea_fore_blue << Game::strItem(id) << consolea_normal << " on the "
+		exCout << "You used the " << consolea_fore_blue << Game::getItem(id)->getName << consolea_normal << " on the "
 			<< object.getName() << ", ";
 		if (object.activate(id))		//activate has more output
 			invAmt[id]--;
 	}
 	else
 		exCout << "You don't have any of those.\n";
-}
-
-void Player::use(int id)
-{
-	UNREFERENCED_PARAMETER(id); // prevent compiler warning
-	//Not sure how consumables work yet
 }
 
 void Player::take(room& r, int id)
@@ -45,8 +39,7 @@ void Player::take(room& r, int id)
 	invAmt[id]++;
 }
 
-void Player::take(Container& thing)
+void Player::talk(NPC npc) const
 {
-	while (!thing.isEmpty())
-		invAmt[thing.take()]++;
+	exCout << npc.talk();
 }

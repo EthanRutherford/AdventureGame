@@ -7,6 +7,7 @@
 #include "custom_io.h" // get iostream types and 'direction' enum type
 #include "gamemap.h" // get class 'gamemap'
 #include "people.h" // get class 'Player'
+#include "item.h"
 
 namespace adventure_game{
 	class Game{		//manages game data.. not sure what all needs to be in here yet
@@ -14,24 +15,24 @@ namespace adventure_game{
 			void run();		//runs the game
 			Game();
 			~Game();
-			static std::string strItem(int id);	//uses id to get item name
+			static Item* getItem(int id);	//uses id to get item
+			
 		private:
 			Player player;
 			gamemap map;						//managed the rooms of the game world
 			//Item* items;						//list of items from markup
 			int numItems;
-			//Creature* creatures;				//list of creatures from markup
-			int numCreatures;
 			std::string help;					//contents of help
+			bool gameover;
 		
 			// let's just always use the 'exCout' stream object declared in custom_io.h
 			// which is #included into this class's implementation file
 			void render() const; // perform rendering for current place in game
 			void getInput();					//read input and translate
-			void take();						//friends functions maybe?
-			void use();							//friends functions maybe?
+			void take();				
+			void use();					
 			void look();						//check surroundings
-			void move(direction);			//move to a room
+			void move(direction);				//move to a room
 			//other functions for game logic (if any)
 	};
 }
