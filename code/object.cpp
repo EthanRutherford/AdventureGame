@@ -10,7 +10,7 @@ string Container::peek() const	//returns string list of contents
 {
 	String ans = "";
 	for (int i = 0; i < size; i++)
-		ans += Game::strItem(i) + ((i != size-1)? ", ": "");
+		ans += Game::getItem(i)->getName() + ((i != size-1)? ", ": "");
 	return ans;
 }
 
@@ -51,5 +51,5 @@ bool Interactive::activate(int id)
 
 Interactive::Interactive()
 {
-
+	
 }

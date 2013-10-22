@@ -20,14 +20,22 @@ namespace adventure_game{
 			int health;
 			int maxHealth;
 	};
-
+	
+	class NPC: public Person{		//Non players have a description, maybe some other behavior
+		public:
+			std::string getDesc() const {return desc;};
+			std::string talk() const {return text;};
+		private:
+			std::string desc;
+			std::string text;
+	};
+	
 	class Player: public Person{	//Players have inventory, and ability to "use"
 		public:
 			int getItemCount(int id) const;
 			void use(int id, Interactive& object);	//attempt to use item on object
-			void use(int id);						//use consumable item
 			void take(room& room, int id);			//take from room
-			void take(Container& thing);			//take from container
+			void talk(NPC npc) const;
 			Player();
 			~Player();
 		private:
@@ -36,12 +44,6 @@ namespace adventure_game{
 			int size;
 	};
 
-	class NPC: public Person{		//Non players have a description, maybe some other behavior
-		public:
-			std::string getDesc() const {return desc;};
-		private:
-			std::string desc;
-	};
 }
 
 #endif
