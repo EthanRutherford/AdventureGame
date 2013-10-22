@@ -14,34 +14,34 @@ play information.
 
 The map will comprise of six rooms.
 The layout will look like this:
-							-------------------------
-							|room:treasure chamber	|
-							|object:crate			|
-							|item:rod of success	|
-							|:crate must be smashed:|
-							|:the rod must be taken:|
-							-------------------------
-							-------------------------
-							|room:northern corridor	|
-							|object:final door		|
-							|item:crowbar			|
-							|:crowbar must be taken:|
-							|:door must be unlocked:|
-							-------------------------
--------------------------	-------------------------
-|room:western cavern	|	|room:cave mouth		|
-|object:crate			|	|object:stalactites		|
-|items:key(inside crate)|	|object:pedestal		|
-|						|	|items:none				|
-|:crate must be smashed:|	|:rod on pedestal = win:|
--------------------------	-------------------------
-							-------------------------	-------------------------
-							|room:entrance to cave	|	|room:gatehouse			|
-							|object:cave door		|	|object:desk			|
-							|items:none				|	|item:key				|
-							|NPC:guide				|	|						|
-							|:door must be unlocked:|	|:key needs to be taken:|
-							-------------------------	-------------------------
+                            -------------------------
+                            |room:treasure chamber  |
+                            |object:crate           |
+                            |item:rod of success    |
+                            |:crate must be smashed:|
+                            |:the rod must be taken:|
+                            -------------------------
+                            -------------------------
+                            |room:northern corridor |
+                            |object:final door      |
+                            |item:crowbar           |
+                            |:crowbar must be taken:|
+                            |:door must be unlocked:|
+                            -------------------------
+-------------------------   -------------------------
+|room:western cavern    |   |room:cave mouth        |
+|object:crate           |   |object:stalactites     |
+|items:key(inside crate)|   |object:pedestal        |
+|                       |   |items:none             |
+|:crate must be smashed:|   |:rod on pedestal = win:|
+-------------------------   -------------------------
+                            -------------------------   -------------------------
+                            |room:entrance to cave  |   |room:gatehouse         |
+                            |object:cave door       |   |object:desk            |
+                            |items:none             |   |item:key               |
+                            |NPC:guide              |   |                       |
+                            |:door must be unlocked:|   |:key needs to be taken:|
+                            -------------------------   -------------------------
 
 The objects are defined per room, doors are objects that take keys, crates take
 crowbar, and pedestal takes rod of success. I will make a victory object, derived
