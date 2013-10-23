@@ -39,6 +39,8 @@ namespace adventure_game
     public:
         room();
 
+		virtual void _writeDescription() const; //why was this private? it needs to be accessible
+		
         int get_item_count() const; // number of items in the room (including those in containers)
         bool take_item(int itemId); // if the item exists, remove it and return true; else return false
     private:
@@ -51,7 +53,6 @@ namespace adventure_game
 
         // implement game_element interface
         virtual void _loadFromMarkup(const tag&);
-        virtual void _writeDescription() const;
 
         Container _roomItems; // I just used Container as a container for the items!
         std::list<Aesthetic> _statics; // Aesthetic objects in the room

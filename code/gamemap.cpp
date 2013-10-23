@@ -245,7 +245,7 @@ void gamemap::print_status() const
     for (int i = 0;i<8;i++)
     {
         if (_pCurRoom->_neighbors[i] != NULL)
-            exCout << "\t" << consolea_fore_red << direction_to_string( direction(i) ) << consolea_normal << ": " << _pCurRoom->_neighbors[i]->get_name() << '\n';
+            exCout << "\t" << consolea_fore_red << direction_to_string( direction(i) ) << consolea_normal << ": " << consolea_fore_blue << _pCurRoom->_neighbors[i]->get_name() << consolea_normal << '\n';
     }
 }
 bool gamemap::travel(direction go)
