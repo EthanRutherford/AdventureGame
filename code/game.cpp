@@ -13,6 +13,7 @@ using namespace adventure_game;
 Game::Game()
 	: map("markup.txt") // hard code the dependency name in (we can always change it later to be passed in on the command-line)
 {
+	look(); //look first
 }
 
 Game::~Game()
@@ -30,8 +31,7 @@ void Game::run()
 
 void Game::render() const
 {
-	map.print_status(); // for my testing purposes (we might like this to be here, who knows?)
-	exCout << "\nGive me a command!\n";
+	exCout << "What would you like to do?\n";
 }
 
 void Game::getInput()
@@ -45,7 +45,7 @@ void Game::getInput()
 	ss.str(line); // replace (empty) contents of stringstream with line input from console
 	ss >> command;
 	if (command == "look")
-		;
+		look();
 	else if (command=="exit" || command=="quit")
 		gameover = true;
 	else if (command == "go")
@@ -61,33 +61,12 @@ void Game::getInput()
 			else if ( !map.travel(gotoDir) )
 				exCout << consolea_fore_red << "There is no room to the " << command << "!\n";
 			// the next render frame will display the new room status
+			look(); //actually, we don't want that displayed every frame
 		}
 		else
 			exCout << consolea_fore_red << "Sytax Error: expect: go direction\n" << consolea_normal;
 			
 	}
-
-
-	/*
-	int space[4]; //location of spaces
-	int size = line.size();
-	int current = 0;
-	for (int i = 0; i < size; i++)
-		if (line[i] == ' ')
-			space[current++] = i;
-	if (line.substr(0,space[0]) == "look")
-		look();
-	if (line.substr(0,space[0]) == "exit")
-		gameover = true;
-	if (line.substr(0,space[0]) == "go")
-		move(direction_from_string(line.substr(space[0]+1,space[1])));*/
-	/*
-	
-	
-		here, we will determine what other function calls to make.
-	
-	
-	*/
 }
 
 void Game::take()
@@ -102,7 +81,7 @@ void Game::use()
 
 void Game::look()
 {
-	map.get_current_room()->look();
+	map.print_status();
 }
 
 void Game::move(direction d)

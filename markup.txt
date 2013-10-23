@@ -1,16 +1,34 @@
 <room>
-	<name>Room1</name>
-	<text>This is a room built for testing. It's pretty bland.</text>
-	<north Room2/>
-	<east Dungeon of Despair/>
+	<name>Entrance</name>
+	<text>You are standing outside a cave, but there is a door barring your way inside. To the east is an abandonned gatehouse.</text>
+	<north Cave Mouth/>
+	<east Gatehouse/>
 </room>
 <room>
-	<name>Room2</name>
-	<text>This is Room2</text>
-	<south>Room1</south>
+	<name>Cave Mouth</name>
+	<text>You are inside the cave. There is a cavern to the west, and a corridor heading north.</text>
+	<north Northern Corridor/>
+	<west Western Cavern/>
+	<south>Entrance</south>
 </room>
 <room>
-	<name>Dungeon of Despair</name>
-	<text>You are going to get really sad in here.</text>
-	<west>Room1</west>
+	<name>Gatehouse</name>
+	<text>You're in a shabby-looking gatehouse, there's a desk with a key on it.</text>
+	<west>Entrance</west>
+</room>
+<room>
+	<name>Western Cavern</name>
+	<text>The cavern ends here, but there's a few crates against the northern wall.</text>
+	<east Cave Mouth/>
+</room>
+<room>
+	<name>Northern Corridor</name>
+	<text>A golden door bars your way north.</text>
+	<north Treasure Chamber/>
+	<south Cave Mouth/>
+</room>
+<room>
+	<name>Treasure Chamber</name>
+	<text>There's a bunch of gold lying everywhere, and a crate against a wall</text>
+	<south Northern Corridor/>
 </room>
