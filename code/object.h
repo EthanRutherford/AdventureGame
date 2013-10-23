@@ -34,6 +34,10 @@ namespace adventure_game{
 			Item* take(const String& itemName); // take first occurance of item with matching name; return NULL if not found
 			void put(Item* itemId); // stow item in container
 
+			// gets the Item referred to by the specified name
+			// or returns NULL if none was found
+			const Item* search_item(const String& objName) const;
+
 			int getCount() const {return contents.size();}
 			bool isEmpty() const {return contents.size()==0;}			//is it empty?
 			bool isLocked() const {return locked;}

@@ -46,6 +46,23 @@ namespace adventure_game
         { return _doors[inDir]; }
         const Interactive& get_door(direction inDir) const
         { return _doors[inDir]; }
+
+        // gets the Interactive object that is described by the specified name
+        // or returns NULL if none was found
+        const Interactive* search_interactive(const String& objName) const;
+
+        // gets the Item object that is described by the specified name
+        // or returns NULL if none was found
+        const Item* search_item(const String& objName) const
+        { return _roomItems.search_item(objName); }
+
+        // gets the Container object that is described by the specified name
+        // or returns NULL if none was found
+        const Container* search_container(const String& objName) const;
+
+        // performs the 'look' operation for any game_element that 
+        // matches the specified name; return false if none was found
+        bool look_for(const String& obj) const;
     private:
         // gets 'name' from game_element (protected member)
         String _text; // text the user sees when they look at a room

@@ -102,6 +102,46 @@ Item* room::take_item(const string& itemName)
     }
     return r;
 }
+const Interactive* room::search_interactive(const string& objName) const
+{
+    for (list<Interactive>::const_iterator iter = _interactives.begin(), end = _interactives.end();iter!=end;iter++)
+        if ( iter->get_name()==objName )
+            return &*iter;
+    return NULL;
+
+}
+const Container* room::search_container(const string& objName) const
+{
+    for (list<Container>::const_iterator iter = _containers.begin(), end = _containers.end();iter!=end;iter++)
+        if ( iter->get_name()==objName )
+            return &*iter;
+    return NULL;
+}
+bool room::look_for(const string& objName) const
+{
+    // Polymorphism!!!
+    const game_element* pElem;
+    // try interactives
+    pElem = search_interactive(objName);
+    if (pElem != NULL)
+    {
+        pElem->look();
+        return true;
+    }
+    pElem = search_item(objName);
+    if (pElem != NULL)
+    {
+        pElem->look();
+        return true;
+    }
+    pElem = search_container(objName);
+    if (pElem != NULL)
+    {
+        pElem->look();
+        return true;
+    }
+    return false;
+}
 void room::_loadFromMarkup(const tag& tagObj) // assume that tagObj has name "room"
 {
     /* A room has the following supported tags that are handled here:

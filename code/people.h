@@ -40,7 +40,7 @@ namespace adventure_game{
 			int getItemCount() const {return inventory.size();} // total items
 			//void use(); // use an item in general, perhaps?
 			bool use(Item* pItem, Interactive& object);	//attempt to use item on object
-			void stow(Item* pItem);
+			bool stow(Item* pItem);
 
 			void talk(String characterName) const;
 		private:

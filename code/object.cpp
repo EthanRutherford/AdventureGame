@@ -42,6 +42,13 @@ void Container::put(Item* item)
 {
 	contents.push_back(item);
 }
+const Item* Container::search_item(const string& objName) const
+{
+	for (list<Item*>::const_iterator iter = contents.begin(), end = contents.end();iter!=end;iter++)
+		if ((*iter)->get_name() == objName)
+			return *iter;
+	return NULL;
+}
 bool Container::unlock(Item* keyItem)
 {
 	// if the pointers have the same address, they

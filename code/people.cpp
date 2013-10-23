@@ -25,9 +25,14 @@ bool Player::use(Item* pItem, Interactive& object)
 	UNREFERENCED_PARAMETER(object);
 	return false; // unimplemented
 }
-void Player::stow(Item* pItem)
+bool Player::stow(Item* pItem)
 {
-	inventory.push_back(pItem);
+	if (pItem != NULL)
+	{
+		inventory.push_back(pItem);
+		return true;
+	}
+	return false;
 }
 void Player::talk(string characterName) const
 {
