@@ -15,33 +15,37 @@ void Aesthetic::_writeDescription() const
 //Container functions
 Container::Container()
 {
-	unlockId = -1; // default not-lockable
+	unlockItem = NULL; // default not-lockable
 	locked = false; // default unlocked
 }
-bool Container::take(int itemId)
+Item* Container::take(const string& itemName)
 {
 	if (!locked) // can only take if unlocked
 	{
-		list<int>::iterator iter = contents.begin(), end = contents.end();
+		// linear search for item in container
+		list<Item*>::iterator iter = contents.begin(), end = contents.end();
 		while (iter != end)
 		{
-			if (*iter == itemId)
+			if ((*iter)->get_name() == itemName)
 			{
+				Item* tmp = *iter;
 				contents.erase(iter);
-				return true;
+				return tmp;
 			}
 			iter++;
 		}
 	}
-	return false;
+	return NULL;
 }
-void Container::put(int itemId)
+void Container::put(Item* item)
 {
-	contents.push_back(itemId);
+	contents.push_back(item);
 }
-bool Container::unlock(int ID)
+bool Container::unlock(Item* keyItem)
 {
-	if (isLockable() && ID==unlockId)
+	// if the pointers have the same address, they
+	// obviously point to the same object
+	if (isLockable() && unlockItem==keyItem)
 	{
 		locked = false;
 		return true;
@@ -65,12 +69,12 @@ void Container::_writeDescription() const
 //Interactive functions
 Interactive::Interactive()
 {
-	activatorId = -1;
+	activatorItem = NULL;
 	activated = false;
 }
-bool Interactive::activate(int id)
+bool Interactive::activate(Item* item)
 {
-	if (id == activatorId)
+	if (item == activatorItem)
 	{
 		activated = true;
 		exCout << successMessage;

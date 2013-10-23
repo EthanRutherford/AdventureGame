@@ -82,23 +82,25 @@ int room::get_item_count() const
         cnt += i->getCount();
     return cnt;
 }
-bool room::take_item(int itemId)
+Item* room::take_item(const string& itemName)
 {
     // attempt to take from non-container items
-    if ( !_roomItems.take(itemId) )
+    Item* r = _roomItems.take(itemName);
+    if (r == NULL)
     {
         // search through each container in the room for specified item
         // perform a linear search
         list<Container>::iterator iter = _containers.begin(), end = _containers.end();
         while (iter != end)
         {
-            if ( iter->take(itemId) )
-                return true;
+            r = iter->take(itemName);
+            if (r != NULL)
+                return r;
             iter++;
         }
-        return false;
+        return NULL;
     }
-    return true;
+    return r;
 }
 void room::_loadFromMarkup(const tag& tagObj) // assume that tagObj has name "room"
 {
@@ -135,7 +137,7 @@ void room::_loadFromMarkup(const tag& tagObj) // assume that tagObj has name "ro
 void room::_writeDescription() const
 {
     // write the room description to exCout
-    exCout << "Welcome to " << consolea_fore_blue << name << consolea_normal << "! " << _text;
+    exCout << "Room: " << consolea_fore_blue << name << consolea_normal << "! " << _text << '\n';
     // items, people, etc.
     // available places to go
     exCout << "Places to go:\n";

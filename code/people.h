@@ -7,7 +7,8 @@
 #define ADVENTUREGAME_PEOPLE_H
 #include <string> // get 'string' type
 #include <list> // get 'list' type
-#include "object.h" // get classes 'Interactive' and 'Container'
+#include "game_element.h"
+#include "object.h" // get classes 'Interactive' and 'Container', gets item.h
 #include "tag.h" // get 'tag' type
 
 namespace adventure_game{
@@ -37,14 +38,13 @@ namespace adventure_game{
 	class Player: public Person{	//Players have inventory, and ability to "use"
 		public:
 			int getItemCount() const {return inventory.size();} // total items
-			int getItemCount(int id) const; // total of specific item
 			//void use(); // use an item in general, perhaps?
-			bool use(int itemId, Interactive& object);	//attempt to use item on object
-			void stow(int id);
+			bool use(Item* pItem, Interactive& object);	//attempt to use item on object
+			void stow(Item* pItem);
 
 			void talk(String characterName) const;
 		private:
-			std::list<int> inventory;
+			std::list<Item*> inventory;
 
 			// we can load default player attributes from the markup
 			// or else do nothing

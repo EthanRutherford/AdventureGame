@@ -6,6 +6,6 @@ using namespace adventure_game;
 
 int main()
 {
-	Game game;
-	game.run();
+    Game game;
+    game.run();
 }

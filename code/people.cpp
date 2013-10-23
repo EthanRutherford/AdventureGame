@@ -19,23 +19,15 @@ void NPC::_writeDescription() const
 {
 }
 
-int Player::getItemCount(int id) const
+bool Player::use(Item* pItem, Interactive& object)
 {
-	int cnt = 0;
-	for (list<int>::const_iterator iter = inventory.begin(), end = inventory.end();iter!=end;iter++)
-		if (*iter == id)
-			cnt++;
-	return cnt;
-}
-bool Player::use(int itemId, Interactive& object)
-{
-	UNREFERENCED_PARAMETER(itemId);
+	UNREFERENCED_PARAMETER(pItem);
 	UNREFERENCED_PARAMETER(object);
 	return false; // unimplemented
 }
-void Player::stow(int itemId)
+void Player::stow(Item* pItem)
 {
-	inventory.push_back(itemId);
+	inventory.push_back(pItem);
 }
 void Player::talk(string characterName) const
 {

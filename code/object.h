@@ -1,12 +1,13 @@
 /* object.h
  * Owner: Ethan Rutherford
- * Brief: Interface for objects
+ * Brief: Interface for objects; objects are found in rooms
  */
 #ifndef ADVENTUREGAME_OBJECT_H
 #define ADVENTUREGAME_OBJECT_H
 #include <string> // just need std::string for header
 #include <list>
 #include "game_element.h"
+#include "item.h"
 
 namespace adventure_game{
 	class Object : public game_element {		//Objects are physical things that exist in (belong to) rooms
@@ -30,17 +31,17 @@ namespace adventure_game{
 		public:
 			Container();
 
-			bool take(int itemId);
-			void put(int itemId);
+			Item* take(const String& itemName); // take first occurance of item with matching name; return NULL if not found
+			void put(Item* itemId); // stow item in container
 
 			int getCount() const {return contents.size();}
 			bool isEmpty() const {return contents.size()==0;}			//is it empty?
 			bool isLocked() const {return locked;}
-			bool isLockable() const {return unlockId!=-1;}
-			bool unlock(int itemId);
+			bool isLockable() const {return unlockItem!=NULL;}
+			bool unlock(Item* pUnlockItem); // attempt to open the container with the specified item
 		private:
-			std::list<int> contents; // ids of items that are inside the container
-			int unlockId;
+			std::list<Item*> contents; // items inside the container
+			Item* unlockItem;
 			bool locked;
 
 			virtual void _loadFromMarkup(const tag&);
@@ -52,9 +53,10 @@ namespace adventure_game{
 			Interactive();
 
 			bool isActive() const {return activated;}
-			bool activate(int id); //if correct item id, change activated state, return true if correct item
+			bool activate(Item* id); //if correct item id, change activated state, return true if correct item
+			const Item* get_activator() const {return activatorItem;} // use this when checking player inventory
 		private:
-			int activatorId;
+			Item* activatorItem;
 			bool activated;
 			String successMessage;
 			String failureMessage;

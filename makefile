@@ -5,3 +5,5 @@
 #############################
 all:
 	make -C code
+clean:
+	make -C code clean

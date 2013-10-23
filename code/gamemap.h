@@ -9,7 +9,7 @@
 #define ADVENTUREGAME_GAMEMAP_H
 #include <string> // get 'string'
 #include <list>
-#include "game_element.h" // gets tag.h
+#include "game_element.h"
 #include "object.h" // get 'Object' and its sub-types
 #include "item.h" // get 'Item'
 #include "people.h" // get 'NPC'
@@ -40,7 +40,7 @@ namespace adventure_game
         room();
 		
         int get_item_count() const; // number of items in the room (including those in containers)
-        bool take_item(int itemId); // if the item exists, remove it and return true; else return false
+        Item* take_item(const String& item); // if the item with the specified name exists, remove the first occurance and return ptr to item; NULL else on fail
     private:
         // gets 'name' from game_element (protected member)
         String _text; // text the user sees when they look at a room

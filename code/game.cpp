@@ -81,7 +81,7 @@ void Game::use()
 
 void Game::look()
 {
-	map.get_current_room()->_writeDescription();
+	map.get_current_room()->look();
 }
 
 void Game::move(direction d)

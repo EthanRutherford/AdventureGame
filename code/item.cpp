@@ -9,71 +9,102 @@ using namespace std;
 using namespace adventure_game;
 
 namespace {
-	// manage global item data here
-	int next_item_id = 0;
-	// dynamic arrays of each of the item kinds
-	vector<Item> itemArray;
-	vector<Disposable> dispArray;
-	vector<Treasure> treaArray;
+	/* This is a hack...
+	 *  Since we want to manage items globally and refer to them by id, I use
+	 *  this unloader class to manage dynamically allocated 'Item' objects. They are
+	 *  are stored in dynamic arrays (std::vectors) and unload when the vector destroys its
+	 *  elements for the final time. To prevent the Item objects being destroyed prematurely
+	 *  when the dynamic array resizes, I add copy functionality that passes ownership of the
+	 *  Item* to the new Unloader object. This system ensures that each Item object exists for 
+	 *  the entire duration of whatever happens in the 'main' function. I CANNOT make guarantees
+	 *  for how the items will be unloaded after main has returned. Therefore, let's not have any 
+	 *  other global objects!
+	 */
+	template<typename T>
+	class Unloader
+	{
+	public:
+		Unloader(T* element)
+		{
+			_elem = element;
+		}
+		Unloader(const Unloader& obj)
+		{
+			// pass ownership
+			_elem = obj._elem;
+			obj._elem = NULL;
+		}
+		~Unloader()
+		{
+			if (_elem != NULL)
+				delete _elem;
+		}
+
+		Unloader& operator =(const Unloader& obj)
+		{
+			// pass ownership
+			_elem = obj._elem;
+			obj._elem = NULL;
+			return *this;
+		}
+	private:
+		mutable T* _elem;
+	};
+
+	
+	vector< Unloader<Item> > globalItems;
+	// TODO: add sub item types
 }
 
-map<string,int> Item::_itemLookupByName;
-map<int,string> Item::_itemLookupById;
 Item::Item()
 {
-	ID = next_item_id++;
 	consumable = false; // default not-consumable
 }
-Item::Item(int itemId)
+Item::Item(const Item& obj)
 {
-	ID = next_item_id++;
-	name = item_id_to_name(itemId);
-	consumable = false;
-}
-Item::Item(string itemName)
-{
-	ID = next_item_id++;
-	name = itemName;
-	consumable = false;
-}
-/* static */ bool Item::does_item_exist(string itemName)
-{
-	return _itemLookupByName.count(itemName) != 0;
-}
-/* static */ bool Item::does_item_exist(int itemId)
-{
-	return _itemLookupById.count(itemId) != 0;
-}
-/* static */ string Item::item_id_to_name(int itemId)
-{
-	if (_itemLookupById.count(itemId) != 0)
-		return _itemLookupById[itemId];
-	return string();
-}
-/* static */ int Item::item_name_to_id(string itemName)
-{
-	if (_itemLookupByName.count(itemName) != 0)
-		return _itemLookupByName[itemName];
-	return -1;
-}
-/* static */ Item* Item::get_global_item(int itemId)
-{
-	UNREFERENCED_PARAMETER(itemId);
-	return NULL; // unimplemented
-}
-/* static */ Item* Item::get_global_item(string itemName)
-{
-	UNREFERENCED_PARAMETER(itemName);
-	return NULL; // unimplemented
+	// copy anything here
+	name = obj.name;
+	description = obj.description;
+	consumable = obj.consumable;
+
 }
 void Item::_loadFromMarkup(const tag& tagObj)
 {
-	UNREFERENCED_PARAMETER(tagObj);
+	// An item expects the following tags:
+	// <name> -name of item i.e. Potion
+	// <desc> -description of tag
+	// <consume>true|false -optional consumable flag value
+	const tag* pNext = tagObj.next_child();
+	while (pNext != NULL)
+	{
+		const string& tagName = pNext->get_name();
+		if (tagName == "name")
+			name = pNext->get_attribute().length()==0 ? pNext->get_content() : pNext->get_attribute();
+		else if (tagName == "desc")
+		{
+		}
+	}
 }
 void Item::_writeDescription() const
 {
+	exCout << consolea_fore_blue << name << consolea_normal << ": " << description;
 }
 
+Item* adventure_game::create_item(const tag& tagObj)
+{
+	Item* newItem = new Item;
+	newItem->load(tagObj);
+	globalItems.push_back(newItem); // the item (and its memory) will be managed in another context
+	return newItem;
+}
+Item* adventure_game::create_item(Item* pItem)
+{
+	// create new item based off of pre-existing by ptr to Item object
+	Item* newItem = new Item(*pItem);
+	globalItems.push_back(newItem);
+	return newItem;
+}
+/*
 Disposable::Disposable()
 {
 }
@@ -92,3 +123,4 @@ void Treasure::_loadFromMarkup(const tag& tagObj)
 void Treasure::_writeDescription() const
 {
 }
+*/

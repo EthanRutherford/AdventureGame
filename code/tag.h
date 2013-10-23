@@ -24,11 +24,11 @@ namespace adventure_game
         tag();
         ~tag();
 
-        _String get_name() const
+        const _String& get_name() const
         { return _name; }
-        _String get_attribute() const
+        const _String& get_attribute() const
         { return _attribute; }
-        _String get_content() const
+        const _String& get_content() const
         { return _content; }
 
         _SizeT get_number_of_children() const
