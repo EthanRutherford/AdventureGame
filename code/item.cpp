@@ -10,7 +10,7 @@ namespace {
 	// dynamic arrays of each of the item kinds
 	vector<Item> itemArray;
 	vector<Disposable> dispArray;
-	vector<Treasure> treaArray;
+	vector<Treasure> treaArray;    //Roger, this one causes compile errors
 }
 
 map<string,int> Item::_itemLookupByName;

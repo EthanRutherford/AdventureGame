@@ -49,7 +49,7 @@ const console_attribute adventure_game::consolea_back_magenta(45);
 const console_attribute adventure_game::consolea_back_cyan(46);
 const console_attribute adventure_game::consolea_back_white(47);
 #else
-const console_attribute adventure_game::consolea_normal(77777);
+const console_attribute adventure_game::consolea_normal(77777);		//compiler error on windows, long int truncated to unsigned int (apparently). it worked with one less seven, though (maybe that's what you meant?)
 const console_attribute adventure_game::consolea_fore_black(0);
 const console_attribute adventure_game::consolea_fore_red(12);
 const console_attribute adventure_game::consolea_fore_green(10);

@@ -7,6 +7,7 @@
 #define ADVENTUREGAME_ITEM_H
 #include <string> // get 'string' type
 #include <map> // get 'map' type
+#include "game_element.h"		//added this, because Compile errors
 
 namespace adventure_game
 {
