@@ -29,7 +29,9 @@ namespace adventure_game
     protected:
         String name;
     private:
-        // implement this interface
+        // implement this interface, which is called by the public
+        // interface of this class; these SHOULD NOT be called directly;
+        // they are reserved for the implementation
         virtual void _loadFromMarkup(const tag&) = 0;
         virtual void _writeDescription() const = 0;
     };
