@@ -8,6 +8,7 @@
 #include "gamemap.h" // get class 'gamemap'
 #include "people.h" // get class 'Player'
 #include "item.h"
+#include "gamemap.h"
 
 namespace adventure_game{
 	class Game{		//manages game data.. not sure what all needs to be in here yet
