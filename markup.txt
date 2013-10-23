@@ -1,6 +1,9 @@
 <room>
 	<name>Entrance</name>
 	<text>You are standing outside a cave, but there is a door barring your way inside. To the east is an abandonned gatehouse.</text>
+	<item>
+		<name>Taco</name>
+	</item>
 	<north Cave Mouth/>
 	<east Gatehouse/>
 </room>

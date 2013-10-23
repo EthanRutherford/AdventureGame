@@ -15,7 +15,6 @@ namespace adventure_game{
 		public:
 			void run();		//runs the game
 			Game();
-			~Game();
 		private:
 			Player player;
 			gamemap map;						//managed the rooms of the game world
@@ -25,8 +24,7 @@ namespace adventure_game{
 			// let's just always use the 'exCout' stream object declared in custom_io.h
 			// which is #included into this class's implementation file
 			void render() const; // perform rendering for current place in game
-			void getInput();					//read input and translate
-			void take();				
+			void getInput();					//read input and translate				
 			void use();					
 			void look();						//check surroundings
 			void move(direction);				//move to a room

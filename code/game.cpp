@@ -16,10 +16,6 @@ Game::Game()
 	look(); //look first
 }
 
-Game::~Game()
-{
-}
-
 void Game::run()
 {
 	while (!gameover)
@@ -45,7 +41,30 @@ void Game::getInput()
 	ss.str(line); // replace (empty) contents of stringstream with line input from console
 	ss >> command;
 	if (command == "look")
-		look();
+	{
+		command.clear();
+		ss >> command;
+		if (command == "at")
+		{
+			command.clear();
+			ss >> command;
+			if(!map.get_current_room()->look_for(command))
+				exCout << "There isn't one of those here.\n";
+		}
+		else if (command.length() != 0)
+			exCout << "Look at what?\n";
+		else
+			look();
+	}
+	else if (command == "take")
+	{
+		command.clear();
+		ss >> command;
+		if(player.stow(map.get_current_room()->take_item(command)))
+			exCout << "Added to inventory.\n";
+		else
+			exCout << "No such item.\n";
+	}
 	else if (command == "use")
 	{
 		command.clear();
@@ -110,11 +129,6 @@ void Game::getInput()
 		exCout << "ewgross\n";
 	else
 		exCout << "I don't know what that means.\nWhat would you like to do?\n"; 
-}
-
-void Game::take()
-{
-	//player.take(map.current_room);
 }
 
 void Game::look()
