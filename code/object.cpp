@@ -10,6 +10,7 @@ void Aesthetic::_loadFromMarkup(const tag& tagObj)
 }
 void Aesthetic::_writeDescription() const
 {
+	exCout << desc;
 }
 
 //Container functions
@@ -60,10 +61,10 @@ void Container::_writeDescription() const
 {
 	if (!locked)
 	{
-		
-		exCout << "Hey! I unlocked this or something...?";
+		//exCout << "Hey! I unlocked this or something...?";
+		//output the contents
 	}
-	exCout << "I haven't opened it yet.";
+	exCout << desc;
 }
 
 //Interactive functions
@@ -89,4 +90,5 @@ void Interactive::_loadFromMarkup(const tag& tagObj)
 }
 void Interactive::_writeDescription() const
 {
+	exCout << desc;
 }

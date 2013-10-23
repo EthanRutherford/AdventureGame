@@ -32,7 +32,6 @@ void Game::run()
 void Game::render() const
 {
 	//map.print_status();	//we don't actually want this here.. it conflicts with look
-	exCout << "What would you like to do?\n";
 }
 
 void Game::getInput()
@@ -47,6 +46,29 @@ void Game::getInput()
 	ss >> command;
 	if (command == "look")
 		look();
+	else if (command == "use")
+	{
+		command.clear();
+		ss >> command;
+		if (command.length() > 0)
+		{
+			//search for proper item pointer here
+			
+			command.clear();
+			ss >> command;
+			if (command == "on")
+			{
+				command.clear();
+				ss >> command;
+				//call use on object
+				//of course, message if fails
+			}
+			//else
+				//call use with no object here
+		}
+		else
+			exCout << "Use what?\n";		//try to use this type syntax for output
+	}
 	else if (command=="exit" || command=="quit")
 		gameover = true;
 	else if (command == "go")
@@ -61,22 +83,35 @@ void Game::getInput()
 				exCout << consolea_fore_red << "You gave an incorrect direction '" << command << "'!\n";
 			else if ( !map.travel(gotoDir) )
 				exCout << consolea_fore_red << "There is no room to the " << command << "!\n";
-			// the next render frame will display the new room status
+			else //if it works
+				look();
 		}
 		else
 			exCout << consolea_fore_red << "Sytax Error: expect: go direction\n" << consolea_normal;
-			
 	}
+	else if (command == "talk")
+	{
+		command.clear();
+		ss >> command;
+		if (command.length() > 0)
+		{
+			command.clear();
+			ss >> command;
+			//call talk to person
+			//if fails: exCout << "Talk to whom?";
+		}
+		else
+			exCout << "Talk to whom?";
+	}
+	else if (command == "poop")
+		exCout << "ewgross\n";
+	else
+		exCout << "I don't know what that means.\nWhat would you like to do?\n"; 
 }
 
 void Game::take()
 {
 	//player.take(map.current_room);
-}
-
-void Game::use()
-{
-	
 }
 
 void Game::look()
