@@ -12,52 +12,6 @@ namespace {
         room* originRoomPtr;
         string adjacentRoomNames[8]; // up to 8 directions
     } RoomMapElement;
-
-    direction direction_from_string(const string& s)
-    {
-        if (s == "north")
-            return north;
-        else if (s == "south")
-            return south;
-        else if (s == "east")
-            return east;
-        else if (s == "west")
-            return west;
-        else if (s == "northeast")
-            return northeast;
-        else if (s == "northwest")
-            return northwest;
-        else if (s == "southeast")
-            return southeast;
-        else if (s == "southwest")
-            return southwest;
-        return bad_direction;
-    }
-    const char* string_from_direction(direction d)
-    {
-        switch (d)
-        {
-        case north:
-            return "north";
-        case south:
-            return "south";
-        case east:
-            return "east";
-        case west:
-            return "west";
-        case northeast:
-            return "north-east";
-        case northwest:
-            return "north-west";
-        case southeast:
-            return "south-east";
-        case southwest:
-            return "south-west";
-        default:
-            return "bad direction";
-        }
-        return "";
-    }
     inline
     void highlight(const char* pc,console_attribute ca)
     {
@@ -68,6 +22,52 @@ namespace {
     {
         exCout << ca << rs << consolea_normal;
     }
+}
+
+direction adventure_game::direction_from_string(const string& s)
+{
+    if (s == "north")
+        return north;
+    else if (s == "south")
+        return south;
+    else if (s == "east")
+        return east;
+    else if (s == "west")
+        return west;
+    else if (s == "northeast")
+        return northeast;
+    else if (s == "northwest")
+        return northwest;
+    else if (s == "southeast")
+        return southeast;
+    else if (s == "southwest")
+        return southwest;
+    return bad_direction;
+}
+const char* adventure_game::direction_to_string(direction d)
+{
+    switch (d)
+    {
+    case north:
+        return "north";
+    case south:
+        return "south";
+    case east:
+        return "east";
+    case west:
+        return "west";
+    case northeast:
+        return "north-east";
+    case northwest:
+        return "north-west";
+    case southeast:
+        return "south-east";
+    case southwest:
+        return "south-west";
+    default:
+        return "bad direction";
+    }
+    return "";
 }
 
 room::room()
@@ -144,7 +144,7 @@ void room::_writeDescription() const
         if (_neighbors[i] != NULL)
         {
             exCout << "\tGo <";
-            highlight( string_from_direction( direction(i) ),consolea_fore_blue);
+            highlight( direction_to_string( direction(i) ),consolea_fore_blue);
             exCout << "> to enter ";
             highlight(_neighbors[i]->name,consolea_fore_magenta);
             exCout.put('\n');
@@ -245,7 +245,7 @@ void gamemap::print() const
     for (int i = 0;i<8;i++)
     {
         if (_pCurRoom->_neighbors[i] != NULL)
-            exCout << '\t' << string_from_direction( direction(i) ) << ": " << _pCurRoom->_neighbors[i]->get_name() << '\n';
+            exCout << '\t' << direction_to_string( direction(i) ) << ": " << _pCurRoom->_neighbors[i]->get_name() << '\n';
     }
     exCout << "\nMap:\n";
     for (list<room>::const_iterator iter = _rooms.begin(), end = _rooms.end();iter!=end;iter++)

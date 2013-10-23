@@ -29,6 +29,9 @@ namespace adventure_game
         west
     };
 
+    direction direction_from_string(const std::string&);
+    const char* direction_to_string(direction);
+
     class room : public game_element
     {
         friend class gamemap;

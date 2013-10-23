@@ -2,32 +2,12 @@
  * Project: AdventureGame
  * Owner: Ethan Rutherford
  */
-#include "game.h" // gets custom_io.h
+#include "game.h" // gets custom_io.h, gamemap.h
 using namespace std;
 using namespace adventure_game;
 
-namespace{	//there must be a better way than this...
-direction direction_from_string(const string& s)
-    {
-        if (s == "north")
-            return north;
-        else if (s == "south")
-            return south;
-        else if (s == "east")
-            return east;
-        else if (s == "west")
-            return west;
-        else if (s == "northeast")
-            return northeast;
-        else if (s == "northwest")
-            return northwest;
-        else if (s == "southeast")
-            return southeast;
-        else if (s == "southwest")
-            return southwest;
-        return bad_direction;
-    }
-}
+// Note for EthanR: I placed direction to string functions in gamemap.h, so you can call them from there...
+
 Game::Game()
 	: map("markup.txt") // hard code the dependency name in (we can always change it later to be passed in on the command-line)
 {
