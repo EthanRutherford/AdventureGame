@@ -59,12 +59,13 @@ void Container::_loadFromMarkup(const tag& tagObj)
 }
 void Container::_writeDescription() const
 {
-	if (!locked)
+	if (!locked && contents.size()>0)
 	{
-		//exCout << "Hey! I unlocked this or something...?";
 		//output the contents
+		exCout << "Contents of " << consolea_fore_blue << name << consolea_normal << ":\n";
+		for (list<Item*>::const_iterator iter = contents.begin(), end = contents.end();iter!=end;iter++)
+			exCout << '\t' << (*iter)->get_name() << '\n';
 	}
-	exCout << desc;
 }
 
 //Interactive functions

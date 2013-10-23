@@ -107,6 +107,7 @@ void room::_loadFromMarkup(const tag& tagObj) // assume that tagObj has name "ro
     /* A room has the following supported tags that are handled here:
      *  <name> -required
      *  <text> -required
+     *  <door> -option ex. <door direction/>key</door>
      *  <object> -any number or zero
      *  <item> -any number or zero
      * tags in a <room> tag but not supported here
@@ -123,6 +124,7 @@ void room::_loadFromMarkup(const tag& tagObj) // assume that tagObj has name "ro
             if (name.length() != 0)
                 cerr << "Warning: multiple names found in room markup for room '" << name << "'; using most recent\n";
             name = pSubTag->get_attribute().length()==0 ? pSubTag->get_content() : pSubTag->get_attribute();
+            _roomItems.setName(name);
             if (name.length() == 0)
                 cerr << "Error: name for room cannot be empty\n";
         }
@@ -131,6 +133,8 @@ void room::_loadFromMarkup(const tag& tagObj) // assume that tagObj has name "ro
             // only use tag content
             _text = pSubTag->get_content();
         }
+        else if (tagName == "item")
+            _roomItems.put( create_item(*pSubTag) );
         pSubTag = tagObj.next_child();
     }
 }
@@ -151,6 +155,19 @@ void room::_writeDescription() const
             highlight(_neighbors[i]->name,consolea_fore_magenta);
             exCout.put('\n');
         }
+    }
+    _roomItems.look();
+    if ( _interactives.size()>0 )
+    {
+        exCout << "\nThings to interact with:\n";
+        for (list<Interactive>::const_iterator iter = _interactives.begin(), end = _interactives.end();iter!=end;iter++)
+            iter->look(), exCout.put('\n');
+    }
+    if ( _npcs.size()>0 )
+    {
+        exCout << "\nPeople in here:\n";
+        for (list<NPC>::const_iterator iter = _npcs.begin(), end = _npcs.end();iter!=end;iter++)
+            exCout << (*iter).get_name() << '\n';
     }
 }
 
@@ -254,6 +271,8 @@ bool gamemap::travel(direction go)
 {
     if (_pCurRoom!=NULL && _pCurRoom->_neighbors[go]!=NULL)
     {
+        if ( _pCurRoom->_doors[go].has_activator() && !_pCurRoom->_doors[go].isActive() )
+            return false;
         _pCurRoom = _pCurRoom->_neighbors[go];
         return true;
     }

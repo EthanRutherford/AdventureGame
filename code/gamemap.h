@@ -41,6 +41,11 @@ namespace adventure_game
 		
         int get_item_count() const; // number of items in the room (including those in containers)
         Item* take_item(const String& item); // if the item with the specified name exists, remove the first occurance and return ptr to item; NULL else on fail
+
+        Interactive& get_door(direction inDir)
+        { return _doors[inDir]; }
+        const Interactive& get_door(direction inDir) const
+        { return _doors[inDir]; }
     private:
         // gets 'name' from game_element (protected member)
         String _text; // text the user sees when they look at a room
@@ -48,11 +53,13 @@ namespace adventure_game
         // rooms adjacent to this room
         // look up by _neighbors[ direction enum value ]
         room* _neighbors[8];
+        Interactive _doors[8];
 
         // implement game_element interface
         virtual void _loadFromMarkup(const tag&);
         virtual void _writeDescription() const; // this is an implementation detail, not an interface function!
 
+        
         Container _roomItems; // I just used Container as a container for the items!
         std::list<Aesthetic> _statics; // Aesthetic objects in the room
         std::list<Container> _containers; // objects that contain items

@@ -81,8 +81,11 @@ void Game::getInput()
 		{
 			if (gotoDir == bad_direction)
 				exCout << consolea_fore_red << "You gave an incorrect direction '" << command << "'!\n";
-			else if ( !map.travel(gotoDir) )
+			else if ( !map.can_travel(gotoDir) ) // ensure there is a room
 				exCout << consolea_fore_red << "There is no room to the " << command << "!\n";
+			else if ( !map.travel(gotoDir) )
+				exCout << consolea_fore_red << "You need to open the door to this room using " <<
+					map.get_current_room()->get_door(gotoDir).get_activator()->get_name() << '\n';
 			else //if it works
 				look();
 		}

@@ -81,8 +81,10 @@ void Item::_loadFromMarkup(const tag& tagObj)
 		if (tagName == "name")
 			name = pNext->get_attribute().length()==0 ? pNext->get_content() : pNext->get_attribute();
 		else if (tagName == "desc")
-		{
-		}
+			description = pNext->get_content();
+		else if (tagName == "consume")
+			consumable = pNext->get_attribute().length()>0 ? pNext->get_attribute()=="true" : pNext->get_content()=="true";
+		pNext = tagObj.next_child();
 	}
 }
 void Item::_writeDescription() const

@@ -39,6 +39,8 @@ namespace adventure_game{
 			bool isLocked() const {return locked;}
 			bool isLockable() const {return unlockItem!=NULL;}
 			bool unlock(Item* pUnlockItem); // attempt to open the container with the specified item
+
+			void setName(const String& newName) {name = newName;}
 		private:
 			std::list<Item*> contents; // items inside the container
 			Item* unlockItem;
@@ -54,6 +56,7 @@ namespace adventure_game{
 
 			bool isActive() const {return activated;}
 			bool activate(Item* id); //if correct item id, change activated state, return true if correct item
+			bool has_activator() const {return activatorItem!=NULL;}
 			const Item* get_activator() const {return activatorItem;} // use this when checking player inventory
 		private:
 			Item* activatorItem;
