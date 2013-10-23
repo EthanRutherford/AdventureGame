@@ -1,3 +1,7 @@
+/* item.cpp
+ * Project: AdventureGame
+ * Owner: Ethan Waddle
+ */
 #include "item.h"
 #include "custom_io.h"
 #include <vector>
@@ -10,7 +14,7 @@ namespace {
 	// dynamic arrays of each of the item kinds
 	vector<Item> itemArray;
 	vector<Disposable> dispArray;
-	vector<Treasure> treaArray;    //Roger, this one causes compile errors
+	vector<Treasure> treaArray;
 }
 
 map<string,int> Item::_itemLookupByName;

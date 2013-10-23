@@ -7,18 +7,18 @@
 #define ADVENTUREGAME_ITEM_H
 #include <string> // get 'string' type
 #include <map> // get 'map' type
-#include "game_element.h"		//added this, because Compile errors
+#include "game_element.h" // get 'game_element' base
 
 namespace adventure_game
 {
-	enum Items {Key, Treasure, Potion}; //This is an example of an enumeration, for disposables, if we so choose to implement disposables that way.  For example, water's effect is QUENCHED, Invisibility Potion's effect is INVISIBLE
+	enum Items {KEY, TREASURE, POTION}; //This is an example of an enumeration, for disposables, if we so choose to implement disposables that way.  For example, water's effect is QUENCHED, Invisibility Potion's effect is INVISIBLE
 
 	/* An ITEM is something that can be taken.
 	 * An item is represented by two unique key identifiers: 
 	 * an integer id and a string name. The user interacts with
 	 * items based on the string name, whereas game elements process
-	 * items based on their key integer id. The Item class has built
-	 * in functionality to allow translation between these two mechanisms.
+	 * items based on their key integer id. The Item class has built-in
+	 * functionality to allow translation between these two mechanisms.
 	 */
 	class Item : public game_element
 	{
@@ -73,9 +73,6 @@ namespace adventure_game
 	
 		virtual void _writeDescription() const;
 	 };
-
-
-
 
 	class Treasure: public Item //a Treasure Item has a value
 	{
