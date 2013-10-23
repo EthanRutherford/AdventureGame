@@ -57,13 +57,13 @@ const char* adventure_game::direction_to_string(direction d)
     case west:
         return "west";
     case northeast:
-        return "north-east";
+        return "northeast";
     case northwest:
-        return "north-west";
+        return "northwest";
     case southeast:
-        return "south-east";
+        return "southeast";
     case southwest:
-        return "south-west";
+        return "southwest";
     default:
         return "bad direction";
     }
@@ -233,24 +233,20 @@ gamemap::gamemap(const char* markupFile)
         _pCurRoom = NULL;
     }
 }
-void gamemap::print() const
+void gamemap::print_status() const
 {
-    // primarily for testing purposes
-    exCout << "You currently are in ";
+    // this should be called each rendering frame
+    exCout << "Current Room: [";
     if (_pCurRoom == NULL)
         exCout << consolea_fore_red << "!An undetermined location!" << consolea_normal;
     else
-        exCout << consolea_fore_blue << _pCurRoom->get_name() << consolea_normal << '\n';
-    exCout << "\nAvailable locations from here:\n";
+        exCout << consolea_fore_blue << _pCurRoom->get_name() << consolea_normal;
+    exCout << "]\nAvailable locations from here:\n";
     for (int i = 0;i<8;i++)
     {
         if (_pCurRoom->_neighbors[i] != NULL)
-            exCout << '\t' << direction_to_string( direction(i) ) << ": " << _pCurRoom->_neighbors[i]->get_name() << '\n';
+            exCout << "\t" << consolea_fore_red << direction_to_string( direction(i) ) << consolea_normal << ": " << _pCurRoom->_neighbors[i]->get_name() << '\n';
     }
-    exCout << "\nMap:\n";
-    for (list<room>::const_iterator iter = _rooms.begin(), end = _rooms.end();iter!=end;iter++)
-        exCout << consolea_fore_blue << iter->get_name() << '\n';
-    exCout << consolea_normal;
 }
 bool gamemap::travel(direction go)
 {

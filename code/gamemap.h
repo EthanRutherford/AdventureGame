@@ -77,7 +77,7 @@ namespace adventure_game
 
         // prints a description that describes the map to the user
         // probably only going to use this for testing
-        void print() const;
+        void print_status() const;
         
         bool travel(direction go); // change the current room by walking in the specified direction
         bool can_travel(direction go) const; // determine if a room lies to the specified direction
