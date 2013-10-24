@@ -50,6 +50,8 @@ void Game::getInput()
 			ss >> command;
 			if(!map.get_current_room()->look_for(command))
 				exCout << "There isn't one of those here.\n";
+			else
+				exCout << "\n";
 		}
 		else if (command.length() != 0)
 			exCout << "Look at what?\n";
@@ -64,6 +66,31 @@ void Game::getInput()
 			exCout << "Added to inventory.\n";
 		else
 			exCout << "No such item.\n";
+	}
+	else if (command == "open")
+	{
+		command.clear();
+		ss >> command;
+		Container* box = map.get_current_room()->search_container(command);
+		if (box != NULL)
+		{
+			command.clear();
+			ss >> command;
+			if (command == "with")
+			{
+				command.clear();
+				ss >> command;
+				Item* pItem = player.hasItem(command);
+				if (pItem == NULL)
+					exCout << "You don't have one of those.\n";
+				else
+					player.use(pItem, box);
+			}
+			else
+				exCout << "Incorrect syntax.\n";
+		}
+		else 
+			exCout << "No such container.\n";
 	}
 	else if (command == "use")
 	{
