@@ -71,25 +71,38 @@ void Game::getInput()
 		ss >> command;
 		if (command.length() > 0)
 		{
+			Item* pitem;
 			//search for proper item pointer here
-			
-			command.clear();
-			ss >> command;
-			if (command == "on")
+			pitem = player.hasItem(command);
+			if (pitem == NULL)
+			{
+				exCout << "You don't have one of those.\n";
+			}
+			else
 			{
 				command.clear();
 				ss >> command;
-				//call use on object
-				//of course, message if fails
+				if (command == "on")
+				{
+					command.clear();
+					ss >> command;
+					Interactive* object = map.get_current_room()->search_interactive(command);
+					if (object == NULL)
+						exCout << "No such object.\n";
+					else
+						player.use(pitem, object);
+				}
+				else
+					exCout << "You can't do that.\n";
 			}
-			//else
-				//call use with no object here
 		}
 		else
 			exCout << "Use what?\n";		//try to use this type syntax for output
 	}
 	else if (command=="exit" || command=="quit")
 		gameover = true;
+	else if (command == "pack")
+		player.look();
 	else if (command == "go")
 	{
 		direction gotoDir;
@@ -104,7 +117,7 @@ void Game::getInput()
 				exCout << consolea_fore_red << "There is no room to the " << command << "!\n";
 			else if ( !map.travel(gotoDir) )
 				exCout << consolea_fore_red << "You need to open the door to this room using " <<
-					map.get_current_room()->get_door(gotoDir).get_activator()->get_name() << '\n';
+					map.get_current_room()->get_door(gotoDir).get_activator() << '\n';
 			else //if it works
 				look();
 		}

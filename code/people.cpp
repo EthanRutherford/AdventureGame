@@ -19,11 +19,12 @@ void NPC::_writeDescription() const
 {
 }
 
-bool Player::use(Item* pItem, Interactive& object)
+bool Player::use(Item* pItem, Interactive* pObject)
 {
-	UNREFERENCED_PARAMETER(pItem);
-	UNREFERENCED_PARAMETER(object);
-	return false; // unimplemented
+	if (pObject->activate(pItem))
+		if (pItem->isConsumable())
+			inventory.remove(pItem);
+	return true;
 }
 bool Player::stow(Item* pItem)
 {
@@ -45,9 +46,23 @@ void Player::_loadFromMarkup(const tag& tagObject)
 {
 	UNREFERENCED_PARAMETER(tagObject);
 }
+Item* Player::hasItem(string item_name)
+{
+	for (list<Item*>::iterator i = inventory.begin(), end = inventory.end(); i != end; i++)
+		if ((*i)->get_name() == item_name)
+			return *i;
+	return NULL;
+}
+const Item* Player::hasItem(string item_name) const
+{
+	for (list<Item*>::const_iterator i = inventory.begin(), end = inventory.end(); i != end; i++)
+		if ((*i)->get_name() == item_name)
+			return *i;
+	return NULL;
+}
 void Player::_writeDescription() const
 {
-	// may just leave this blank
-	// but is called when using the 
-	// look() member function from game_element
+	exCout << "Inventory:\n";
+	for (list<Item*>::const_iterator i = inventory.begin(), end = inventory.end(); i != end; i++)
+		exCout << (*i)->get_name() << "\n";
 }

@@ -17,7 +17,6 @@ namespace adventure_game{
 			// gets 'get_name' from game_element
 			int getHealth() const {return health;};
 		protected:
-			typedef std::string String;
 			// gets 'name' from game_element (protected member)
 			int health;
 			int maxHealth;
@@ -39,9 +38,11 @@ namespace adventure_game{
 		public:
 			int getItemCount() const {return inventory.size();} // total items
 			//void use(); // use an item in general, perhaps?
-			bool use(Item* pItem, Interactive& object);	//attempt to use item on object
+			bool use(Item* pItem, Interactive* object);	//attempt to use item on object
 			bool stow(Item* pItem);
-
+			Item* hasItem(String name);
+			const Item* hasItem(String name) const;
+			
 			void talk(String characterName) const;
 		private:
 			std::list<Item*> inventory;
