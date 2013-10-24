@@ -39,6 +39,7 @@ namespace adventure_game{
 			int getItemCount() const {return inventory.size();} // total items
 			//void use(); // use an item in general, perhaps?
 			bool use(Item* pItem, Interactive* object);	//attempt to use item on object
+			bool use(Item* pItem, Container* box);
 			bool stow(Item* pItem);
 			Item* hasItem(String name);
 			const Item* hasItem(String name) const;
