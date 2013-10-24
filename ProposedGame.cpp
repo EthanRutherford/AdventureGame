@@ -10,7 +10,8 @@ using namespace adventure_game;
 // Note for EthanR: I placed direction to string functions in gamemap.h, so you can call them from there...
 // I made some changes just to show you how to use the stringstreams; just a demo...
 
-//Suggestion: we might want to use the toUpper function on the input.
+//Suggestion: we'll want to use a lowercase function on the input, so proper case on the input will no longer be necessary
+//We will also need a set of alternatives to each command e.g. "Pack", "Inventory", "Backpack", "Satchel", "Inv"
 
 Game::Game()
 	: map("markup.txt") // hard code the dependency name in (we can always change it later to be passed in on the command-line)
