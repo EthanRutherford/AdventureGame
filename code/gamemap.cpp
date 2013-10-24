@@ -230,14 +230,14 @@ void room::_writeDescription() const
         if (_neighbors[i] != NULL)
         {
             if ( _doors[i].has_activator() && !_doors[i].isActive() )
-                exCout << "\t" << "To the <" << consolea_fore_blue << direction_to_string( direction(i) ) << consolea_normal << ">: " << _doors[i].get_name() << '\n';
+                exCout << "\tTo the <" << consolea_fore_blue << direction_to_string( direction(i) ) << consolea_normal << ">: " << _doors[i].get_name() << endl;
             else
             {
                 exCout << "\tGo <";
                 highlight( direction_to_string( direction(i) ),consolea_fore_blue);
                 exCout << "> to enter ";
                 highlight(_neighbors[i]->name,consolea_fore_magenta);
-				exCout << "\n";
+		exCout << endl;
             }
         }
     }
@@ -247,19 +247,19 @@ void room::_writeDescription() const
     {
         exCout << "Things to interact with:\n";
         for (list<Interactive>::const_iterator iter = _interactives.begin(), end = _interactives.end();iter!=end;iter++)
-            exCout << endl, iter->look();
+            exCout << '\t', iter->look();
     }
     if ( _containers.size()>0 )
     {
         exCout << "Things to open:\n";
         for (list<Container>::const_iterator iter = _containers.begin(),end = _containers.end();iter!=end;iter++)
-            exCout << "\t" << iter->get_name() << "\n";
+            exCout << "\t" << iter->get_name() << endl;
     }
     if ( _npcs.size()>0 )
     {
         exCout << "\nPeople in here:\n";
         for (list<NPC>::const_iterator iter = _npcs.begin(), end = _npcs.end();iter!=end;iter++)
-            exCout << "\t" << (*iter).get_name() << "\n";
+            exCout << '\t' << (*iter).get_name() << endl;
     }
 }
 
