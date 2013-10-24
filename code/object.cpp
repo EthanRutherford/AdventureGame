@@ -124,7 +124,6 @@ bool Interactive::activate(const Item* item)
 }
 void Interactive::_loadFromMarkup(const tag& tagObj)
 {
-	UNREFERENCED_PARAMETER(tagObj);
 	// <object> OR <door> - content string is activator item name
 	// supported sub-tags
 	//  <desc>

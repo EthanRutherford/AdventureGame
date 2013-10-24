@@ -76,7 +76,7 @@ our_ostream_buffer::our_ostream_buffer()
     // open resource for writing to the standard output
     // note: don't have to close these since they're standard
 #ifdef ADVENTUREGAME_LINUX
-    _fdOutput = 0; // assign stdout descriptor
+    _fdOutput = 1; // assign stdout descriptor
 #else
     _hOutput = ::GetStdHandle(STD_OUTPUT_HANDLE); // get stdout handle
     // cache console specifications for

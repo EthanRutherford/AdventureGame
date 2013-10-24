@@ -107,7 +107,7 @@ const Interactive* room::search_interactive(const string& objName) const
     for (list<Interactive>::const_iterator iter = _interactives.begin(), end = _interactives.end();iter!=end;iter++)
         if ( iter->get_name()==objName )
             return &(*iter);
-	for (int i = 0;i < 8;i++)
+    for (int i = 0;i < 8;i++)
         if ( _doors[i].get_name()==objName )
             return &_doors[i];
     return NULL;
@@ -118,7 +118,7 @@ Interactive* room::search_interactive(const string& objName)
     for (list<Interactive>::iterator iter = _interactives.begin(), end = _interactives.end();iter!=end;iter++)
         if ( iter->get_name()==objName )
             return &(*iter);
-	for (int i = 0;i < 8;i++)
+    for (int i = 0;i < 8;i++)
         if ( _doors[i].get_name()==objName )
             return &_doors[i];
     return NULL;
@@ -247,7 +247,7 @@ void room::_writeDescription() const
     {
         exCout << "Things to interact with:\n";
         for (list<Interactive>::const_iterator iter = _interactives.begin(), end = _interactives.end();iter!=end;iter++)
-            iter->look();
+            exCout << endl, iter->look();
     }
     if ( _containers.size()>0 )
     {
