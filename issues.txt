@@ -28,8 +28,8 @@ We take the current room pointer (map.get_current_room()) which returns NULL bec
 		ss >> command;
 		if (command == "at")
 
-Issue #2 -      resolved [no]
+Issue #2 -      resolved [yes]
       Endlines in the Game::getInput need to be fixed. I made some changes to the output in gamemap to conform to standards for the look operation. It threw off the endlines a little bit.
 
-Issue #3 -     resolved [no]
+Issue #3 -     resolved [yes]
       Console attribute needs to be reset to normal after printing out door locked message in Game::getInput.
