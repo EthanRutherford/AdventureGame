@@ -44,7 +44,7 @@ void Game::getInput()
 	{
 		command.clear();
 		ss >> command;
-		if (command == "at")
+		if (command == "at" or command == "in")
 		{
 			command.clear();
 			ss >> command;
@@ -84,7 +84,12 @@ void Game::getInput()
 				if (pItem == NULL)
 					exCout << "You don't have one of those.\n";
 				else
-					player.use(pItem, box);
+				{
+					if (player.use(pItem, box))
+						exCout << "It is opened.\n";
+					else
+						exCout << "This item doesn't work.\n";
+				}
 			}
 			else
 				exCout << "Incorrect syntax.\n";
@@ -139,12 +144,12 @@ void Game::getInput()
 		if (command.length() > 0)
 		{
 			if (gotoDir == bad_direction)
-				exCout << consolea_fore_red << "You gave an incorrect direction '" << command << "'!\n";
+				exCout << consolea_fore_red << "You gave an incorrect direction '" << command << "'!" << consolea_normal << "\n";
 			else if ( !map.can_travel(gotoDir) ) // ensure there is a room
-				exCout << consolea_fore_red << "There is no room to the " << command << "!\n";
+				exCout << consolea_fore_red << "There is no room to the " << command << "!" << consolea_normal << "\n";
 			else if ( !map.travel(gotoDir) )
 				exCout << consolea_fore_red << "You need to open the door to this room using " <<
-					map.get_current_room()->get_door(gotoDir).get_activator() << '\n';
+					map.get_current_room()->get_door(gotoDir).get_activator() << consolea_normal << '\n';
 			else //if it works
 				look();
 		}

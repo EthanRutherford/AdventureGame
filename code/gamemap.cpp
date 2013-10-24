@@ -107,6 +107,9 @@ const Interactive* room::search_interactive(const string& objName) const
     for (list<Interactive>::const_iterator iter = _interactives.begin(), end = _interactives.end();iter!=end;iter++)
         if ( iter->get_name()==objName )
             return &(*iter);
+	for (int i = 0;i < 8;i++)
+        if ( _doors[i].get_name()==objName )
+            return &_doors[i];
     return NULL;
 
 }
@@ -115,6 +118,9 @@ Interactive* room::search_interactive(const string& objName)
     for (list<Interactive>::iterator iter = _interactives.begin(), end = _interactives.end();iter!=end;iter++)
         if ( iter->get_name()==objName )
             return &(*iter);
+	for (int i = 0;i < 8;i++)
+        if ( _doors[i].get_name()==objName )
+            return &_doors[i];
     return NULL;
 
 }
@@ -224,7 +230,11 @@ void room::_writeDescription() const
         if (_neighbors[i] != NULL)
         {
             if ( _doors[i].has_activator() && !_doors[i].isActive() )
+<<<<<<< HEAD
+                exCout << '\t' << "To the <" << consolea_fore_blue << direction_to_string( direction(i) ) << consolea_normal << ">: " << _doors[i].get_name() << '\n';
+=======
                 exCout << "\n\t" << "To the <" << consolea_fore_blue << direction_to_string( direction(i) ) << consolea_normal << ">: " << _doors[i].getDescription();
+>>>>>>> 3117b01ecde5a223c41989ba4fb664917f719ad6
             else
             {
                 exCout << "\n\tGo <";

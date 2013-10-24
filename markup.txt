@@ -1,82 +1,80 @@
 <room>
 	<name>Entrance</name>
-	<text>You are standing outside a cave, but there is a door barring your way inside. To the east is an abandonned gatehouse.</text>
-	<item>
-		<name>Taco</name>
-		<desc>A crunchy bit of Mexico...</desc>
-	</item>
+	<text>You are standing outside a cave. To the east is an abandonned gatehouse.</text>
 	<north Cave Mouth/>
 	<east Gatehouse/>
-	<door east>
-		<name>Gatehouse Door</name>
+	<door north>
+		<name>CaveDoor</name>
 		<desc>A large oaken door blocks your way</desc>
-		<activator GatehouseKey/>
-		<success-msg You opened the gatehouse!/>
-		<fail-msg That cannot be used to open the gatehouse!/>
+		<activator CaveKey/>
+		<success-msg You opened the Cave!/>
+		<fail-msg You try knocking on the door with it, but no one seems to be home./>
 	</door>
-
-	<container MagicalBag>
-		<item>
-			<name Loaf/>
-			<desc A nice loaf of bread/>
-		</item>
-		<item>
-			<name RubberMallet/>
-			<desc A mallet for beating things nicely/>
-		</item>
-		<lock MagicalBagOpener/>
-	</container>
 </room>
 <room>
 	<name>Cave Mouth</name>
 	<text>You are inside the cave. There is a cavern to the west, and a corridor heading north.</text>
+	<object>
+		<name>Pedestal</name>
+		<desc>There's a pedestal in the center of the room with a slot on top. It seems like something should fit in the slot.</desc>
+		<activator>RodOfSuccess</activator>
+		<success-msg>The rod slides into place. You have won! Feel free to continue exploring the demo area.</success-msg>
+		<failure-msg>It doesn't quite fit.</failure-msg>
+	</object>
 	<north Northern Corridor/>
 	<west Western Cavern/>
 	<south>Entrance</south>
-	<item>
-		<name>GatehouseKey</name>
-		<desc>The key that opens the gatehouse</desc>
-	</item>
 </room>
 <room>
 	<name>Gatehouse</name>
-	<text>You're in a shabby-looking gatehouse, there's a desk with a key on it.</text>
+	<text>You're in a shabby-looking gatehouse, there's an empty desk and some lockers.</text>
 	<west>Entrance</west>
-
-	<container Chest>
-		<item>
-			<name>Loaf</name>
-			<desc>A non-stale piece of bread</desc>
-		</item>
-		<item>
-			<name>Bolagna</name>
-			<desc>A old can of bolagna - goes great with tacos</desc>
-		</item>
-		<lock>GatehouseChestKey</lock>
-	</container>	
-
 	<item>
-		<name>GatehouseChestKey</name>
-		<desc>A key that opens a chest in the gate-house</desc>
+		<name>CaveKey</name>
+		<desc>This key probably opens the cave door.</desc>
 	</item>
 </room>
 <room>
 	<name>Western Cavern</name>
 	<text>The cavern ends here, but there's a few crates against the northern wall.</text>
 	<east Cave Mouth/>
+	<container>
+		<name>Crate</name>
+		<item>
+			<name>ChamberKey</name>
+			<desc>You assume it opens the Treasure Chamber.</desc>
+		</item>
+		<lock>Crowbar</lock>
+	</container>
 </room>
 <room>
 	<name>Northern Corridor</name>
-	<text>A golden door bars your way north.</text>
+	<text>There's an enticing looking door to the north.</text>
+	<door north>
+		<name>FinalDoor</name>
+		<desc>A golden door bars your way</desc>
+		<activator ChamberKey/>
+		<success-msg You open the door, and see treasure beyond!/>
+		<fail-msg Well, that probably wasn't going to work anyway.../>
+	</door>
+	<item>
+		<name>Crowbar</name>
+		<desc>With this, you could pry open some things.</desc>
+	</item>
 	<north Treasure Chamber/>
 	<south Cave Mouth/>
 </room>
 <room>
 	<name>Treasure Chamber</name>
 	<text>There's a bunch of gold lying everywhere, and a crate against a wall</text>
+	<container>
+		<name>Crate</name>
+		<item>
+			<name>RodOfSuccess</name>
+			<desc>This looks like it could fit in a slot.</desc>
+		</item>
+		<lock>Crowbar</lock>
+	</container>
 	<south Northern Corridor/>
-	<item>
-		<name>MagicalBagOpener</name>
-		<desc Opens a magical bag/>
-	</item>
+	
 </room>

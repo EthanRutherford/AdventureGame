@@ -97,12 +97,12 @@ void Container::_writeDescription() const
 	if (!locked && contents.size()>0)
 	{
 		//output the contents
-		exCout << "Contents of " << consolea_fore_blue << name << consolea_normal << ":";
+		exCout << "Contents of " << consolea_fore_blue << name << consolea_normal << ":\n";
 		for (list<Item*>::const_iterator iter = contents.begin(), end = contents.end();iter!=end;iter++)
-			exCout << "\n\t" << (*iter)->get_name();
+			exCout << "\t" << (*iter)->get_name() << "\n";
 	}
 	else if (isLockable())
-		exCout << "It won't open. You need to find the " << consolea_fore_green << unlockItemName << consolea_normal << '.';
+		exCout << "It won't open. You need to find the " << consolea_fore_green << unlockItemName << consolea_normal << ".\n";
 }
 
 //Interactive functions
@@ -116,7 +116,7 @@ bool Interactive::activate(const Item* item)
 	if (item->get_name() == activatorItemName)
 	{
 		activated = true;
-		exCout << successMessage;
+		exCout << successMessage << "\n";
 	}
 	else
 		exCout << failureMessage;

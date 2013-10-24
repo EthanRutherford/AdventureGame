@@ -1,0 +1,28 @@
+go east
+take CaveKey
+go west
+use CaveKey on CaveDoor
+go north
+look at Pedestal
+go north
+look at Crowbar
+take Crowbar
+go south
+go west
+open Crate with Crowbar
+look in Crate
+take ChamberKey
+go east
+use ChamberKey on Pedestal
+go north
+look at FinalDoor
+use ChamberKey on FinalDoor
+go north
+look in Crate
+open Crate with Crowbar
+look in Crate
+take RodOfSuccess
+go south
+go south
+use RodOfSuccess on Pedestal
+quit

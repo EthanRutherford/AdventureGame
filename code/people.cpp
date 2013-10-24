@@ -29,9 +29,12 @@ bool Player::use(Item* pItem, Interactive* pObject)
 bool Player::use(Item* pItem, Container* box)
 {
 	if (box->unlock(pItem))
+	{
 		if (pItem->isConsumable())
 			inventory.remove(pItem);
-	return true;
+		return true;
+	}
+	return false;
 }
 bool Player::stow(Item* pItem)
 {
