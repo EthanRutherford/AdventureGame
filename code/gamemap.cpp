@@ -245,13 +245,13 @@ void room::_writeDescription() const
         _roomItems.look();
     if ( _interactives.size()>0 )
     {
-        exCout << "\nThings to interact with:";
+        exCout << "Things to interact with:\n";
         for (list<Interactive>::const_iterator iter = _interactives.begin(), end = _interactives.end();iter!=end;iter++)
-            exCout << endl, iter->look();
+            iter->look();
     }
     if ( _containers.size()>0 )
     {
-        exCout << "\nThings to open:\n";
+        exCout << "Things to open:\n";
         for (list<Container>::const_iterator iter = _containers.begin(),end = _containers.end();iter!=end;iter++)
             exCout << "\t" << iter->get_name() << "\n";
     }

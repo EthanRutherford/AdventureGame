@@ -91,7 +91,7 @@ void Item::_loadFromMarkup(const tag& tagObj)
 }
 void Item::_writeDescription() const
 {
-	exCout << consolea_fore_blue << name << consolea_normal << ": " << description;
+	exCout << consolea_fore_blue << name << consolea_normal << ": " << description << "\n";
 }
 
 Item* adventure_game::create_item(const tag& tagObj)

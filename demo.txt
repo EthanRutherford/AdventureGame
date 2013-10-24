@@ -1,9 +1,12 @@
 go east
+look at CaveKey
+poop
+do things
+go east
 take CaveKey
 go west
 use CaveKey on CaveDoor
 go north
-look at Pedestal
 go north
 look at Crowbar
 take Crowbar

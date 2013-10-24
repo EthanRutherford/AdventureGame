@@ -50,8 +50,6 @@ void Game::getInput()
 			ss >> command;
 			if(!map.get_current_room()->look_for(command))
 				exCout << "There isn't one of those here.\n";
-			else
-				exCout << "\n";
 		}
 		else if (command.length() != 0)
 			exCout << "Look at what?\n";
