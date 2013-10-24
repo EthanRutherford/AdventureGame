@@ -1,54 +1,18 @@
 # Adventure Game Project - CS 230
 
 ## Bulletin
-(Put stuff here that you want people to see...)
 
 * Note about output: to keep style matching among output, try to portray all information to the user as plain text. Brackets break the immersion. Try to tell the user things in a descriptive way, rather than a bulleted list fashion.
-
-* Note about interface: the game element class supplies a virtual interface which is supposed to be implemented as a private interface. Access modifiers in C++ DO NOT AFFECT virtual function calls. I can have a private virtual in a base class AND STILL override it in a derived. This strategy is preferred because I DO NOT want users calling the virtual methods. They are merely reserved for the implementation. Whenever I prefix a name with an underscore, I basically am saying: "This element is reserved for the implementation of a class and its children." Therefore it should never be called directly. Sorry I didn't make this clearer earlier! You might wonder why I do this? Primarily, it's just me following I practice that I use to make code expandable if need be. Check out [this article](http://www.gotw.ca/publications/mill18.htm), the main point of which is that customizable behavior in a base class SHOULD be seperate from the interface. In the author's opinion, if a virtual function is both interface and customizable the code cannot be expanded later on. Both public and virtual interfaces should be seperate. Furthermore, virtual functions should be made private unless derived classes need to call them. Here's an example:
-
-```cpp
-class baseClass
-{
-public:
-	void action() {
-		cout << "Do something that I want each object to do regardless of subtype...";
-		_action(); // do something that each subtype does differently
-	}
-private:
-	virtual void _action() = 0;
-};
-
-class derviedClass : public baseClass
-{
-private:
-	// override base class method - it's private, but still overridable
-	virtual void _action() {
-
-	}
-};
-
-class otherDerivedClass : public derivedClass
-{
-public:
-	void doSomething()
-	{
-		// this only allows the object to use the full implementation
-		// from baseClass::action
-		_action(); // error: is private from derivedClass
-	}
-};
-```
-
 * Please only commit code that compiles! This will allow the people using the Windows build script to not go crazy. When a module compiles, I'll add it to the makefile.
 * Place puesdo-code in the root directory (AdventureGame), not AdventureGame/code. Place only things that compile, please!
 * Try to include your name in the commit message for readibility.
+* The project requires C++11 (std::list emplace member functions)
 * If you're getting annoyed prefixing std:: and don't want to pollute a file with using directives, consider using a private or protected member typedef:
 
 ```cpp
 class myClass
 {
-	typedef std::string _String;
+	typedef std::string _String; // make sure this goes near the top of the class
 public:
 	_String get_name() const
 	{ return "Blaarg"; }
@@ -90,16 +54,13 @@ List tasks for each member of the group. Feel free to make changes. I may have f
 	1. objects
 	2. player/npcs
 	3. game loop
-	4. 
 * Ethan W.
 	1. items
 	2. creatures
-	3. 
 * Roger G.
 	1. markup system for adventure text file
 	2. room class design
 	3. io system design
-	4. 
 
 ## Draft Assignment Description
 * Basic Stuff:
