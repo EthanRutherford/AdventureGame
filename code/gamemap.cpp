@@ -132,7 +132,6 @@ Container* room::search_container(const string& objName)
             return &*iter;
     return NULL;
 }
-
 bool room::look_for(const string& objName) const
 {
     // Polymorphism!!!
@@ -216,44 +215,44 @@ void room::_loadFromMarkup(const tag& tagObj) // assume that tagObj has name "ro
 void room::_writeDescription() const
 {
     // write the room description to exCout
-    exCout << "Room: " << consolea_fore_blue << name << consolea_normal << "! " << _text << '\n';
+    exCout << _text << " [" << consolea_fore_blue << name << consolea_normal << ']' << endl;
     // items, people, etc.
     // available places to go
-    exCout << "Places to go:\n";
+    exCout << "Places to go:";
     for (int i = 0;i<8;i++)
     {
         if (_neighbors[i] != NULL)
         {
             if ( _doors[i].has_activator() && !_doors[i].isActive() )
-                exCout << '\t' << "To the <" << consolea_fore_blue << direction_to_string( direction(i) ) << consolea_normal << ">: " << _doors[i].getDescription() << '\n';
+                exCout << "\n\t" << "To the <" << consolea_fore_blue << direction_to_string( direction(i) ) << consolea_normal << ">: " << _doors[i].getDescription();
             else
             {
-                exCout << "\tGo <";
+                exCout << "\n\tGo <";
                 highlight( direction_to_string( direction(i) ),consolea_fore_blue);
                 exCout << "> to enter ";
                 highlight(_neighbors[i]->name,consolea_fore_magenta);
-                exCout.put('\n');
             }
         }
     }
-    _roomItems.look();
+    if ( _roomItems.getCount() > 0 )
+        exCout << endl, _roomItems.look();
     if ( _interactives.size()>0 )
     {
-        exCout << "\nThings to interact with:\n";
+        exCout << "\nThings to interact with:";
         for (list<Interactive>::const_iterator iter = _interactives.begin(), end = _interactives.end();iter!=end;iter++)
-            iter->look(), exCout.put('\n');
+            exCout << endl, iter->look();
     }
     if ( _containers.size()>0 )
     {
-        exCout << "\nThings to open:\n";
+        exCout << "\nThings to open:";
         for (list<Container>::const_iterator iter = _containers.begin(),end = _containers.end();iter!=end;iter++)
-            exCout << '\t' << iter->get_name() << '\n';
+            exCout << "\n\t" << iter->get_name();
     }
     if ( _npcs.size()>0 )
     {
-        exCout << "\nPeople in here:\n";
+        exCout << "\nPeople in here:";
         for (list<NPC>::const_iterator iter = _npcs.begin(), end = _npcs.end();iter!=end;iter++)
-            exCout << (*iter).get_name() << '\n';
+            exCout << "\n\t" << (*iter).get_name();
     }
 }
 
@@ -351,7 +350,7 @@ void gamemap::print_status() const
     for (int i = 0;i<8;i++)
     {
         if (_pCurRoom->_neighbors[i] != NULL)
-            exCout << "\t" << consolea_fore_red << direction_to_string( direction(i) ) << consolea_normal << ": " << consolea_fore_blue << _pCurRoom->_neighbors[i]->get_name() << consolea_normal << '\n';
+            exCout << "\t" << consolea_fore_red << direction_to_string( direction(i) ) << consolea_normal << ": " << consolea_fore_blue << _pCurRoom->_neighbors[i]->get_name() << consolea_normal << endl;
     }
 }
 bool gamemap::travel(direction go)

@@ -54,4 +54,4 @@ $(OBJDIR):
 	mkdir -p $(OBJDIR)
 
 clean:
-	rm $(OBJDIR)/*.o ../adventure
+	rm --verbose $(OBJDIR)/*.o ../adventure
