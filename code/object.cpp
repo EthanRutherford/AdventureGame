@@ -119,7 +119,7 @@ bool Interactive::activate(const Item* item)
 		exCout << successMessage << "\n";
 	}
 	else
-		exCout << failureMessage;
+		exCout << failureMessage << "\n";
 	return activated;
 }
 void Interactive::_loadFromMarkup(const tag& tagObj)
@@ -152,5 +152,5 @@ void Interactive::_loadFromMarkup(const tag& tagObj)
 }
 void Interactive::_writeDescription() const
 {
-	exCout << desc;
+	exCout << desc << "\n";
 }

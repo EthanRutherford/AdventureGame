@@ -224,28 +224,25 @@ void room::_writeDescription() const
     exCout << _text << " [" << consolea_fore_blue << name << consolea_normal << ']' << endl;
     // items, people, etc.
     // available places to go
-    exCout << "Places to go:";
+    exCout << "Places to go:\n";
     for (int i = 0;i<8;i++)
     {
         if (_neighbors[i] != NULL)
         {
             if ( _doors[i].has_activator() && !_doors[i].isActive() )
-<<<<<<< HEAD
-                exCout << '\t' << "To the <" << consolea_fore_blue << direction_to_string( direction(i) ) << consolea_normal << ">: " << _doors[i].get_name() << '\n';
-=======
-                exCout << "\n\t" << "To the <" << consolea_fore_blue << direction_to_string( direction(i) ) << consolea_normal << ">: " << _doors[i].getDescription();
->>>>>>> 3117b01ecde5a223c41989ba4fb664917f719ad6
+                exCout << "\t" << "To the <" << consolea_fore_blue << direction_to_string( direction(i) ) << consolea_normal << ">: " << _doors[i].get_name() << '\n';
             else
             {
-                exCout << "\n\tGo <";
+                exCout << "\tGo <";
                 highlight( direction_to_string( direction(i) ),consolea_fore_blue);
                 exCout << "> to enter ";
                 highlight(_neighbors[i]->name,consolea_fore_magenta);
+				exCout << "\n";
             }
         }
     }
     if ( _roomItems.getCount() > 0 )
-        exCout << endl, _roomItems.look();
+        _roomItems.look();
     if ( _interactives.size()>0 )
     {
         exCout << "\nThings to interact with:";
@@ -254,15 +251,15 @@ void room::_writeDescription() const
     }
     if ( _containers.size()>0 )
     {
-        exCout << "\nThings to open:";
+        exCout << "\nThings to open:\n";
         for (list<Container>::const_iterator iter = _containers.begin(),end = _containers.end();iter!=end;iter++)
-            exCout << "\n\t" << iter->get_name();
+            exCout << "\t" << iter->get_name() << "\n";
     }
     if ( _npcs.size()>0 )
     {
-        exCout << "\nPeople in here:";
+        exCout << "\nPeople in here:\n";
         for (list<NPC>::const_iterator iter = _npcs.begin(), end = _npcs.end();iter!=end;iter++)
-            exCout << "\n\t" << (*iter).get_name();
+            exCout << "\t" << (*iter).get_name() << "\n";
     }
 }
 
