@@ -198,6 +198,11 @@ void room::_loadFromMarkup(const tag& tagObj) // assume that tagObj has name "ro
             _containers.emplace_back();
             _containers.back().load(*pSubTag);
         }
+        else if (tagName == "object")
+        {
+            _interactives.emplace_back();
+            _interactives.back().load(*pSubTag);
+        }
         else if (tagName == "door")
         {
             direction d = direction_from_string( pSubTag->get_attribute() );
@@ -237,6 +242,12 @@ void room::_writeDescription() const
         exCout << "\nThings to interact with:\n";
         for (list<Interactive>::const_iterator iter = _interactives.begin(), end = _interactives.end();iter!=end;iter++)
             iter->look(), exCout.put('\n');
+    }
+    if ( _containers.size()>0 )
+    {
+        exCout << "\nThings to open:\n";
+        for (list<Container>::const_iterator iter = _containers.begin(),end = _containers.end();iter!=end;iter++)
+            exCout << '\t' << iter->get_name() << '\n';
     }
     if ( _npcs.size()>0 )
     {

@@ -14,6 +14,18 @@
 		<success-msg You opened the gatehouse!/>
 		<fail-msg That cannot be used to open the gatehouse!/>
 	</door>
+
+	<container MagicalBag>
+		<item>
+			<name Loaf/>
+			<desc A nice loaf of bread/>
+		</item>
+		<item>
+			<name RubberMallet/>
+			<desc A mallet for beating things nicely/>
+		</item>
+		<lock MagicalBagOpener/>
+	</container>
 </room>
 <room>
 	<name>Cave Mouth</name>
@@ -21,11 +33,32 @@
 	<north Northern Corridor/>
 	<west Western Cavern/>
 	<south>Entrance</south>
+	<item>
+		<name>GatehouseKey</name>
+		<desc>The key that opens the gatehouse</desc>
+	</item>
 </room>
 <room>
 	<name>Gatehouse</name>
 	<text>You're in a shabby-looking gatehouse, there's a desk with a key on it.</text>
 	<west>Entrance</west>
+
+	<container Chest>
+		<item>
+			<name>Loaf</name>
+			<desc>A non-stale piece of bread</desc>
+		</item>
+		<item>
+			<name>Bolagna</name>
+			<desc>A old can of bolagna - goes great with tacos</desc>
+		</item>
+		<lock>GatehouseChestKey</lock>
+	</container>	
+
+	<item>
+		<name>GatehouseChestKey</name>
+		<desc>A key that opens a chest in the gate-house</desc>
+	</item>
 </room>
 <room>
 	<name>Western Cavern</name>
@@ -42,4 +75,8 @@
 	<name>Treasure Chamber</name>
 	<text>There's a bunch of gold lying everywhere, and a crate against a wall</text>
 	<south Northern Corridor/>
+	<item>
+		<name>MagicalBagOpener</name>
+		<desc Opens a magical bag/>
+	</item>
 </room>
