@@ -16,7 +16,7 @@ void Aesthetic::_writeDescription() const
 //Container functions
 Container::Container()
 {
-	unlockItem = NULL; // default not-lockable
+	// default unlockable
 	locked = false; // default unlocked
 }
 Item* Container::take(const string& itemName)
@@ -49,11 +49,18 @@ const Item* Container::search_item(const string& objName) const
 			return *iter;
 	return NULL;
 }
-bool Container::unlock(Item* keyItem)
+Item* Container::search_item(const string& objName)
+{
+	for (list<Item*>::iterator iter = contents.begin(), end = contents.end();iter!=end;iter++)
+		if ((*iter)->get_name() == objName)
+			return *iter;
+	return NULL;
+}
+bool Container::unlock(const Item* keyItem)
 {
 	// if the pointers have the same address, they
 	// obviously point to the same object
-	if (isLockable() && unlockItem==keyItem)
+	if (isLockable() && keyItem!=NULL && unlockItemName==keyItem->get_name())
 	{
 		locked = false;
 		return true;
@@ -62,7 +69,28 @@ bool Container::unlock(Item* keyItem)
 }
 void Container::_loadFromMarkup(const tag& tagObj)
 {
-	UNREFERENCED_PARAMETER(tagObj);
+	// supported tags for Container
+	// attribute: can be name for tag
+	// <name>
+	// <item>
+	// <lock itemName/>  OR <lock>itemName</lock>
+	const tag* pTagIter = tagObj.next_child();
+	if ( tagObj.get_attribute().length() > 0 )
+		name = tagObj.get_attribute();
+	while (pTagIter != NULL)
+	{
+		const string& tagName = pTagIter->get_name();
+		if (tagName == "name")
+			name = pTagIter->get_attribute().length()>0 ? pTagIter->get_attribute() : pTagIter->get_content();
+		else if (tagName == "item")
+			contents.push_back( create_item(*pTagIter) );
+		else if (tagName == "lock")
+		{
+			unlockItemName = pTagIter->get_attribute().length()>0 ? pTagIter->get_attribute() : pTagIter->get_content();
+			locked = true;
+		}
+		pTagIter = tagObj.next_child();
+	}
 }
 void Container::_writeDescription() const
 {
@@ -78,12 +106,12 @@ void Container::_writeDescription() const
 //Interactive functions
 Interactive::Interactive()
 {
-	activatorItem = NULL;
+	// default has no activator
 	activated = false;
 }
-bool Interactive::activate(Item* item)
+bool Interactive::activate(const Item* item)
 {
-	if (item == activatorItem)
+	if (item->get_name() == activatorItemName)
 	{
 		activated = true;
 		exCout << successMessage;
@@ -95,6 +123,14 @@ bool Interactive::activate(Item* item)
 void Interactive::_loadFromMarkup(const tag& tagObj)
 {
 	UNREFERENCED_PARAMETER(tagObj);
+	// <object> OR <door> - content string is activator item name
+	// supported sub-tags
+	//  <desc>
+	//  <name>
+	//  <activator>
+	//  <success-msg>
+	//  <fail-msg>
+
 }
 void Interactive::_writeDescription() const
 {

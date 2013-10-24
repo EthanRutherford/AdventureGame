@@ -42,7 +42,6 @@ namespace adventure_game
 	{
 		friend Item* create_item(const tag&);
 		friend Item* create_item(Item*);
-		typedef std::string String;
 	 public:
 		// gets 'get_name' from game_element
 		String getDescription() const {return description;}

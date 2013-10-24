@@ -18,6 +18,7 @@ namespace adventure_game
      */
     class game_element
     {
+    protected:
         typedef std::string String;
     public:
         void load(const tag& t)

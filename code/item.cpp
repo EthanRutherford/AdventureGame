@@ -75,6 +75,8 @@ void Item::_loadFromMarkup(const tag& tagObj)
 	// <desc> -description of tag
 	// <consume>true|false -optional consumable flag value
 	const tag* pNext = tagObj.next_child();
+	if ( tagObj.get_attribute().length() > 0 )
+		name = tagObj.get_attribute();
 	while (pNext != NULL)
 	{
 		const string& tagName = pNext->get_name();

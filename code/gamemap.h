@@ -35,7 +35,6 @@ namespace adventure_game
     class room : public game_element
     {
         friend class gamemap;
-        typedef std::string String;
     public:
         room();
 		
@@ -50,15 +49,19 @@ namespace adventure_game
         // gets the Interactive object that is described by the specified name
         // or returns NULL if none was found
         const Interactive* search_interactive(const String& objName) const;
+        Interactive* search_interactive(const String& objName);
 
         // gets the Item object that is described by the specified name
         // or returns NULL if none was found
         const Item* search_item(const String& objName) const
         { return _roomItems.search_item(objName); }
+        Item* search_item(const String& objName)
+        { return _roomItems.search_item(objName); }
 
         // gets the Container object that is described by the specified name
         // or returns NULL if none was found
         const Container* search_container(const String& objName) const;
+        Container* search_container(const String& objName);
 
         // performs the 'look' operation for any game_element that 
         // matches the specified name; return false if none was found

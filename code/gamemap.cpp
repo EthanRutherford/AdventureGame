@@ -106,7 +106,15 @@ const Interactive* room::search_interactive(const string& objName) const
 {
     for (list<Interactive>::const_iterator iter = _interactives.begin(), end = _interactives.end();iter!=end;iter++)
         if ( iter->get_name()==objName )
-            return &*iter;
+            return &(*iter);
+    return NULL;
+
+}
+Interactive* room::search_interactive(const string& objName)
+{
+    for (list<Interactive>::iterator iter = _interactives.begin(), end = _interactives.end();iter!=end;iter++)
+        if ( iter->get_name()==objName )
+            return &(*iter);
     return NULL;
 
 }
@@ -117,6 +125,14 @@ const Container* room::search_container(const string& objName) const
             return &*iter;
     return NULL;
 }
+Container* room::search_container(const string& objName)
+{
+    for (list<Container>::iterator iter = _containers.begin(), end = _containers.end();iter!=end;iter++)
+        if ( iter->get_name()==objName )
+            return &*iter;
+    return NULL;
+}
+
 bool room::look_for(const string& objName) const
 {
     // Polymorphism!!!
@@ -147,9 +163,11 @@ void room::_loadFromMarkup(const tag& tagObj) // assume that tagObj has name "ro
     /* A room has the following supported tags that are handled here:
      *  <name> -required
      *  <text> -required
-     *  <door> -option ex. <door direction/>key</door>
-     *  <object> -any number or zero
+     *  <door> -optional ex. <door direction> <name>TheDoor</name> <activator Key/> <desc>It stops you from walking!</desc> </door> --lookup performed by string comparison
+     *  <object> -any number or zero (these are interactives)
+     *  <static> -any number of zero (these are asthetics)
      *  <item> -any number or zero
+     *  <container> -see container markup load documentation
      * tags in a <room> tag but not supported here
      * <direction> -where direction is north, south, east, west, northeast,
      *  northwest, southeast, southwest - these tags are not handled in this
@@ -175,6 +193,18 @@ void room::_loadFromMarkup(const tag& tagObj) // assume that tagObj has name "ro
         }
         else if (tagName == "item")
             _roomItems.put( create_item(*pSubTag) );
+        else if (tagName == "container")
+        {
+            _containers.emplace_back();
+            _containers.back().load(*pSubTag);
+        }
+        else if (tagName == "door")
+        {
+            direction d = direction_from_string( pSubTag->get_attribute() );
+            if (d == bad_direction)
+                cerr << "Error: expected direction specifier for <door> tag\n";
+            _doors[d].load(*pSubTag);
+        }
         pSubTag = tagObj.next_child();
     }
 }
@@ -189,11 +219,16 @@ void room::_writeDescription() const
     {
         if (_neighbors[i] != NULL)
         {
-            exCout << "\tGo <";
-            highlight( direction_to_string( direction(i) ),consolea_fore_blue);
-            exCout << "> to enter ";
-            highlight(_neighbors[i]->name,consolea_fore_magenta);
-            exCout.put('\n');
+            if ( _doors[i].has_activator() && !_doors[i].isActive() )
+                exCout << '\t' << "To the <" << consolea_fore_blue << direction_to_string( direction(i) ) << consolea_normal << ">: " << _doors[i].getDescription() << '\n';
+            else
+            {
+                exCout << "\tGo <";
+                highlight( direction_to_string( direction(i) ),consolea_fore_blue);
+                exCout << "> to enter ";
+                highlight(_neighbors[i]->name,consolea_fore_magenta);
+                exCout.put('\n');
+            }
         }
     }
     _roomItems.look();
