@@ -296,6 +296,7 @@ gamemap::gamemap(const char* markupFile)
                     roomMapping.push(rmElem);
             }
             // handle other tags that exist at file scope
+
         } while ( markupStream.good() );
         // handle late-bound room associations
         while ( !roomMapping.empty() )

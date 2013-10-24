@@ -3,9 +3,17 @@
 	<text>You are standing outside a cave, but there is a door barring your way inside. To the east is an abandonned gatehouse.</text>
 	<item>
 		<name>Taco</name>
+		<desc>A crunchy bit of Mexico...</desc>
 	</item>
 	<north Cave Mouth/>
 	<east Gatehouse/>
+	<door east>
+		<name>Gatehouse Door</name>
+		<desc>A large oaken door blocks your way</desc>
+		<activator GatehouseKey/>
+		<success-msg You opened the gatehouse!/>
+		<fail-msg That cannot be used to open the gatehouse!/>
+	</door>
 </room>
 <room>
 	<name>Cave Mouth</name>

@@ -130,6 +130,22 @@ void Interactive::_loadFromMarkup(const tag& tagObj)
 	//  <activator>
 	//  <success-msg>
 	//  <fail-msg>
+	const tag* pIter = tagObj.next_child();
+	while (pIter != NULL)
+	{
+		const string& tagName = pIter->get_name();
+		if (tagName == "desc")
+			desc = pIter->get_attribute().length()>0 ? pIter->get_attribute() : pIter->get_content();
+		else if (tagName == "name")
+			name = pIter->get_attribute().length()>0 ? pIter->get_attribute() : pIter->get_content();
+		else if (tagName == "activator")
+			activatorItemName = pIter->get_attribute().length()>0 ? pIter->get_attribute() : pIter->get_content();
+		else if (tagName == "success-msg")
+			successMessage = pIter->get_attribute().length()>0 ? pIter->get_attribute() : pIter->get_content();
+		else if (tagName == "fail-msg")
+			failureMessage = pIter->get_attribute().length()>0 ? pIter->get_attribute() : pIter->get_content();
+		pIter = tagObj.next_child();
+	}
 
 }
 void Interactive::_writeDescription() const
