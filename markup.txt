@@ -32,6 +32,7 @@
 	<item>
 		<name>CaveKey</name>
 		<desc>This key probably opens the cave door.</desc>
+		<consume>true</consume>
 	</item>
 </room>
 <room>
@@ -43,6 +44,7 @@
 		<item>
 			<name>ChamberKey</name>
 			<desc>You assume it opens the Treasure Chamber.</desc>
+			<consume>true</consume>
 		</item>
 		<lock>Crowbar</lock>
 	</container>
@@ -72,6 +74,7 @@
 		<item>
 			<name>RodOfSuccess</name>
 			<desc>This looks like it could fit in a slot.</desc>
+			<consume>true</consume>
 		</item>
 		<lock>Crowbar</lock>
 	</container>
