@@ -22,9 +22,12 @@ void NPC::_writeDescription() const
 bool Player::use(Item* pItem, Interactive* pObject)
 {
 	if (pObject->activate(pItem))
+	{
 		if (pItem->isConsumable())
 			inventory.remove(pItem);
-	return true;
+		return true;
+	}
+	return false;
 }
 bool Player::use(Item* pItem, Container* box)
 {

@@ -4,11 +4,24 @@
  */
 #include "game.h" // gets custom_io.h, gamemap.h
 #include <sstream>
+#include <stdio.h>
 using namespace std;
 using namespace adventure_game;
 
 // Note for EthanR: I placed direction to string functions in gamemap.h, so you can call them from there...
 // I made some changes just to show you how to use the stringstreams; just a demo...
+
+namespace adventure_game{
+	//not sure if this should go here, or in a different file
+	//its not used yet, because it needs to be used on all comparisons on both sides.
+	string tolower(string input)
+	{
+		char letter;
+		for (unsigned int i = 0; i < input.size(); i++)
+			input[i] = std::tolower(input[i]);
+		return input;
+	}
+}
 
 Game::Game()
 	: map("markup.txt") // hard code the dependency name in (we can always change it later to be passed in on the command-line)
@@ -39,16 +52,24 @@ void Game::getInput()
 
 	getline(cin, line);
 	ss.str(line); // replace (empty) contents of stringstream with line input from console
+	//line = tolower(line);		//uncomment once all items etc. are case insensitive
 	ss >> command;
-	if (command == "look")
+	if (command == "look" or command == "check")
 	{
-		command.clear();
-		ss >> command;
-		if (command == "at" or command == "in")
+		if (command == "look")
 		{
 			command.clear();
 			ss >> command;
-			if(!map.get_current_room()->look_for(command))
+		}
+		if (command == "at" or command == "in" or command == "check")
+		{
+			command.clear();
+			ss >> command;
+			Item* pitem;
+			pitem = player.hasItem(command);
+			if (pitem != NULL)
+				pitem->look();	//now we can look at items in inventory
+			else if(!map.get_current_room()->look_for(command))
 				exCout << "There isn't one of those here.\n";
 		}
 		else if (command.length() != 0)
@@ -70,11 +91,12 @@ void Game::getInput()
 		command.clear();
 		ss >> command;
 		Container* box = map.get_current_room()->search_container(command);
-		if (box != NULL)
+		Interactive* object = map.get_current_room()->search_interactive(command);
+		if (box != NULL or object != NULL)
 		{
 			command.clear();
 			ss >> command;
-			if (command == "with")
+			if (command == "with" or command == "using")
 			{
 				command.clear();
 				ss >> command;
@@ -83,8 +105,10 @@ void Game::getInput()
 					exCout << "You don't have one of those.\n";
 				else
 				{
-					if (player.use(pItem, box))
+					if (box != NULL and player.use(pItem, box))
 						exCout << "It is opened.\n";
+					else if (object != NULL and player.use(pItem, object))
+						exCout << "";
 					else
 						exCout << "This item doesn't work.\n";
 				}
@@ -93,7 +117,7 @@ void Game::getInput()
 				exCout << "Incorrect syntax.\n";
 		}
 		else 
-			exCout << "No such container.\n";
+			exCout << "No such bject.\n";
 	}
 	else if (command == "use")
 	{
@@ -101,10 +125,10 @@ void Game::getInput()
 		ss >> command;
 		if (command.length() > 0)
 		{
-			Item* pitem;
+			Item* pItem;
 			//search for proper item pointer here
-			pitem = player.hasItem(command);
-			if (pitem == NULL)
+			pItem = player.hasItem(command);
+			if (pItem == NULL)
 			{
 				exCout << "You don't have one of those.\n";
 			}
@@ -117,21 +141,29 @@ void Game::getInput()
 					command.clear();
 					ss >> command;
 					Interactive* object = map.get_current_room()->search_interactive(command);
-					if (object == NULL)
-						exCout << "No such object.\n";
+					Container* box = map.get_current_room()->search_container(command);
+					if (box != NULL)
+					{
+						if (player.use(pItem, box))
+							exCout << "It is opened.\n";
+						else
+							exCout << "This item doesn't work.\n";
+					}
+					else if (object != NULL)
+						player.use(pItem, object);
 					else
-						player.use(pitem, object);
+						exCout << "No such object.\n";
 				}
 				else
 					exCout << "You can't do that.\n";
 			}
 		}
 		else
-			exCout << "Use what?\n";		//try to use this type syntax for output
+			exCout << "Use what?\n";
 	}
 	else if (command=="exit" || command=="quit")
 		gameover = true;
-	else if (command == "pack")
+	else if (command == "pack" or command == "inventory")
 		player.look();
 	else if (command == "go")
 	{
