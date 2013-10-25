@@ -114,10 +114,10 @@ void Game::getInput()
 				}
 			}
 			else
-				exCout << "Incorrect syntax.\n";
+				exCout << "Open with what?\n";
 		}
 		else 
-			exCout << "No such bject.\n";
+			exCout << "No such object.\n";
 	}
 	else if (command == "use")
 	{
@@ -190,15 +190,23 @@ void Game::getInput()
 	{
 		command.clear();
 		ss >> command;
-		if (command.length() > 0)
+		if (command == "to")
 		{
 			command.clear();
 			ss >> command;
-			//call talk to person
-			//if fails: exCout << "Talk to whom?";
+			if (command.length() > 0)
+			{
+				NPC* pCharacter = map.get_current_room()->search_NPC(command);
+				if (pCharacter != NULL)
+					player.talk(pCharacter);
+				else
+					exCout << "There is no one by that name.\n";
+			}
+			else
+				exCout << "Talk to whom?\n";
 		}
 		else
-			exCout << "Talk to whom?";
+			exCout << "Talk to whom?\n";
 	}
 	else if (command == "poop")
 		exCout << "ewgross\n";

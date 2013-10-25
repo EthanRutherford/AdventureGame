@@ -8,17 +8,32 @@
 using namespace std;
 using namespace adventure_game;
 
-void NPC::_loadFromMarkup(const tag& tagObject)
+void NPC::_loadFromMarkup(const tag& tagObj)
 {
-	UNREFERENCED_PARAMETER(tagObject);
-	// needs to support the following tags
+	// supported tags for NPC
+	// attribute: can be name for tag
 	// <name>
 	// <desc>
+	// <text>
+	const tag* pTagIter = tagObj.next_child();
+	if ( tagObj.get_attribute().length() > 0 )
+		name = tagObj.get_attribute();
+	while (pTagIter != NULL)
+	{
+		const string& tagName = pTagIter->get_name();
+		if (tagName == "name")
+			name = pTagIter->get_attribute().length()>0 ? pTagIter->get_attribute() : pTagIter->get_content();
+		else if (tagName == "desc")
+			desc = pTagIter->get_attribute().length()>0 ? pTagIter->get_attribute() : pTagIter->get_content();
+		else if (tagName == "text")
+			text = pTagIter->get_attribute().length()>0 ? pTagIter->get_attribute() : pTagIter->get_content();
+		pTagIter = tagObj.next_child();
+	}
 }
 void NPC::_writeDescription() const
 {
+	exCout << desc << endl;
 }
-
 bool Player::use(Item* pItem, Interactive* pObject)
 {
 	if (pObject->activate(pItem))
@@ -48,12 +63,9 @@ bool Player::stow(Item* pItem)
 	}
 	return false;
 }
-void Player::talk(string characterName) const
+void Player::talk(NPC* character) const
 {
-	NPC* pCharacter;
-	// ask the current map if an NPC exists with the specified name;
-	// if so, get a pointer to the NPC and have it talk or do whatever it does
-	UNREFERENCED_PARAMETER(characterName);
+	exCout << character->talk() << endl;;
 }
 void Player::_loadFromMarkup(const tag& tagObject)
 {

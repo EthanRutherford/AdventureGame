@@ -63,6 +63,16 @@ namespace adventure_game
         const Container* search_container(const String& objName) const;
         Container* search_container(const String& objName);
 
+		// gets the Aesthetic object that is described by the specified name
+        // or returns NULL if none was found
+        const Aesthetic* search_static(const String& staticName) const;
+        Aesthetic* search_static(const String& taticName);
+		
+		// gets the NPC that is described by the specified name
+        // or returns NULL if none was found
+        const NPC* search_NPC(const String& NPCName) const;
+        NPC* search_NPC(const String& NPCName);
+		
         // performs the 'look' operation for any game_element that 
         // matches the specified name; return false if none was found
         bool look_for(const String& obj) const;

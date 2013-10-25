@@ -6,11 +6,26 @@ using namespace adventure_game;
 
 void Aesthetic::_loadFromMarkup(const tag& tagObj)
 {
-	UNREFERENCED_PARAMETER(tagObj);
+	// supported tags for Aesthetic
+	// attribute: can be name for tag
+	// <name>
+	// <desc>
+	const tag* pTagIter = tagObj.next_child();
+	if ( tagObj.get_attribute().length() > 0 )
+		name = tagObj.get_attribute();
+	while (pTagIter != NULL)
+	{
+		const string& tagName = pTagIter->get_name();
+		if (tagName == "name")
+			name = pTagIter->get_attribute().length()>0 ? pTagIter->get_attribute() : pTagIter->get_content();
+		else if (tagName == "desc")
+			desc = pTagIter->get_attribute().length()>0 ? pTagIter->get_attribute() : pTagIter->get_content();
+		pTagIter = tagObj.next_child();
+	}
 }
 void Aesthetic::_writeDescription() const
 {
-	exCout << desc;
+	exCout << desc << endl;
 }
 
 //Container functions
@@ -97,9 +112,15 @@ void Container::_writeDescription() const
 	if (!locked && contents.size()>0)
 	{
 		//output the contents
-		exCout << "Contents of " << consolea_fore_blue << name << consolea_normal << ":\n";
-		for (list<Item*>::const_iterator iter = contents.begin(), end = contents.end();iter!=end;iter++)
-			exCout << "\t" << (*iter)->get_name() << "\n";
+		for (list<Item*>::const_iterator iter = contents.begin(), n = contents.end(), end = n--;iter!=end;iter++)
+		{
+			if (contents.size()==1)
+				exCout << "a " << consolea_fore_green << (*iter)->get_name() << consolea_normal << ".";
+			else if (iter == n)
+				exCout << "and a " << consolea_fore_green << (*iter)->get_name() << consolea_normal << ".";
+			else
+				exCout << "a " << consolea_fore_green << (*iter)->get_name() << consolea_normal << ", ";
+		}
 	}
 	else if (isLockable())
 		exCout << "It won't open. You need to find the " << consolea_fore_green << unlockItemName << consolea_normal << ".\n";

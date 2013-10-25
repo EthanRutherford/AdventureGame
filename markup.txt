@@ -1,6 +1,11 @@
 <room>
 	<name>Entrance</name>
-	<text>You are standing outside a cave. To the east is an abandonned gatehouse.</text>
+	<text>You are standing outside a cave.</text>
+	<npc>
+		<name>Guide</name>
+		<desc>He looks helpful.</desc>
+		<text>To play the game you must type the actions you want to take. For example, if you want to travel, you can use the word go or travel, and go that direction. If you wish to take something, you can type take, and so on.</text>
+	</npc>
 	<north Cave Mouth/>
 	<east Gatehouse/>
 	<door north>
@@ -13,13 +18,13 @@
 </room>
 <room>
 	<name>Cave Mouth</name>
-	<text>You are inside the cave. There is a cavern to the west, and a corridor heading north.</text>
+	<text>You are inside the cave.</text>
 	<object>
 		<name>Pedestal</name>
 		<desc>There's a pedestal in the center of the room with a slot on top. It seems like something should fit in the slot.</desc>
 		<activator>RodOfSuccess</activator>
 		<success-msg>The rod slides into place. You have won! Feel free to continue exploring the demo area.</success-msg>
-		<failure-msg>It doesn't quite fit.</failure-msg>
+		<fail-msg>It doesn't quite fit.</fail-msg>
 	</object>
 	<north Northern Corridor/>
 	<west Western Cavern/>
@@ -27,17 +32,21 @@
 </room>
 <room>
 	<name>Gatehouse</name>
-	<text>You're in a shabby-looking gatehouse, there's an empty desk and some lockers.</text>
-	<west>Entrance</west>
+	<text>You're in a shabby-looking gatehouse.</text>
+	<static>
+		<name>desk</name>
+		<desc>There's an old desk in the corner, but it's empty.</desc>
+	</static>
 	<item>
 		<name>CaveKey</name>
 		<desc>This key probably opens the cave door.</desc>
 		<consume>true</consume>
 	</item>
+	<west>Entrance</west>
 </room>
 <room>
 	<name>Western Cavern</name>
-	<text>The cavern ends here, but there's a few crates against the northern wall.</text>
+	<text>You find yourself in a cavern.</text>
 	<east Cave Mouth/>
 	<container>
 		<name>Crate</name>
@@ -51,7 +60,7 @@
 </room>
 <room>
 	<name>Northern Corridor</name>
-	<text>There's an enticing looking door to the north.</text>
+	<text>You're in a narrow passage.</text>
 	<door north>
 		<name>FinalDoor</name>
 		<desc>A golden door bars your way</desc>
@@ -68,7 +77,7 @@
 </room>
 <room>
 	<name>Treasure Chamber</name>
-	<text>There's a bunch of gold lying everywhere, and a crate against a wall</text>
+	<text>There's a bunch of gold lying everywhere.</text>
 	<container>
 		<name>Crate</name>
 		<item>

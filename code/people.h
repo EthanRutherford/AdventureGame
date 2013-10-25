@@ -24,7 +24,6 @@ namespace adventure_game{
 	
 	class NPC: public Person{		//Non players have a description, maybe some other behavior
 		public:
-			String getDesc() const {return desc;};
 			String talk() const {return text;};
 		private:
 			String desc;
@@ -44,7 +43,7 @@ namespace adventure_game{
 			Item* hasItem(String name);
 			const Item* hasItem(String name) const;
 			
-			void talk(String characterName) const;
+			void talk(NPC* character) const;
 		private:
 			std::list<Item*> inventory;
 
