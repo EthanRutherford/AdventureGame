@@ -27,13 +27,25 @@ our_ostream& operator <<(our_ostream& stream, String output)
 		word.clear();
 		num++;
 	}
-	stream << consolea_normal;
+	if (num == output.points.front())
+	{
+		output.points.pop_front();
+		stream << output.attr.front();
+		output.attr.pop_front();
+	}
 	return stream;
 }
 
 void getline(std::istream& stream, String& stuff)
 {
 	getline(stream, stuff.contents);
+}
+
+void String::clear()
+{
+	attr.clear();
+	points.clear();
+	contents.clear();
 }
 
 String& String::operator=(std::string input)

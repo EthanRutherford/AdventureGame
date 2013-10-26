@@ -5,6 +5,7 @@ class String{
 	friend adventure_game::our_ostream& operator <<(adventure_game::our_ostream& stream, String output);
 	friend void getline(std::istream& stream, String& stuff);
 	public:
+		void clear();
 		String& operator =(std::string input);
 		String& operator =(String input);
 		String& operator +=(std::string input);
