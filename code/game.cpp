@@ -77,7 +77,7 @@ void Game::getInput()
 		else
 			look();
 	}
-	else if (command == "take")
+	else if (command == "take" or command == "grab")
 	{
 		command.clear();
 		ss >> command;
@@ -161,11 +161,11 @@ void Game::getInput()
 		else
 			exCout << "Use what?\n";
 	}
-	else if (command=="exit" || command=="quit")
+	else if (command == "exit" || command == "quit")
 		gameover = true;
 	else if (command == "pack" or command == "inventory")
 		player.look();
-	else if (command == "go")
+	else if (command == "go" or command == "travel")
 	{
 		direction gotoDir;
 		command.clear(); // in case of failure
