@@ -13,6 +13,7 @@
 #include "object.h" // get 'Object' and its sub-types
 #include "item.h" // get 'Item'
 #include "people.h" // get 'NPC'
+#include "creature.h"
 
 namespace adventure_game
 {
@@ -46,6 +47,11 @@ namespace adventure_game
         const Interactive& get_door(direction inDir) const
         { return _doors[inDir]; }
 
+		Creature* get_creature()
+        { return &*_creature; }
+        void check_lives();
+		~room() { if (_creature != NULL) delete _creature;};
+		
         // gets the Interactive object that is described by the specified name
         // or returns NULL if none was found
         const Interactive* search_interactive(const String& objName) const;
@@ -89,12 +95,12 @@ namespace adventure_game
         virtual void _loadFromMarkup(const tag&);
         virtual void _writeDescription() const; // this is an implementation detail, not an interface function!
 
-        
         Container _roomItems; // I just used Container as a container for the items!
         std::list<Aesthetic> _statics; // Aesthetic objects in the room
         std::list<Container> _containers; // objects that contain items
         std::list<Interactive> _interactives; // other objects that are in the room
         std::list<NPC> _npcs;
+		Creature* _creature;
     };
 
     class gamemap

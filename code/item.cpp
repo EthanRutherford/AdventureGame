@@ -50,8 +50,22 @@ namespace {
 	private:
 		mutable T* _elem;
 	};
-
-	
+	int power(int b, int p)
+	{
+		if (p == 0)
+			return 1;
+		return b*power(b,p-1);
+	}
+	int str_int(const string word)
+	{
+		int num = 0, tmp;
+		for (unsigned int i = 0; i < word.size(); i--)
+		{
+			tmp = (word[i]-48);
+			num += power(tmp,word.size()-i);
+		}
+		return num;
+	}
 	vector< Unloader<Item> > globalItems;
 	// TODO: add sub item types
 }
@@ -59,6 +73,7 @@ namespace {
 Item::Item()
 {
 	consumable = false; // default not-consumable
+	power = 0; //default power to 0
 }
 Item::Item(const Item& obj)
 {
@@ -66,7 +81,7 @@ Item::Item(const Item& obj)
 	name = obj.name;
 	description = obj.description;
 	consumable = obj.consumable;
-
+	power = obj.power;
 }
 void Item::_loadFromMarkup(const tag& tagObj)
 {
@@ -74,6 +89,7 @@ void Item::_loadFromMarkup(const tag& tagObj)
 	// <name> -name of item i.e. Potion
 	// <desc> -description of tag
 	// <consume>true|false -optional consumable flag value
+	// <power> -optional, defaults to zero
 	const tag* pNext = tagObj.next_child();
 	if ( tagObj.get_attribute().length() > 0 )
 		name = tagObj.get_attribute();
@@ -86,6 +102,8 @@ void Item::_loadFromMarkup(const tag& tagObj)
 			description = pNext->get_attribute().length()==0 ? pNext->get_content() : pNext->get_attribute();
 		else if (tagName == "consume")
 			consumable = pNext->get_attribute().length()>0 ? pNext->get_attribute()=="true" : pNext->get_content()=="true";
+		else if (tagName == "power")
+			power = str_int(pNext->get_attribute().length()>0 ? pNext->get_attribute() : pNext->get_content());
 		pNext = tagObj.next_child();
 	}
 }

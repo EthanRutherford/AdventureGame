@@ -15,6 +15,7 @@ namespace adventure_game{
 	class Person : public game_element{	//Person is abstract (because game_element is abstract), has name and health
 		public:
 			// gets 'get_name' from game_element
+			void takeDamage(int damage);
 			int getHealth() const {return health;};
 		protected:
 			// gets 'name' from game_element (protected member)
@@ -25,6 +26,7 @@ namespace adventure_game{
 	class NPC: public Person{		//Non players have a description, maybe some other behavior
 		public:
 			String talk() const {return text;};
+			NPC() {health=10;};
 		private:
 			String desc;
 			String text;
@@ -42,11 +44,14 @@ namespace adventure_game{
 			bool stow(Item* pItem);
 			Item* hasItem(String name);
 			const Item* hasItem(String name) const;
-			
+			int attack();
+			int attack(Item* item);
 			void talk(NPC* character) const;
+			void write_health() const;
+			Player() {health = 100; maxHealth = 100; power = 10;};
 		private:
 			std::list<Item*> inventory;
-
+			int power;
 			// we can load default player attributes from the markup
 			// or else do nothing
 			virtual void _loadFromMarkup(const tag&);

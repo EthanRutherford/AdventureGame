@@ -8,7 +8,7 @@
 #include "gamemap.h" // get class 'gamemap'
 #include "people.h" // get class 'Player'
 #include "item.h"
-#include "gamemap.h"
+#include "creature.h"
 
 namespace adventure_game{
 	class Game{		//manages game data.. not sure what all needs to be in here yet
@@ -18,7 +18,6 @@ namespace adventure_game{
 		private:
 			Player player;
 			gamemap map;						//managed the rooms of the game world
-			std::string help;					//contents of help
 			bool gameover;
 		
 			// let's just always use the 'exCout' stream object declared in custom_io.h

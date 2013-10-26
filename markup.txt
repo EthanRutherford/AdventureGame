@@ -47,7 +47,6 @@
 <room>
 	<name>Western Cavern</name>
 	<text>You find yourself in a cavern.</text>
-	<east Cave Mouth/>
 	<container>
 		<name>Crate</name>
 		<item>
@@ -57,6 +56,14 @@
 		</item>
 		<lock>Crowbar</lock>
 	</container>
+	<creature>
+		<name>Monster</name>
+		<desc>It's a crazy MOOONSTEERRRRRR!!!!</desc>
+		<health>50</health>
+		<hostile>true</hostile>
+		<power>5</power>
+	</creature>
+	<east Cave Mouth/>
 </room>
 <room>
 	<name>Northern Corridor</name>
@@ -71,6 +78,7 @@
 	<item>
 		<name>Crowbar</name>
 		<desc>With this, you could pry open some things.</desc>
+		<power>5</power>
 	</item>
 	<north Treasure Chamber/>
 	<south Cave Mouth/>

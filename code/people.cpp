@@ -3,11 +3,16 @@
  * Owner: Ethan Rutherford
  */
 #include "people.h"
-#include "game.h"
 #include "custom_io.h"
+#include <stdlib.h>
+#include <time.h> 
 using namespace std;
 using namespace adventure_game;
 
+void Person::takeDamage(int damage)
+{
+	health -= damage;
+}
 void NPC::_loadFromMarkup(const tag& tagObj)
 {
 	// supported tags for NPC
@@ -66,6 +71,27 @@ bool Player::stow(Item* pItem)
 void Player::talk(NPC* character) const
 {
 	exCout << character->talk() << endl;;
+}
+int Player::attack()
+{
+	srand (time(NULL));
+	int amount = power + ((rand()%5)-2); //attack with a variance of +/- 2
+	exCout << "You inflict " << amount << " points of damage.\n";
+	return amount;
+}
+int Player::attack(Item* item)
+{
+	srand (time(NULL));
+	int amount = power + item->get_power() + ((rand()%5)-2); //attack, adding weapon power, with a variance of +/- 2
+	exCout << "You inflict " << amount << " points of damage.\n";
+	return amount;
+}
+void Player::write_health() const
+{
+	if ((float)health / maxHealth < .15)
+		exCout << consolea_fore_red << "Current health: " << health << "/" << maxHealth << consolea_normal << endl;
+	else
+		exCout << "Current health: " << health << "/" << maxHealth << endl;
 }
 void Player::_loadFromMarkup(const tag& tagObject)
 {
