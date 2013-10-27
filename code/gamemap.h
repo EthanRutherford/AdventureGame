@@ -48,7 +48,7 @@ namespace adventure_game
         { return _doors[inDir]; }
 
 		Creature* get_creature()
-        { return &*_creature; }
+        { return _creature; }
         void check_lives();
 		~room() { if (_creature != NULL) delete _creature;};
 		

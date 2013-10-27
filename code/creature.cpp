@@ -19,7 +19,7 @@ namespace{
 	int str_int(const string word)
 	{
 		int num = 0, tmp;
-		for (unsigned int i = 0; i < word.size(); i--)
+		for (unsigned int i = 0; i < word.size(); i++)
 		{
 			tmp = (word[i]-48);
 			num += power(tmp,word.size()-i);
