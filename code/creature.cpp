@@ -9,25 +9,6 @@
 using namespace std;
 using namespace adventure_game;
 
-namespace{
-	int power(int b, int p)
-	{
-		if (p == 0)
-			return 1;
-		return b*power(b,p-1);
-	}
-	int str_int(const string word)
-	{
-		int num = 0, tmp;
-		for (unsigned int i = 0; i < word.size(); i++)
-		{
-			tmp = (word[i]-48);
-			num += power(tmp,word.size()-i);
-		}
-		return num;
-	}
-}
-
 void Creature::_loadFromMarkup(const tag& tagObj)
 {
 	// supported tags for creature
@@ -56,9 +37,9 @@ void Creature::_loadFromMarkup(const tag& tagObj)
 				hostile = false;
 		}
 		else if (tagName == "health")
-			health = str_int(pTagIter->get_attribute().length()>0 ? pTagIter->get_attribute() : pTagIter->get_content());
+			health = atoi((pTagIter->get_attribute().length()>0 ? pTagIter->get_attribute() : pTagIter->get_content()).c_str());
 		else if (tagName == "power")
-			power = str_int(pTagIter->get_attribute().length()>0 ? pTagIter->get_attribute() : pTagIter->get_content());
+			power = atoi((pTagIter->get_attribute().length()>0 ? pTagIter->get_attribute() : pTagIter->get_content()).c_str());
 		pTagIter = tagObj.next_child();
 	}
 }

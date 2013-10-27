@@ -4,6 +4,7 @@
  */
 #include "item.h"
 #include "custom_io.h"
+#include <stdlib.h>
 #include <vector>
 using namespace std;
 using namespace adventure_game;
@@ -50,22 +51,6 @@ namespace {
 	private:
 		mutable T* _elem;
 	};
-	int power(int b, int p)
-	{
-		if (p == 0)
-			return 1;
-		return b*power(b,p-1);
-	}
-	int str_int(const string word)
-	{
-		int num = 0, tmp;
-		for (unsigned int i = 0; i < word.size(); i++)
-		{
-			tmp = (word[i]-48);
-			num += power(tmp,word.size()-i);
-		}
-		return num;
-	}
 	vector< Unloader<Item> > globalItems;
 	// TODO: add sub item types
 }
@@ -103,7 +88,7 @@ void Item::_loadFromMarkup(const tag& tagObj)
 		else if (tagName == "consume")
 			consumable = pNext->get_attribute().length()>0 ? pNext->get_attribute()=="true" : pNext->get_content()=="true";
 		else if (tagName == "power")
-			power = str_int(pNext->get_attribute().length()>0 ? pNext->get_attribute() : pNext->get_content());
+			power = atoi((pNext->get_attribute().length()>0 ? pNext->get_attribute() : pNext->get_content()).c_str());
 		pNext = tagObj.next_child();
 	}
 }
