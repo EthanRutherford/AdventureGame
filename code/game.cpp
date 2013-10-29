@@ -69,12 +69,12 @@ void Game::getInput()
 	ss >> command;
 	if (curCreature != NULL and curCreature->isHostile())
 	{
-		if (command == "attack")
+		if (command == "attack" or command == "fight")
 	{
 		command.clear();
 		ss >> command;
 		Creature* creature = map.get_current_room()->get_creature();
-		if (command == "with")
+		if (command == "with" or command == "using")
 		{
 			command.clear();
 			ss >> command;
@@ -84,6 +84,22 @@ void Game::getInput()
 		}
 		else
 			creature->takeDamage(player.attack());
+	}
+	else if (command == "look")
+	{
+		command.clear();
+		ss >> command;
+		if (command == "at")
+		{
+			command.clear();
+			ss >> command;
+			if (command == curCreature->get_name())
+				curCreature->look();
+			else
+				exCout << "You have to focus!\n";
+		}
+		else
+			exCout << "You can't, you're being attacked!\n";
 	}
 	else
 		exCout << "You can't do that, you have to fight!\n"; 
@@ -247,7 +263,7 @@ void Game::getInput()
 		}
 		else if (command == "poop")
 			exCout << "ewgross\n";
-		else if (command == "attack")
+		else if (command == "attack" or command == "fight")
 		{
 			command.clear();
 			ss >> command;
@@ -257,7 +273,7 @@ void Game::getInput()
 				command.clear();
 				ss >> command;
 			}
-			if (command == "with")
+			if (command == "with" or command == "using")
 			{
 				command.clear();
 				ss >> command;
@@ -286,6 +302,8 @@ void Game::getInput()
 					exCout << "Nothing to attack here.\n";
 			}
 		}
+		else if (command == "enter")
+			exCout << "I can't do that yet."; // implement traveling via room name
 		else
 			exCout << "I don't know what that means.\nWhat would you like to do?\n";
 	}
