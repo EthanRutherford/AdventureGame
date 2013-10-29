@@ -24,22 +24,6 @@ namespace {
     }
 }
 
-void room::check_lives()
-{
-	for (list<NPC>::iterator iter = _npcs.begin(), end = _npcs.end();iter!=end;iter++)
-        if (iter->getHealth() <= 0)
-		{
-			exCout << consolea_fore_white << iter->get_name() << consolea_normal << " has died.\n";
-			_npcs.erase(iter);
-			return;
-		}
-	if (_creature != NULL and _creature->getHealth() <= 0)
-	{
-		exCout << consolea_fore_white << _creature->get_name() << consolea_normal << " has died.\n";
-		delete _creature;
-		_creature = NULL;
-	}
-}
 direction adventure_game::direction_from_string(const string& s)
 {
     if (s == "north")
@@ -85,11 +69,17 @@ const char* adventure_game::direction_to_string(direction d)
     }
     return "";
 }
+
 room::room()
 {
     for (int i = 0;i<8;i++)
         _neighbors[i] = NULL;
-	_creature = NULL;
+    _creature = NULL;
+}
+room::~room()
+{
+    if (_creature != NULL)
+        delete _creature;
 }
 int room::get_item_count() const
 {
@@ -117,6 +107,22 @@ Item* room::take_item(const string& itemName)
         return NULL;
     }
     return r;
+}
+void room::check_lives()
+{
+    for (list<NPC>::iterator iter = _npcs.begin(), end = _npcs.end();iter!=end;iter++)
+        if (iter->getHealth() <= 0)
+        {
+            exCout << consolea_fore_white << iter->get_name() << consolea_normal << " has died.\n";
+            _npcs.erase(iter);
+            return;
+        }
+    if (_creature != NULL && _creature->getHealth() <= 0)
+    {
+        exCout << consolea_fore_white << _creature->get_name() << consolea_normal << " has died.\n";
+        delete _creature;
+        _creature = NULL;
+    }
 }
 const Interactive* room::search_interactive(const string& objName) const
 {
@@ -156,28 +162,28 @@ Container* room::search_container(const string& objName)
 }
 const NPC* room::search_NPC(const string& NPCName) const
 {
-	for (list<NPC>::const_iterator iter = _npcs.begin(), end = _npcs.end();iter!=end;iter++)
+    for (list<NPC>::const_iterator iter = _npcs.begin(), end = _npcs.end();iter!=end;iter++)
         if ( iter->get_name()==NPCName )
             return &*iter;
     return NULL;
 }
 NPC* room::search_NPC(const string& staticName)
 {
-	for (list<NPC>::iterator iter = _npcs.begin(), end = _npcs.end();iter!=end;iter++)
+    for (list<NPC>::iterator iter = _npcs.begin(), end = _npcs.end();iter!=end;iter++)
         if ( iter->get_name()==staticName )
             return &*iter;
     return NULL;
 }
 const Aesthetic* room::search_static(const string& staticName) const
 {
-	for (list<Aesthetic>::const_iterator iter = _statics.begin(), end = _statics.end();iter!=end;iter++)
+    for (list<Aesthetic>::const_iterator iter = _statics.begin(), end = _statics.end();iter!=end;iter++)
         if ( iter->get_name()==staticName )
             return &*iter;
     return NULL;
 }
 Aesthetic* room::search_static(const string& NPCName)
 {
-	for (list<Aesthetic>::iterator iter = _statics.begin(), end = _statics.end();iter!=end;iter++)
+    for (list<Aesthetic>::iterator iter = _statics.begin(), end = _statics.end();iter!=end;iter++)
         if ( iter->get_name()==NPCName )
             return &*iter;
     return NULL;
@@ -203,30 +209,30 @@ bool room::look_for(const string& objName) const
     if (box != NULL)
     {
         if (!box->isLocked())
-			exCout << "Inside the " << consolea_fore_yellow << box->get_name() << consolea_normal << " you find "; 
-		box->look();
-		if (!box->isLocked())
-			exCout << endl;
+            exCout << "Inside the " << consolea_fore_yellow << box->get_name() << consolea_normal << " you find "; 
+        box->look();
+        if (!box->isLocked())
+            exCout << endl;
         return true;
     }
-	pElem = search_NPC(objName);
+    pElem = search_NPC(objName);
     if (pElem != NULL)
     {
         pElem->look();
         return true;
     }
-	pElem = search_static(objName);
+    pElem = search_static(objName);
     if (pElem != NULL)
     {
         pElem->look();
         return true;
     }
-	pElem = _creature;
-	if (pElem != NULL)
-	{
-		pElem->look();
-		return true;
-	}
+    pElem = _creature;
+    if (pElem != NULL)
+    {
+        pElem->look();
+        return true;
+    }
     return false;
 }
 void room::_loadFromMarkup(const tag& tagObj) // assume that tagObj has name "room"
@@ -237,12 +243,12 @@ void room::_loadFromMarkup(const tag& tagObj) // assume that tagObj has name "ro
      *  <door> -optional ex. <door direction> <name>TheDoor</name> <activator Key/> <desc>It stops you from walking!</desc> </door> --lookup performed by string comparison
      *  <object> -any number or zero (these are interactives)
      *  <static> -any number or zero (these are asthetics)
-	 *  <npc) -any number or zero
+     *  <npc) -any number or zero
      *  <item> -any number or zero
-	 *  <creature> -one or none
+     *  <creature> -one or none
      *  <container> -see container markup load documentation
-     * 	tags in a <room> tag but not supported here
-     * 	<direction> -where direction is north, south, east, west, northeast,
+     *  tags in a <room> tag but not supported here
+     *  <direction> -where direction is north, south, east, west, northeast,
      *  northwest, southeast, southwest - these tags are not handled in this
      *  routine, but rather by the gamemap load routines
      */
@@ -283,21 +289,21 @@ void room::_loadFromMarkup(const tag& tagObj) // assume that tagObj has name "ro
                 cerr << "Error: expected direction specifier for <door> tag\n";
             _doors[d].load(*pSubTag);
         }
-		else if (tagName == "static")
-		{
-			_statics.emplace_back();
-			_statics.back().load(*pSubTag);
-		}
-		else if (tagName == "npc")
-		{
-			_npcs.emplace_back();
-			_npcs.back().load(*pSubTag);
-		}
-		else if (tagName == "creature")
-		{
-			_creature = new Creature;
-			_creature->load(*pSubTag);
-		}
+        else if (tagName == "static")
+        {
+            _statics.emplace_back();
+            _statics.back().load(*pSubTag);
+        }
+        else if (tagName == "npc")
+        {
+            _npcs.emplace_back();
+            _npcs.back().load(*pSubTag);
+        }
+        else if (tagName == "creature")
+        {
+            _creature = new Creature;
+            _creature->load(*pSubTag);
+        }
         pSubTag = tagObj.next_child();
     }
 }
@@ -305,94 +311,94 @@ void room::_writeDescription() const
 {
     // write the room description to exCout
     exCout << _text << " ";
-	//list aesthetics.
-	if (_creature != NULL and _creature->isHostile())
-		exCout << "There's a " << consolea_fore_white << consolea_normal << _creature->get_name() << " here!\n";
-	else
-	{
-		if ( _statics.size()>0 )
-		{
-			exCout << "There is ";
-			for (list<Aesthetic>::const_iterator iter = _statics.begin(), n = _statics.end(), end = n--;iter!=end;iter++)
-			{
-				if (_statics.size() == 1 and _interactives.size() == 0)
-					exCout << "a " << iter->get_name() << ". ";
-				else if (iter == n and _interactives.size() == 0)
-					exCout << "and a " << iter->get_name() << ". ";
-				else
-					exCout << "a " << iter->get_name() << ", ";
-			}
-		}
-		//list interactives
-		if ( _interactives.size()>0 )
-		{
-			if ( _statics.size()==0 )
-				exCout << "There is ";
-			for (list<Interactive>::const_iterator iter = _interactives.begin(), n = _interactives.end(), end = n--;iter!=end;iter++)
-			{
-				if (_interactives.size() == 1)
-					exCout << "a " << consolea_fore_blue << iter->get_name() << consolea_normal << ". ";
-				else if (iter == n)
-					exCout << "and a " << consolea_fore_blue << iter->get_name() << consolea_normal << ". ";
-				else
-					exCout << "a " << consolea_fore_blue << iter->get_name() << consolea_normal << ", ";
-			}
-		}
-		//as well as containers
-		if ( _containers.size()>0 )
-		{
-			exCout << "You can see ";
-			for (list<Container>::const_iterator iter = _containers.begin(), n = _containers.end(), end = n--;iter!=end;iter++)
-			{
-				if (_containers.size() == 1)
-					exCout << "a " << consolea_fore_yellow << iter->get_name() << consolea_normal << ". ";
-				else if (iter == n)
-					exCout << "and a " << consolea_fore_yellow << iter->get_name() << consolea_normal << ". ";
-				else
-					exCout << "a " << consolea_fore_yellow << iter->get_name() << consolea_normal << ", ";
-			}
-		}
-		// available places to go
-		exCout << "Looking around, you see that ";
-		for (int i = 0;i<8;i++)
-		{
-			if (_neighbors[i] != NULL)
-			{
-				if ( _doors[i].has_activator() && !_doors[i].isActive() )
-					exCout << "the way " << consolea_fore_magenta << direction_to_string( direction(i) ) << consolea_normal << " is barred by the " << consolea_fore_cyan << _doors[i].get_name() << consolea_normal << ", ";
-				else
-				{
-					exCout << "you can go ";
-					highlight( direction_to_string( direction(i) ),consolea_fore_magenta);
-					exCout << " to enter the ";
-					highlight(_neighbors[i]->name,consolea_fore_cyan);
-					exCout << ", ";
-				}
-			}
-		}
-		exCout << "and ";
-		if ( _roomItems.getCount() > 0 )
-		{
-			exCout << "lying about is ";
-			_roomItems.look();
-		}
-		else
-			exCout << "there are no items to be found.";
-		if ( _npcs.size()>0 )
-		{
-			exCout << " Nearby you see ";
-			for (list<NPC>::const_iterator iter = _npcs.begin(), n = _npcs.end(), end = n--;iter!=end;iter++)
-			{
-				if (_npcs.size() == 1)
-					exCout << consolea_fore_white << iter->get_name() << consolea_normal << ". ";
-				else if (iter == n)
-					exCout << "and " << consolea_fore_white << iter->get_name() << consolea_normal << ". ";
-				else
-					exCout << consolea_fore_white << iter->get_name() << consolea_normal << ", ";
-			}
-		}
-		exCout << endl;
-	}
+    //list aesthetics.
+    if (_creature != NULL && _creature->isHostile())
+        exCout << "There's a " << consolea_fore_white << consolea_normal << _creature->get_name() << " here!\n";
+    else
+    {
+        if ( _statics.size()>0 )
+        {
+            exCout << "There is ";
+            for (list<Aesthetic>::const_iterator iter = _statics.begin(), n = _statics.end(), end = n--;iter!=end;iter++)
+            {
+                if (_statics.size() == 1 && _interactives.size() == 0)
+                    exCout << "a " << iter->get_name() << ". ";
+                else if (iter == n && _interactives.size() == 0)
+                    exCout << "and a " << iter->get_name() << ". ";
+                else
+                    exCout << "a " << iter->get_name() << ", ";
+            }
+        }
+        //list interactives
+        if ( _interactives.size()>0 )
+        {
+            if ( _statics.size()==0 )
+                exCout << "There is ";
+            for (list<Interactive>::const_iterator iter = _interactives.begin(), n = _interactives.end(), end = n--;iter!=end;iter++)
+            {
+                if (_interactives.size() == 1)
+                    exCout << "a " << consolea_fore_blue << iter->get_name() << consolea_normal << ". ";
+                else if (iter == n)
+                    exCout << "and a " << consolea_fore_blue << iter->get_name() << consolea_normal << ". ";
+                else
+                    exCout << "a " << consolea_fore_blue << iter->get_name() << consolea_normal << ", ";
+            }
+        }
+        //as well as containers
+        if ( _containers.size()>0 )
+        {
+            exCout << "You can see ";
+            for (list<Container>::const_iterator iter = _containers.begin(), n = _containers.end(), end = n--;iter!=end;iter++)
+            {
+                if (_containers.size() == 1)
+                    exCout << "a " << consolea_fore_yellow << iter->get_name() << consolea_normal << ". ";
+                else if (iter == n)
+                    exCout << "and a " << consolea_fore_yellow << iter->get_name() << consolea_normal << ". ";
+                else
+                    exCout << "a " << consolea_fore_yellow << iter->get_name() << consolea_normal << ", ";
+            }
+        }
+        // available places to go
+        exCout << "Looking around, you see that ";
+        for (int i = 0;i<8;i++)
+        {
+            if (_neighbors[i] != NULL)
+            {
+                if ( _doors[i].has_activator() && !_doors[i].isActive() )
+                    exCout << "the way " << consolea_fore_magenta << direction_to_string( direction(i) ) << consolea_normal << " is barred by the " << consolea_fore_cyan << _doors[i].get_name() << consolea_normal << ", ";
+                else
+                {
+                    exCout << "you can go ";
+                    highlight( direction_to_string( direction(i) ),consolea_fore_magenta);
+                    exCout << " to enter the ";
+                    highlight(_neighbors[i]->name,consolea_fore_cyan);
+                    exCout << ", ";
+                }
+            }
+        }
+        exCout << "and ";
+        if ( _roomItems.getCount() > 0 )
+        {
+            exCout << "lying about is ";
+            _roomItems.look();
+        }
+        else
+            exCout << "there are no items to be found.";
+        if ( _npcs.size()>0 )
+        {
+            exCout << " Nearby you see ";
+            for (list<NPC>::const_iterator iter = _npcs.begin(), n = _npcs.end(), end = n--;iter!=end;iter++)
+            {
+                if (_npcs.size() == 1)
+                    exCout << consolea_fore_white << iter->get_name() << consolea_normal << ". ";
+                else if (iter == n)
+                    exCout << "and " << consolea_fore_white << iter->get_name() << consolea_normal << ". ";
+                else
+                    exCout << consolea_fore_white << iter->get_name() << consolea_normal << ", ";
+            }
+        }
+        exCout << endl;
+    }
 }
 gamemap::gamemap(const char* markupFile)
 {
