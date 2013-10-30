@@ -160,7 +160,7 @@ streamsize our_ostream_buffer::xsputn(const char* data,streamsize n)
         {
             if ( is_vertical_whitespace(data[i]) )
                 _charsOut = 0;
-            else if (_charsOut>0 && _charsOut%(_colCnt-1)==0)
+            else if (_charsOut>0 && _charsOut%_colCnt==0)
             {
                 int j;
                 for (j = i--;j>=0 && !is_linear_whitespace(data[j]);j--);
