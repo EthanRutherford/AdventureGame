@@ -124,10 +124,10 @@ void room::check_lives()
 const Interactive* room::search_interactive(const string& objName) const
 {
     for (list<Interactive>::const_iterator iter = _interactives.begin(), end = _interactives.end();iter!=end;iter++)
-        if ( iter->get_name()==objName )
+        if ( iter->compare_name(objName) )
             return &(*iter);
     for (int i = 0;i < 8;i++)
-        if ( _doors[i].get_name()==objName )
+        if ( _doors[i].compare_name(objName) )
             return &_doors[i];
     return NULL;
 
@@ -135,10 +135,10 @@ const Interactive* room::search_interactive(const string& objName) const
 Interactive* room::search_interactive(const string& objName)
 {
     for (list<Interactive>::iterator iter = _interactives.begin(), end = _interactives.end();iter!=end;iter++)
-        if ( iter->get_name()==objName )
+        if ( iter->compare_name(objName) )
             return &(*iter);
     for (int i = 0;i < 8;i++)
-        if ( _doors[i].get_name()==objName )
+        if ( _doors[i].compare_name(objName) )
             return &_doors[i];
     return NULL;
 
@@ -146,42 +146,42 @@ Interactive* room::search_interactive(const string& objName)
 const Container* room::search_container(const string& objName) const
 {
     for (list<Container>::const_iterator iter = _containers.begin(), end = _containers.end();iter!=end;iter++)
-        if ( iter->get_name()==objName )
+        if ( iter->compare_name(objName) )
             return &*iter;
     return NULL;
 }
 Container* room::search_container(const string& objName)
 {
     for (list<Container>::iterator iter = _containers.begin(), end = _containers.end();iter!=end;iter++)
-        if ( iter->get_name()==objName )
+        if ( iter->compare_name(objName) )
             return &*iter;
     return NULL;
 }
 const NPC* room::search_NPC(const string& NPCName) const
 {
     for (list<NPC>::const_iterator iter = _npcs.begin(), end = _npcs.end();iter!=end;iter++)
-        if ( iter->get_name()==NPCName )
+        if ( iter->compare_name(NPCName) )
             return &*iter;
     return NULL;
 }
 NPC* room::search_NPC(const string& staticName)
 {
     for (list<NPC>::iterator iter = _npcs.begin(), end = _npcs.end();iter!=end;iter++)
-        if ( iter->get_name()==staticName )
+        if ( iter->compare_name(staticName) )
             return &*iter;
     return NULL;
 }
 const Aesthetic* room::search_static(const string& staticName) const
 {
     for (list<Aesthetic>::const_iterator iter = _statics.begin(), end = _statics.end();iter!=end;iter++)
-        if ( iter->get_name()==staticName )
+        if ( iter->compare_name(staticName) )
             return &*iter;
     return NULL;
 }
 Aesthetic* room::search_static(const string& NPCName)
 {
     for (list<Aesthetic>::iterator iter = _statics.begin(), end = _statics.end();iter!=end;iter++)
-        if ( iter->get_name()==NPCName )
+        if ( iter->compare_name(NPCName) )
             return &*iter;
     return NULL;
 }
@@ -453,7 +453,7 @@ gamemap::gamemap(const char* markupFile)
         while ( !roomMapping.empty() )
         {
             RoomMapElement& elem = roomMapping.front();
-            for (direction d = north;d <= west;++(int&)d)
+            for (int d = 0;d<=7;d++)
             {
                 if ( elem.adjacentRoomNames[d].length()==0 )
                     continue; // none specified in given direction
@@ -503,7 +503,8 @@ void gamemap::print_story() const
         {
             exCout << storyText;
             storyText.clear();
-            _outputStorySubTag(pChild);
+            // expect color tag
+            output_color_tag(pChild);
             pChild = _storyTag.next_child();
         }
         storyText.push_back( storyContent[i] );
@@ -512,7 +513,7 @@ void gamemap::print_story() const
     // get any sub-tags that append content
     while (pChild != NULL)
     {
-        _outputStorySubTag(pChild);
+        output_color_tag(pChild);
         pChild = _storyTag.next_child();
     }
     exCout << endl;
@@ -528,14 +529,30 @@ bool gamemap::travel(direction go)
     }
     return false;
 }
+bool gamemap::travel(const string& roomName)
+{
+    if (_pCurRoom != NULL)
+    {
+        for (int i = 0;i<=7;i++)
+            if ( _pCurRoom->_neighbors[i]!=NULL && _pCurRoom->_neighbors[i]->compare_name(roomName) )
+                if ( travel( direction(i) ) )
+                    return true;
+    }
+    return false;
+}
 bool gamemap::can_travel(direction go) const
 {
+    // is there a room in the specified direction
     return _pCurRoom!=NULL && _pCurRoom->_neighbors[go]!=NULL;
 }
-void gamemap::_outputStorySubTag(const tag* pChild) const
+bool gamemap::can_travel(const string& roomName) const
 {
-    if (pChild->get_name() == "cmd")
-        exCout << consolea_back_blue << pChild->get_content() << consolea_normal;
-    else
-        exCout << pChild->get_content();
+    // is there a room in the specified room
+    if (_pCurRoom != NULL)
+    {
+        for (int i = 0;i<=7;i++)
+            if ( _pCurRoom->_neighbors[i]!=NULL && _pCurRoom->_neighbors[i]->compare_name(roomName) )
+                return true;
+    }
+    return false;
 }

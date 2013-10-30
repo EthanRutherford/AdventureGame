@@ -27,6 +27,8 @@ namespace adventure_game
         { _writeDescription(); }
         String get_name() const
         { return name; }
+
+        bool compare_name(String elementName) const;
     protected:
         String name;
     private:
