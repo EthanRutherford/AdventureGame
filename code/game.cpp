@@ -61,8 +61,8 @@ void Game::getInput()
 	string line, command;
 	getline(cin, line);
 	exCout.input_event(); // inform the IO manager that the user entered input
-	ss.str(line); // replace (empty) contents of stringstream with line input from console
 	line = tolower(line);		//uncomment once all items etc. are case insensitive
+	ss.str(line); // replace (empty) contents of stringstream with line input from console
 	ss >> command;
 	if (curCreature->isValid() and curCreature->isHostile())
 	{
@@ -76,7 +76,7 @@ void Game::getInput()
 			ss >> command;
 			Item* pitem = player.hasItem(command);
 			if (pitem != NULL)
-				ccurCreature->takeDamage(player.attack(pitem));
+				curCreature->takeDamage(player.attack(pitem));
 		}
 		else
 			curCreature->takeDamage(player.attack());
@@ -302,7 +302,7 @@ void Game::getInput()
 		{
 			command.clear();
 			ss >> command;
-			if (command.length() > 0
+			if (command.length() > 0)
 			{
 				if (map.travel(command))
 					look();

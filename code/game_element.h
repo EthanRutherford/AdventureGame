@@ -28,7 +28,7 @@ namespace adventure_game
         String get_name() const
         { return name; }
 
-        bool compare_name(String elementName) const;
+        bool compare_name(const String& elementName) const;
     protected:
         String name;
     private:

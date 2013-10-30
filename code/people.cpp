@@ -100,14 +100,14 @@ void Player::_loadFromMarkup(const tag& tagObject)
 Item* Player::hasItem(string item_name)
 {
 	for (list<Item*>::iterator i = inventory.begin(), end = inventory.end(); i != end; i++)
-		if ((*i)->compare_name((item_name))
+		if ( (*i)->compare_name(item_name) )
 			return *i;
 	return NULL;
 }
 const Item* Player::hasItem(string item_name) const
 {
 	for (list<Item*>::const_iterator i = inventory.begin(), end = inventory.end(); i != end; i++)
-		if ((*i)->compare_name((item_name))
+		if ( (*i)->compare_name(item_name) )
 			return *i;
 	return NULL;
 }

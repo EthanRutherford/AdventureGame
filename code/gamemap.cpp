@@ -556,3 +556,4 @@ bool gamemap::can_travel(const string& roomName) const
     }
     return false;
 }
+
