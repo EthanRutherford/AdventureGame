@@ -1,3 +1,7 @@
+/* gamemap.cpp
+ * Project: Adventure Game
+ * Owner: Roger Gee
+ */
 #include "gamemap.h"
 #include "custom_io.h"
 #include <fstream>
@@ -74,12 +78,6 @@ room::room()
 {
     for (int i = 0;i<8;i++)
         _neighbors[i] = NULL;
-    _creature = NULL;
-}
-room::~room()
-{
-    if (_creature != NULL)
-        delete _creature;
 }
 int room::get_item_count() const
 {
@@ -117,11 +115,10 @@ void room::check_lives()
             _npcs.erase(iter);
             return;
         }
-    if (_creature != NULL && _creature->getHealth() <= 0)
+    if (_creature.isValid() && _creature.getHealth() <= 0)
     {
-        exCout << consolea_fore_white << _creature->get_name() << consolea_normal << " has died.\n";
-        delete _creature;
-        _creature = NULL;
+        exCout << consolea_fore_white << _creature.get_name() << consolea_normal << " has died.\n";
+        _creature.invalidate();
     }
 }
 const Interactive* room::search_interactive(const string& objName) const
@@ -227,10 +224,9 @@ bool room::look_for(const string& objName) const
         pElem->look();
         return true;
     }
-    pElem = _creature;
-    if (pElem != NULL)
+    if ( _creature.isValid() )
     {
-        pElem->look();
+        _creature.look();
         return true;
     }
     return false;
@@ -300,10 +296,7 @@ void room::_loadFromMarkup(const tag& tagObj) // assume that tagObj has name "ro
             _npcs.back().load(*pSubTag);
         }
         else if (tagName == "creature")
-        {
-            _creature = new Creature;
-            _creature->load(*pSubTag);
-        }
+            _creature.load(*pSubTag);
         pSubTag = tagObj.next_child();
     }
 }
@@ -312,8 +305,8 @@ void room::_writeDescription() const
     // write the room description to exCout
     exCout << _text << " ";
     //list aesthetics.
-    if (_creature != NULL && _creature->isHostile())
-        exCout << "There's a " << consolea_fore_white << consolea_normal << _creature->get_name() << " here!\n";
+    if (_creature.isValid() && _creature.isHostile())
+        exCout << "There's a " << consolea_fore_white << consolea_normal << _creature.get_name() << " here!\n";
     else
     {
         if ( _statics.size()>0 )
@@ -450,7 +443,11 @@ gamemap::gamemap(const char* markupFile)
                     roomMapping.push(rmElem);
             }
             // handle other tags that exist at file scope
-
+            else if (theTag.get_name() == "story") // expect 1, overwrite if found more than 1
+            {
+                // TODO: attribute could be used for story title
+                _storyTag = theTag;
+            }
         } while ( markupStream.good() );
         // handle late-bound room associations
         while ( !roomMapping.empty() )
@@ -477,14 +474,11 @@ gamemap::gamemap(const char* markupFile)
             _pCurRoom = NULL;
     }
     else
-    {
-        cerr << "Error: could not open companion markup file!\n";
         _pCurRoom = NULL;
-    }
 }
 void gamemap::print_status() const
 {
-    // this should be called each rendering frame
+    // for testing purposes
     exCout << "Current Room: [";
     if (_pCurRoom == NULL)
         exCout << consolea_fore_red << "!An undetermined location!" << consolea_normal;
@@ -496,6 +490,32 @@ void gamemap::print_status() const
         if (_pCurRoom->_neighbors[i] != NULL)
             exCout << "\t" << consolea_fore_red << direction_to_string( direction(i) ) << consolea_normal << ": " << consolea_fore_blue << _pCurRoom->_neighbors[i]->get_name() << consolea_normal << endl;
     }
+}
+void gamemap::print_story() const
+{
+    int childCnt = _storyTag.get_number_of_children();
+    const tag* pChild = _storyTag.next_child();
+    string storyText;
+    const string storyContent = _storyTag.get_content();
+    for (size_t i = 0;i<storyContent.length();i++)
+    {
+        if (pChild!=NULL && pChild->get_position()==i)
+        {
+            exCout << storyText;
+            storyText.clear();
+            _outputStorySubTag(pChild);
+            pChild = _storyTag.next_child();
+        }
+        storyText.push_back( storyContent[i] );
+    }
+    exCout << storyText;
+    // get any sub-tags that append content
+    while (pChild != NULL)
+    {
+        _outputStorySubTag(pChild);
+        pChild = _storyTag.next_child();
+    }
+    exCout << endl;
 }
 bool gamemap::travel(direction go)
 {
@@ -511,4 +531,11 @@ bool gamemap::travel(direction go)
 bool gamemap::can_travel(direction go) const
 {
     return _pCurRoom!=NULL && _pCurRoom->_neighbors[go]!=NULL;
+}
+void gamemap::_outputStorySubTag(const tag* pChild) const
+{
+    if (pChild->get_name() == "cmd")
+        exCout << consolea_back_blue << pChild->get_content() << consolea_normal;
+    else
+        exCout << pChild->get_content();
 }

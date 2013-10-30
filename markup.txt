@@ -98,3 +98,5 @@
 	<south Northern Corridor/>
 	
 </room>
+
+<story>Enter the cave and complete the mission: get the <cmd>RodOfSuccess</cmd> to the pedestal. It may help to <cmd>-look-</cmd> around first.</story>

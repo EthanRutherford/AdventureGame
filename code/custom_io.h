@@ -51,7 +51,7 @@ namespace adventure_game
     extern const console_attribute consolea_back_cyan;
     extern const console_attribute consolea_back_white;
 
-#if defined(ADVENTUREGAME_LINUX) || defined(ADVENTUREGAME_WIN32)
+#if defined(ADVENTUREGAME_XTERM) || defined(ADVENTUREGAME_WIN32)
     class our_ostream;
     class our_ostream_buffer : public std::streambuf
     {
@@ -66,14 +66,16 @@ namespace adventure_game
 #ifdef ADVENTUREGAME_WIN32
         void* _hOutput; // HANDLE
         unsigned short _wAttributesOriginal;
-        unsigned short _colCnt, _rowCnt;
 #else
         int _fdOutput; // descriptor
 #endif
         console_attribute _attrib;
+        unsigned short _colCnt, _rowCnt;
         bool _trigger;
+        int _charsOut;
 
         void _applyAttribute();
+        std::streamsize _writeBuffer(const char*,std::streamsize);
     };
 
     class our_ostream : public std::ostream
@@ -85,6 +87,9 @@ namespace adventure_game
         void set_attribute(console_attribute attrib);
         void restore_attribute()
         { set_attribute(consolea_normal); }
+        void set_cursor_location(short curx,short cury);
+        void input_event()
+        { _pBuf->_charsOut = 0; }
     private:
         our_ostream_buffer* _pBuf;
     };
@@ -96,17 +101,18 @@ namespace adventure_game
     class our_ostream : public std::ostream
     {
     public:
-        our_ostream(std::streambuf* buffer)
-            : std::ostream(buffer) {}
+        our_ostream(std::streambuf* buffer);
 
         // implement the same interface; but provide none
         // of the same functionality
-        
         void clear_screen()
         { this->put('\n'); } // just use an endline if we cannot clear the screen
         void set_attribute(console_attribute)
         { } // do nothing
         void restore_attribute()
+        { } // do nothing
+        void set_cursor_location(short curx,short cury);
+        void input_event()
         { } // do nothing
     };
 

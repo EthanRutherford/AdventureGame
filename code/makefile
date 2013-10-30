@@ -14,8 +14,8 @@ CXX_obj = g++ -c -Wall -pedantic-errors -Werror -Wextra -Wshadow -Wfatal-errors 
 OUTX = -o ../adventure
 OUTOBJ = -o obj/
 OBJDIR = obj
-OBJFILES = $(addprefix $(OBJDIR)/,test.o custom_io.o tag.o gamemap.o people.o object.o item.o game.o)
-MACRO = -DADVENTUREGAME_LINUX
+OBJFILES = $(addprefix $(OBJDIR)/,main.o custom_io.o tag.o gamemap.o people.o object.o item.o game.o creature.o)
+MACRO = -DADVENTUREGAME_XTERM
 
 ../adventure: $(OBJDIR) $(OBJFILES)
 	$(CXX) $(OUTX) $(OBJFILES)
@@ -26,8 +26,8 @@ MACRO = -DADVENTUREGAME_LINUX
 # then I might add it to the depedency list; normally,
 # I assume that if a module's interface/implementation file(s)
 # are modified, that only that module needs to be re-built
-obj/test.o: test.cpp
-	$(CXX_obj) $(OUTOBJ)test.o test.cpp $(MACRO)
+obj/main.o: main.cpp
+	$(CXX_obj) $(OUTOBJ)main.o main.cpp $(MACRO)
 
 obj/custom_io.o: custom_io.cpp custom_io.h
 	$(CXX_obj) $(OUTOBJ)custom_io.o custom_io.cpp $(MACRO)
@@ -49,6 +49,9 @@ obj/item.o: item.cpp item.h
 
 obj/game.o: game.cpp game.h
 	$(CXX_obj) $(OUTOBJ)game.o game.cpp $(MACRO)
+
+obj/creature.o: creature.cpp creature.h
+	$(CXX_obj) $(OUTOBJ)creature.o creature.cpp $(MACRO)
 
 $(OBJDIR):
 	mkdir -p $(OBJDIR)

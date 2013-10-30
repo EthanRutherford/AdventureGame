@@ -11,6 +11,14 @@
 #include "creature.h"
 
 namespace adventure_game{
+	struct GameException{
+		GameException(const char* message)
+			: msg(message) {}
+		const char* getMessage() const {return msg.c_str();}
+	private:
+		const std::string msg;
+	};
+
 	class Game{		//manages game data.. not sure what all needs to be in here yet
 		public:
 			void run();		//runs the game

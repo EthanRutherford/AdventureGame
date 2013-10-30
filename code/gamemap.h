@@ -38,7 +38,6 @@ namespace adventure_game
         friend class gamemap;
     public:
         room();
-        ~room();
         
         int get_item_count() const; // number of items in the room (including those in containers)
         Item* take_item(const String& item); // if the item with the specified name exists, remove the first occurance and return ptr to item; NULL else on fail
@@ -49,9 +48,9 @@ namespace adventure_game
         { return _doors[inDir]; }
 
         Creature* get_creature()
-        { return _creature; }
+        { return &_creature; }
         const Creature* get_creature() const
-        { return _creature; }
+        { return &_creature; }
         void check_lives();
         
         // gets the Interactive object that is described by the specified name
@@ -102,11 +101,12 @@ namespace adventure_game
         std::list<Container> _containers; // objects that contain items
         std::list<Interactive> _interactives; // other objects that are in the room
         std::list<NPC> _npcs;
-        Creature* _creature;
+        Creature _creature;
     };
 
     class gamemap
     {
+        typedef std::string String;
     public:
         gamemap(const char* markupFile); // load everything from markup
 
@@ -123,12 +123,16 @@ namespace adventure_game
         // prints a description that describes the map to the user
         // probably only going to use this for testing
         void print_status() const;
+        void print_story() const; // if the map had a story specified, then it's printed on exCout
         
         bool travel(direction go); // change the current room by walking in the specified direction
         bool can_travel(direction go) const; // determine if a room lies to the specified direction
     private:
         room* _pCurRoom;
         std::list<room> _rooms;
+        tag _storyTag; // optional story text
+
+        void _outputStorySubTag(const tag*) const;
     };
 }
 

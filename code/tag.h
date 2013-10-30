@@ -14,38 +14,43 @@ namespace adventure_game
 {
     class tag
     {
-        typedef std::string _String;
-        typedef std::istream _Istream;
-        typedef std::list<tag*> _List;
-        typedef std::list<tag*>::const_iterator _ConstIter;
+        typedef std::string String;
+        typedef std::istream IStream;
+        typedef std::list<tag*> List;
+        typedef std::list<tag*>::const_iterator ConstIter;
         typedef std::list<tag*>::iterator _Iter;
-        typedef std::size_t _SizeT;
+        typedef std::size_t Uint;
     public:
         tag();
+        tag(const tag&);
         ~tag();
 
-        const _String& get_name() const
-        { return _name; }
-        const _String& get_attribute() const
-        { return _attribute; }
-        const _String& get_content() const
-        { return _content; }
+        tag& operator =(const tag&);
 
-        _SizeT get_number_of_children() const
+        const String& get_name() const
+        { return _name; }
+        const String& get_attribute() const
+        { return _attribute; }
+        const String& get_content() const
+        { return _content; }
+        Uint get_position() const
+        { return _position; }
+
+        Uint get_number_of_children() const
         { return _childTags.size(); }
         const tag* next_child() const;
 
         void clear();
 
-        void read(_Istream&);
+        void read(IStream&);
     private:
-        _String _name;
-        _String _attribute;
-        _String _content;
-        _List _childTags;
-        _SizeT _position;
+        String _name;
+        String _attribute;
+        String _content;
+        List _childTags;
+        Uint _position;
 
-        mutable _ConstIter _iter;
+        mutable ConstIter _iter;
     };
 }
 

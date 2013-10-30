@@ -5,12 +5,34 @@
 #include "custom_io.h"
 #if defined(ADVENTUREGAME_WIN32)
 #include <Windows.h> // get Win32 API stuff
-#elif defined(ADVENTUREGAME_LINUX)
+#elif defined(ADVENTUREGAME_XTERM)
 #include "unistd.h" // write( )
+#include "sys/ioctl.h" // terminal attributes
 #endif
 #include <sstream>
 using namespace std;
 using namespace adventure_game;
+
+namespace {
+    inline
+    bool is_linear_whitespace(char c)
+    {
+        return c==' ' || c=='\t';
+    }
+    inline
+    bool is_vertical_whitespace(char c)
+    {
+        return c=='\n' || c=='\r';
+    }
+    inline
+    int strlen(const char* p)
+    {
+        int sz = 0;
+        while ( p[sz] )
+            sz++;
+        return sz;
+    }
+}
 
 // console_attributes
 console_attribute::console_attribute(unsigned short initial)
@@ -30,7 +52,7 @@ bool adventure_game::operator !=(console_attribute left,console_attribute right)
 {
     return left.value != right.value;
 }
-#ifdef ADVENTUREGAME_LINUX
+#ifdef ADVENTUREGAME_XTERM
 const console_attribute adventure_game::consolea_normal(0);
 const console_attribute adventure_game::consolea_fore_black(30);
 const console_attribute adventure_game::consolea_fore_red(31);
@@ -68,15 +90,20 @@ const console_attribute adventure_game::consolea_back_cyan(0);
 const console_attribute adventure_game::consolea_back_white(0);
 #endif
 
-#if defined(ADVENTUREGAME_LINUX) || defined(ADVENTUREGAME_WIN32)
+#if defined(ADVENTUREGAME_XTERM) || defined(ADVENTUREGAME_WIN32)
 
 our_ostream_buffer::our_ostream_buffer()
     : _attrib(consolea_normal)
 {
     // open resource for writing to the standard output
     // note: don't have to close these since they're standard
-#ifdef ADVENTUREGAME_LINUX
+#ifdef ADVENTUREGAME_XTERM
     _fdOutput = 1; // assign stdout descriptor
+    // cache original console dimensions
+    winsize wsz;
+    ioctl(0,TIOCGWINSZ,&wsz); // ask the Kernel what the terminal dimensions are
+    _colCnt = wsz.ws_col;
+    _rowCnt = wsz.ws_row;
 #else
     _hOutput = ::GetStdHandle(STD_OUTPUT_HANDLE); // get stdout handle
     // cache console specifications for
@@ -96,39 +123,65 @@ our_ostream_buffer::our_ostream_buffer()
     }
 #endif
     _trigger = false;
+    _charsOut = 0;
 }
 streambuf::int_type our_ostream_buffer::overflow(int_type ch)
 {
     // handle color
     if (_trigger)
         _applyAttribute();
-#ifdef ADVENTUREGAME_LINUX
+#ifdef ADVENTUREGAME_XTERM
     if (ch >= 0 && write(_fdOutput,&ch,1)==1)
+    {
+        _charsOut++;
         return ch;
+    }
 #else
     DWORD charsWrote;
     if (ch >= 0 && ::WriteFile(_hOutput,&ch,1,&charsWrote,NULL) && charsWrote==1)
+    {
+        _charsOut++;
         return ch;
+    }
 #endif
     return -1;
 }
 streamsize our_ostream_buffer::xsputn(const char* data,streamsize n)
 {
+    streamsize totalOut = 0;
     // handle color
     if (_trigger)
         _applyAttribute();
-    // write a buffer
-#ifdef ADVENTUREGAME_LINUX
-    return write(_fdOutput,data,n);
-#else
-    DWORD bytesOut;
-    ::WriteFile(_hOutput,data,n,&bytesOut,NULL);
-    return streamsize(bytesOut);
-#endif
+    if (n > 0)
+    {
+        // handle line-wrapping
+        char* localBuf = new char[n];
+        for (int i = 0;i<n;i++)
+        {
+            if ( is_vertical_whitespace(data[i]) )
+                _charsOut = 0;
+            else if (_charsOut>0 && _charsOut%_colCnt==0)
+            {
+                int j;
+                for (j = i--;j>=0 && !is_linear_whitespace(data[j]);j--);
+                if (j >= 0)
+                    localBuf[j] = '\n';
+                else
+                    _writeBuffer("\n",1);
+                _charsOut = 0;
+                continue;
+            }
+            localBuf[i] = data[i];
+            _charsOut++;
+        }
+        totalOut += _writeBuffer(localBuf,n);
+        delete[] localBuf;
+    }
+    return totalOut;
 }
 void our_ostream_buffer::_applyAttribute()
 {
-#ifdef ADVENTUREGAME_LINUX
+#ifdef ADVENTUREGAME_XTERM
     string s = "\033[1;";
     stringstream ss;
     ss << int(_attrib.value);
@@ -142,11 +195,25 @@ void our_ostream_buffer::_applyAttribute()
 #endif
    _trigger = false;
 }
+streamsize our_ostream_buffer::_writeBuffer(const char* data,streamsize n)
+{
+    // write a buffer
+#ifdef ADVENTUREGAME_XTERM
+    return write(_fdOutput,data,n);
+#else
+    DWORD bytesOut;
+    ::WriteFile(_hOutput,data,n,&bytesOut,NULL);
+    return streamsize(bytesOut);
+#endif
+}
 
 our_ostream::our_ostream(our_ostream_buffer& buffer)
     : ostream(&buffer)
 {
     _pBuf = &buffer;
+    // prepare the environment
+    clear_screen();
+    set_cursor_location(0,0);
 }
 void our_ostream::clear_screen()
 {
@@ -180,7 +247,8 @@ void our_ostream::clear_screen()
     ::WriteConsoleOutput(_pBuf->_hOutput,clearBuffer,sz,origin,&writeRect);
     delete[] clearBuffer;
 #else
-    *this << "\033[2J";
+    static const char* const clearMsg = "\033[1J";
+    _pBuf->_writeBuffer(clearMsg,strlen(clearMsg));
 #endif
 }
 void our_ostream::set_attribute(console_attribute a)
@@ -192,11 +260,38 @@ void our_ostream::set_attribute(console_attribute a)
         *this << ""; // put blank buffer to enforce attribute change
     }
 }
+void our_ostream::set_cursor_location(short curx,short cury)
+{
+#ifdef ADVENTUREGAME_XTERM
+    string s = "\033[";
+    stringstream ss;
+    ss << curx << ';' << cury << 'f';
+    s += ss.str();
+    _pBuf->_writeBuffer(s.c_str(),s.length());
+#else
+    COORD pos;
+    pos.X = curx;
+    pos.Y = curY;
+    ::SetConsoleCursorPosition(_hOutput,pos);
+#endif
+}
 
 static our_ostream_buffer theOutputStreamBuffer;
 our_ostream adventure_game::exCout(theOutputStreamBuffer);
 
-#else
+#else // unknown mode
+our_ostream::our_ostream(std::streambuf* buffer)
+    : ostream(buffer)
+{
+    
+}
+void our_ostream::set_cursor_location(short curx,short cury)
+{
+    // do nothing
+    UNREFERENCED_PARAMETER(curx);
+    UNREFERENCED_PARAMETER(cury);
+}
+
 // share stream buffers with 'cout'
 our_ostream adventure_game::exCout( cout.rdbuf() );
 

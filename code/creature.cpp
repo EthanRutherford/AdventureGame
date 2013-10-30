@@ -9,10 +9,17 @@
 using namespace std;
 using namespace adventure_game;
 
+Creature::Creature()
+{
+	hostile = false; // default
+	isValidState = false; // wait until load time
+	// default init other things?
+
+}
 void Creature::_loadFromMarkup(const tag& tagObj)
 {
 	// supported tags for creature
-	// attribute: can be name for tag
+	// attribute: can be content for tag
 	// <name>
 	// <desc>
 	// <health>
@@ -42,6 +49,8 @@ void Creature::_loadFromMarkup(const tag& tagObj)
 			power = atoi((pTagIter->get_attribute().length()>0 ? pTagIter->get_attribute() : pTagIter->get_content()).c_str());
 		pTagIter = tagObj.next_child();
 	}
+	// assume validity
+	isValidState = true;
 }
 void Creature::_writeDescription() const
 {

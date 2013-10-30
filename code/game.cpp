@@ -5,7 +5,6 @@
 #include "game.h" // gets custom_io.h, gamemap.h
 #include <sstream>
 #include <stdio.h>
-#include <fstream>
 using namespace std;
 using namespace adventure_game;
 
@@ -27,14 +26,18 @@ namespace adventure_game{
 Game::Game(string name)
 	: map(name.c_str())
 {
-	ifstream markupStream(name.c_str());
-    if (markupStream)
-    {
-		tag theTag;
-        theTag.read(markupStream);
-        if (theTag.get_name() == "story")
-			exCout << theTag.get_content() << endl;
-	}
+	if (map.get_current_room() == NULL) // there must be at least one room
+		throw GameException("The specified markup file either does not exist or is not correctly formatted.");
+	map.print_story(); // if the map has a story, then print it
+
+	// (This is not a good place to do this...)
+	//ifstream markupStream(name.c_str());
+	//if (markupStream) {
+	//tag theTag;
+        //theTag.read(markupStream);
+        //if (theTag.get_name() == "story") {
+	//	exCout << theTag.get_content() << endl;
+	//}
 	//look(); //look first
 }
 
@@ -46,7 +49,7 @@ void Game::run()
 		getInput();
 		map.get_current_room()->check_lives();
 		Creature* curCreature = map.get_current_room()->get_creature();
-		if (curCreature != NULL)
+		if (curCreature->isValid())
 		{
 			player.takeDamage(curCreature->attack());
 			player.write_health();
@@ -73,16 +76,17 @@ void Game::getInput()
 	string line, command;
 
 	getline(cin, line);
+	exCout.input_event(); // inform the IO manager that the user entered input
 	ss.str(line); // replace (empty) contents of stringstream with line input from console
 	//line = tolower(line);		//uncomment once all items etc. are case insensitive
 	ss >> command;
-	if (curCreature != NULL and curCreature->isHostile())
+	if (curCreature->isValid() and curCreature->isHostile())
 	{
 		if (command == "attack" or command == "fight")
 	{
 		command.clear();
 		ss >> command;
-		Creature* creature = map.get_current_room()->get_creature();
+		Creature* creature = map.get_current_room()->get_creature(); // why do we get the creature again on this line?
 		if (command == "with" or command == "using")
 		{
 			command.clear();
@@ -299,8 +303,8 @@ void Game::getInput()
 			}
 			else
 			{
-				Creature* creature = map.get_current_room()->get_creature();
-				if (creature != NULL)
+				Creature* creature = map.get_current_room()->get_creature(); // why do we get the creature again on this line?
+				if (creature->isValid())
 				{
 					if (pitem != NULL)
 						map.get_current_room()->get_creature()->takeDamage(player.attack(pitem));
