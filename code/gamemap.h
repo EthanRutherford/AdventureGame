@@ -126,13 +126,13 @@ namespace adventure_game
         void print_story() const; // if the map had a story specified, then it's printed on exCout
         
         bool travel(direction go); // change the current room by walking in the specified direction
+        bool travel(const String&); // change the current room to the specified room (return false if room does not exist adjacent to the current)
         bool can_travel(direction go) const; // determine if a room lies to the specified direction
+        bool can_travel(const String&) const; // determine if specified room lies to the specified direction
     private:
         room* _pCurRoom;
         std::list<room> _rooms;
         tag _storyTag; // optional story text
-
-        void _outputStorySubTag(const tag*) const;
     };
 }
 

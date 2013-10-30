@@ -52,6 +52,8 @@ namespace adventure_game
 
         mutable ConstIter _iter;
     };
+
+    void output_color_tag(const tag* pColorTag);
 }
 
 #endif

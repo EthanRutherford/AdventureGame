@@ -14,7 +14,7 @@ CXX_obj = g++ -c -Wall -pedantic-errors -Werror -Wextra -Wshadow -Wfatal-errors 
 OUTX = -o ../adventure
 OUTOBJ = -o obj/
 OBJDIR = obj
-OBJFILES = $(addprefix $(OBJDIR)/,main.o custom_io.o tag.o gamemap.o people.o object.o item.o game.o creature.o)
+OBJFILES = $(addprefix $(OBJDIR)/,main.o custom_io.o tag.o gamemap.o people.o object.o item.o game.o creature.o game_element.o)
 MACRO = -DADVENTUREGAME_XTERM
 
 ../adventure: $(OBJDIR) $(OBJFILES)
@@ -52,6 +52,9 @@ obj/game.o: game.cpp game.h
 
 obj/creature.o: creature.cpp creature.h
 	$(CXX_obj) $(OUTOBJ)creature.o creature.cpp $(MACRO)
+
+obj/game_element.o: game_element.cpp game_element.h
+	$(CXX_obj) $(OUTOBJ)game_element.o game_element.cpp $(MACRO)
 
 $(OBJDIR):
 	mkdir -p $(OBJDIR)

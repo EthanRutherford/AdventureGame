@@ -133,3 +133,39 @@ void tag::read(istream& stream)
         if (_name[i]>='A' && _name[i]<='Z')
             _name[i] = _name[i]-'A'+'a';
 }
+
+void adventure_game::output_color_tag(const tag* pColorTag)
+{
+    bool isFore;
+    string colorName;
+    const string& tagName = pColorTag->get_name();
+    if (tagName.length() >= 2)
+    {
+        isFore = tagName[0]=='f';
+        for (size_t i = 1;i<tagName.length();i++)
+            colorName.push_back( tagName[i]>='A' && tagName[i]<='Z' ? tagName[i]-'A'+'a' : tagName[i] );
+        if (colorName == "blue")
+        {
+            if (isFore)
+                exCout << consolea_fore_blue;
+            else
+                exCout << consolea_back_blue;
+        }
+        else if (colorName == "red")
+        {
+            if (isFore)
+                exCout << consolea_fore_red;
+            else
+                exCout << consolea_back_red;
+        }
+        else if (colorName == "green")
+        {
+            if (isFore)
+                exCout << consolea_fore_green;
+            else
+                exCout << consolea_back_green;
+        }
+        exCout << pColorTag->get_content();
+        exCout << consolea_normal;
+    }
+}
