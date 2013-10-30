@@ -81,10 +81,10 @@ const console_attribute adventure_game::consolea_fore_magenta(13);
 const console_attribute adventure_game::consolea_fore_cyan(11);
 const console_attribute adventure_game::consolea_fore_white(15);
 const console_attribute adventure_game::consolea_back_black(0);
-const console_attribute adventure_game::consolea_back_red(0);
-const console_attribute adventure_game::consolea_back_green(0);
+const console_attribute adventure_game::consolea_back_red(64);
+const console_attribute adventure_game::consolea_back_green(32);
 const console_attribute adventure_game::consolea_back_yellow(0);
-const console_attribute adventure_game::consolea_back_blue(0);
+const console_attribute adventure_game::consolea_back_blue(16);
 const console_attribute adventure_game::consolea_back_magenta(0);
 const console_attribute adventure_game::consolea_back_cyan(0);
 const console_attribute adventure_game::consolea_back_white(0);
@@ -271,8 +271,8 @@ void our_ostream::set_cursor_location(short curx,short cury)
 #else
     COORD pos;
     pos.X = curx;
-    pos.Y = curY;
-    ::SetConsoleCursorPosition(_hOutput,pos);
+    pos.Y = cury;
+    ::SetConsoleCursorPosition(_pBuf->_hOutput,pos);
 #endif
 }
 
