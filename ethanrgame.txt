@@ -1,0 +1,24 @@
+<story>You wake up in a densely packed forest, with no memory of who you are or how you got here. As you get up off the ground, you try to <cmd>look</cmd> around to get a feel for your surroundings.</story>
+<room>
+	<name Forest/>
+	<text>You are in a dense forest.</text>
+	<west>Meadow</west>
+</room>
+<room>
+	<name Meadow/>
+	<text>You are in a meadow.</text>
+	<east>Forest</east>
+	<north>Clearing</north>
+</room>
+<room>
+	<name Clearing/>
+	<text>You find an open clearing, and something draws your eyes to the center.</text>
+	<object>
+		<name Dirt/>
+		<desc For some reason, you feel drawn to this particular patch of dirt/>
+		<activator>Shovel</activator>
+		<success-msg>Something happens...</success-msg>
+		<fail-msg>It would be easier if you had a shovel...</fail-msg>
+	</object>
+	<south>Meadow</south>
+</room>

@@ -8,9 +8,6 @@
 using namespace std;
 using namespace adventure_game;
 
-// Note for EthanR: I placed direction to string functions in gamemap.h, so you can call them from there...
-// I made some changes just to show you how to use the stringstreams; just a demo...
-
 namespace adventure_game{
 	//not sure if this should go here, or in a different file
 	//its not used yet, because it needs to be used on all comparisons on both sides.
@@ -29,16 +26,6 @@ Game::Game(string name)
 	if (map.get_current_room() == NULL) // there must be at least one room
 		throw GameException("The specified markup file either does not exist or is not correctly formatted.");
 	map.print_story(); // if the map has a story, then print it
-
-	// (This is not a good place to do this...)
-	//ifstream markupStream(name.c_str());
-	//if (markupStream) {
-	//tag theTag;
-        //theTag.read(markupStream);
-        //if (theTag.get_name() == "story") {
-	//	exCout << theTag.get_content() << endl;
-	//}
-	//look(); //look first
 }
 
 void Game::run()
@@ -70,15 +57,12 @@ void Game::render() const
 void Game::getInput()
 {
 	Creature* curCreature = map.get_current_room()->get_creature();
-	// let's try this instead
-	// stringstreams are really powerful
 	stringstream ss;
 	string line, command;
-
 	getline(cin, line);
 	exCout.input_event(); // inform the IO manager that the user entered input
 	ss.str(line); // replace (empty) contents of stringstream with line input from console
-	//line = tolower(line);		//uncomment once all items etc. are case insensitive
+	line = tolower(line);		//uncomment once all items etc. are case insensitive
 	ss >> command;
 	if (curCreature->isValid() and curCreature->isHostile())
 	{
@@ -86,17 +70,16 @@ void Game::getInput()
 	{
 		command.clear();
 		ss >> command;
-		Creature* creature = map.get_current_room()->get_creature(); // why do we get the creature again on this line?
 		if (command == "with" or command == "using")
 		{
 			command.clear();
 			ss >> command;
 			Item* pitem = player.hasItem(command);
 			if (pitem != NULL)
-				creature->takeDamage(player.attack(pitem));
+				ccurCreature->takeDamage(player.attack(pitem));
 		}
 		else
-			creature->takeDamage(player.attack());
+			curCreature->takeDamage(player.attack());
 	}
 	else if (command == "look")
 	{
@@ -106,7 +89,7 @@ void Game::getInput()
 		{
 			command.clear();
 			ss >> command;
-			if (command == curCreature->get_name())
+			if (curCreature->compare_name(command))
 				curCreature->look();
 			else
 				exCout << "You have to focus!\n";
@@ -316,7 +299,19 @@ void Game::getInput()
 			}
 		}
 		else if (command == "enter")
-			exCout << "I can't do that yet."; // implement traveling via room name
+		{
+			command.clear();
+			ss >> command;
+			if (command.length() > 0
+			{
+				if (map.travel(command))
+					look();
+				else
+					exCout << "There is no room of that name nearby.\n";
+			}
+			else
+				exCout << "Travel where?\n";
+		}
 		else
 			exCout << "I don't know what that means.\nWhat would you like to do?\n";
 	}

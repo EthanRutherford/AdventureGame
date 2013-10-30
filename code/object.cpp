@@ -42,7 +42,7 @@ Item* Container::take(const string& itemName)
 		list<Item*>::iterator iter = contents.begin(), end = contents.end();
 		while (iter != end)
 		{
-			if ((*iter)->get_name() == itemName)
+			if ((*iter)->compare_name(itemName))
 			{
 				Item* tmp = *iter;
 				contents.erase(iter);
@@ -60,14 +60,14 @@ void Container::put(Item* item)
 const Item* Container::search_item(const string& objName) const
 {
 	for (list<Item*>::const_iterator iter = contents.begin(), end = contents.end();iter!=end;iter++)
-		if ((*iter)->get_name() == objName)
+		if ((*iter)->compare_name(objName))
 			return *iter;
 	return NULL;
 }
 Item* Container::search_item(const string& objName)
 {
 	for (list<Item*>::iterator iter = contents.begin(), end = contents.end();iter!=end;iter++)
-		if ((*iter)->get_name() == objName)
+		if ((*iter)->compare_name(objName))
 			return *iter;
 	return NULL;
 }
@@ -75,7 +75,7 @@ bool Container::unlock(const Item* keyItem)
 {
 	// if the pointers have the same address, they
 	// obviously point to the same object
-	if (isLockable() && keyItem!=NULL && unlockItemName==keyItem->get_name())
+	if (isLockable() && keyItem!=NULL && keyItem->compare_name(unlockItemName))
 	{
 		locked = false;
 		return true;
@@ -134,7 +134,7 @@ Interactive::Interactive()
 }
 bool Interactive::activate(const Item* item)
 {
-	if (item->get_name() == activatorItemName)
+	if (item->compare_name(activatorItemName))
 	{
 		activated = true;
 		exCout << successMessage << "\n";
