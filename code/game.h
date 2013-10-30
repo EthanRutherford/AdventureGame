@@ -14,7 +14,7 @@ namespace adventure_game{
 	class Game{		//manages game data.. not sure what all needs to be in here yet
 		public:
 			void run();		//runs the game
-			Game();
+			Game(std::string name);
 		private:
 			Player player;
 			gamemap map;						//managed the rooms of the game world

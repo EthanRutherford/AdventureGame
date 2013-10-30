@@ -5,6 +5,7 @@
 #include "game.h" // gets custom_io.h, gamemap.h
 #include <sstream>
 #include <stdio.h>
+#include <fstream>
 using namespace std;
 using namespace adventure_game;
 
@@ -23,10 +24,18 @@ namespace adventure_game{
 	}
 }
 
-Game::Game()
-	: map("markup.txt") // hard code the dependency name in (we can always change it later to be passed in on the command-line)
+Game::Game(string name)
+	: map(name.c_str())
 {
-	look(); //look first
+	ifstream markupStream(name.c_str());
+    if (markupStream)
+    {
+		tag theTag;
+        theTag.read(markupStream);
+        if (theTag.get_name() == "story")
+			exCout << theTag.get_content() << endl;
+	}
+	//look(); //look first
 }
 
 void Game::run()
