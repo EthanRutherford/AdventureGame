@@ -165,7 +165,7 @@ void adventure_game::output_color_tag(const tag* pColorTag)
             else
                 exCout << consolea_back_green;
         }
-        exCout << pColorTag->get_content();
+        exCout << (pColorTag->get_attribute().length()==0 ? pColorTag->get_content() : pColorTag->get_attribute());
         exCout << consolea_normal;
     }
 }
