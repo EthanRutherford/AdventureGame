@@ -1,4 +1,4 @@
-<story>You wake up in a densely packed forest, with no memory of who you are or how you got here. As you get up off the ground, you try to <cmd>look</cmd> around to get a feel for your surroundings.</story>
+<story>You wake up in a densely packed forest, with no memory of who you are or how you got here. As you get up off the ground, you try to <fblue>look</fblue> around to get a feel for your surroundings.</story>
 <room>
 	<name Forest/>
 	<text>You are in a dense forest.</text>
@@ -7,6 +7,12 @@
 <room>
 	<name Meadow/>
 	<text>You are in a meadow.</text>
+	<item>
+		<name>Shovel</name>
+		<desc>It's like a giant spoon, but without the power to fit in a soup bowl.</desc>
+		<consume>false</consume>
+		<power>3</power>
+	</item>
 	<east>Forest</east>
 	<north>Clearing</north>
 </room>
