@@ -9,7 +9,7 @@ bool game_element::compare_name(const string& elementName) const
         if (lowerName[i]>='A' && lowerName[i]<='Z')
             lowerName[i] -= 'A', lowerName[i] += 'a';
     for (size_t i = 0;i<lowerElem.length();i++)
-        if (lowerName[i]>='A' && lowerElem[i]<='Z')
-            lowerName[i] -= 'A', lowerElem[i] += 'a';
+        if (lowerElem[i]>='A' && lowerElem[i]<='Z')
+            lowerElem[i] -= 'A', lowerElem[i] += 'a';
     return lowerElem == lowerName;
 }
