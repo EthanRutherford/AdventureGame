@@ -56,6 +56,11 @@ void Game::render() const
 
 void Game::getInput()
 {
+	if (!cin) // prevent infinite loop if end of input reached (for redirected stdin)
+	{
+		gameover = true;
+		return;
+	}
 	Creature* curCreature = map.get_current_room()->get_creature();
 	stringstream ss;
 	string line, command;

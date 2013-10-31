@@ -155,12 +155,12 @@ streamsize our_ostream_buffer::xsputn(const char* data,streamsize n)
     if (n > 0)
     {
         // handle line-wrapping
-        char* localBuf = new char[n+1];
+        char* localBuf = new char[n];
         for (int i = 0;i<n;i++)
         {
             if ( is_vertical_whitespace(data[i]) )
                 _charsOut = 0;
-            else if (_charsOut>0 && _charsOut%_colCnt==0)
+            else if (_charsOut>0 && _charsOut==_colCnt)
             {
                 int j;
                 for (j = i--;j>=0 && !is_linear_whitespace(localBuf[j]);j--);
@@ -174,6 +174,8 @@ streamsize our_ostream_buffer::xsputn(const char* data,streamsize n)
             localBuf[i] = data[i];
             _charsOut++;
         }
+        if (_charsOut == _colCnt)
+            _charsOut = 0; // let the console add an new line on its own
         totalOut += _writeBuffer(localBuf,n);
         delete[] localBuf;
     }
