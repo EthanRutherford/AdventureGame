@@ -98,7 +98,7 @@ void Container::_loadFromMarkup(const tag& tagObj)
 		if (tagName == "name")
 			name = pTagIter->get_attribute().length()>0 ? pTagIter->get_attribute() : pTagIter->get_content();
 		else if (tagName == "item")
-			contents.push_back( create_item(*pTagIter) );
+			contents.push_back( Item::create_item(*pTagIter) );
 		else if (tagName == "lock")
 		{
 			unlockItemName = pTagIter->get_attribute().length()>0 ? pTagIter->get_attribute() : pTagIter->get_content();

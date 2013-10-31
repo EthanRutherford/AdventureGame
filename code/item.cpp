@@ -97,14 +97,15 @@ void Item::_writeDescription() const
 	exCout << consolea_fore_blue << name << consolea_normal << ": " << description << "\n";
 }
 
-Item* adventure_game::create_item(const tag& tagObj)
+// user functions for creating items
+/* static */ Item* Item::create_item(const tag& tagObj)
 {
 	Item* newItem = new Item;
 	newItem->load(tagObj);
 	globalItems.push_back(newItem); // the item (and its memory) will be managed in another context
 	return newItem;
 }
-Item* adventure_game::create_item(Item* pItem)
+/* static */ Item* Item::create_item(Item* pItem)
 {
 	// create new item based off of pre-existing by ptr to Item object
 	Item* newItem = new Item(*pItem);

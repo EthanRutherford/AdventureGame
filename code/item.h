@@ -11,17 +11,19 @@
 
 namespace adventure_game
 {
-
 	// An ITEM is something that can be taken.
 	class Item : public game_element
 	{
-		friend Item* create_item(const tag&);
-		friend Item* create_item(Item*);
 		public:
 			// gets 'get_name' from game_element
 			String getDescription() const {return description;}
 			bool isConsumable() const {return consumable;} 
-			int get_power() {return power;};
+			int get_power() {return power;}
+
+			// use these functions to create items; since we use
+			// items with reference semantics only			
+			static Item* create_item(const tag& fromTag); // create new item from markup
+			static Item* create_item(Item* pFromItem); // create new item based on existing item
 		private:
 			// don't allow users to create an item; they must use item create functions
 			// implement reference semantics for items
@@ -40,12 +42,6 @@ namespace adventure_game
 			virtual void _loadFromMarkup(const tag&);
 			virtual void _writeDescription() const;
 	};
-
-	// use these functions to create items; since we use
-	// items with reference semantics only
-	Item* create_item(const tag&); // create new item from markup
-	Item* create_item(Item* pItem); // create new item based on existing item
-
 }
 
 #endif

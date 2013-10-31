@@ -1,3 +1,7 @@
+/* game_element.cpp
+ * Project: Adventure Game
+ * Owner: Roger Gee
+ */
 #include "game_element.h"
 using namespace std;
 using namespace adventure_game;

@@ -267,7 +267,7 @@ void room::_loadFromMarkup(const tag& tagObj) // assume that tagObj has name "ro
             _text = pSubTag->get_content();
         }
         else if (tagName == "item")
-            _roomItems.put( create_item(*pSubTag) );
+            _roomItems.put( Item::create_item(*pSubTag) );
         else if (tagName == "container")
         {
             _containers.emplace_back();
