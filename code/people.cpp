@@ -59,6 +59,26 @@ bool Player::use(Item* pItem, Container* box)
 	}
 	return false;
 }
+bool Player::use(Item* pItem)
+{
+	if (pItem->isEdible())
+	{
+		srand (time(NULL));
+		int amount = pItem->get_power() + ((rand()%5)-2);
+		health += amount;
+		if (health > maxHealth)
+		{
+			amount -= health-maxHealth;
+			health = maxHealth;
+		}
+		exCout << "You heal " << consolea_back_green << amount << consolea_normal << " HP.\n";
+		write_health();
+		if (pItem->isConsumable())
+			inventory.remove(pItem);
+		return true;
+	}
+	return false;
+}
 bool Player::stow(Item* pItem)
 {
 	if (pItem != NULL)
@@ -81,10 +101,15 @@ int Player::attack()
 }
 int Player::attack(Item* item)
 {
-	srand (time(NULL));
-	int amount = power + item->get_power() + ((rand()%5)-2); //attack, adding weapon power, with a variance of +/- 2
-	exCout << "You inflict " << amount << " points of damage.\n";
-	return amount;
+	if (!item->isEdible())
+	{
+		srand (time(NULL));
+		int amount = power + item->get_power() + ((rand()%5)-2); //attack, adding weapon power, with a variance of +/- 2
+		exCout << "You inflict " << amount << " points of damage.\n";
+		return amount;
+	}
+	else
+	return attack();
 }
 void Player::write_health() const
 {

@@ -2,6 +2,12 @@
 <room>
 	<name Forest/>
 	<text>You are in a dense forest.</text>
+	<item>
+		<name>cookie</name>
+		<consume>true</consume>
+		<edible>true</edible>
+		<power>10</power>
+	</item>
 	<west>Meadow</west>
 </room>
 <room>

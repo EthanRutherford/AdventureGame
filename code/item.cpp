@@ -58,7 +58,8 @@ namespace {
 Item::Item()
 {
 	consumable = false; // default not-consumable
-	power = 0; //default power to 0
+	edible = false;		//default not edible
+	power = 0; 			//default power to 0
 }
 Item::Item(const Item& obj)
 {
@@ -87,6 +88,8 @@ void Item::_loadFromMarkup(const tag& tagObj)
 			description = pNext->get_attribute().length()==0 ? pNext->get_content() : pNext->get_attribute();
 		else if (tagName == "consume")
 			consumable = pNext->get_attribute().length()>0 ? pNext->get_attribute()=="true" : pNext->get_content()=="true";
+		else if (tagName == "edible")
+			edible = pNext->get_attribute().length()>0 ? pNext->get_attribute()=="true" : pNext->get_content()=="true";
 		else if (tagName == "power")
 			power = atoi((pNext->get_attribute().length()>0 ? pNext->get_attribute() : pNext->get_content()).c_str());
 		pNext = tagObj.next_child();

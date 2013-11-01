@@ -41,6 +41,7 @@ namespace adventure_game{
 			//void use(); // use an item in general, perhaps?
 			bool use(Item* pItem, Interactive* object);	//attempt to use item on object
 			bool use(Item* pItem, Container* box);
+			bool use(Item* pItem);
 			bool stow(Item* pItem);
 			Item* hasItem(String name);
 			const Item* hasItem(String name) const;

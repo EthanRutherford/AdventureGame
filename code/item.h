@@ -17,7 +17,8 @@ namespace adventure_game
 		public:
 			// gets 'get_name' from game_element
 			String getDescription() const {return description;}
-			bool isConsumable() const {return consumable;} 
+			bool isConsumable() const {return consumable;}
+			bool isEdible() const {return edible;}
 			int get_power() {return power;}
 
 			// use these functions to create items; since we use
@@ -38,7 +39,8 @@ namespace adventure_game
 			bool consumable; //if it is consumable, we return -1 if it's already used
 					 //this means that if an item is not disposable, we return true
 					 //if an item is disposable and we have an unused item in our inventory, we return true
-
+			bool edible;	//if edible, then it is a health item, and its power is used for 
+					//healing, not attacking. (this will be handled in player)
 			virtual void _loadFromMarkup(const tag&);
 			virtual void _writeDescription() const;
 	};
