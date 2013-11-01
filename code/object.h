@@ -64,7 +64,9 @@ namespace adventure_game{
 			bool activate(const Item* id); //if correct item id, change activated state, return true if correct item
 			bool has_activator() const {return activatorItemName.length()>0;}
 			const String& get_activator() const {return activatorItemName;} // use this when checking player inventory
+			String getRoomName() {return linkedRoomName;}
 		private:
+			String linkedRoomName;
 			String activatorItemName;
 			bool activated;
 			String successMessage;

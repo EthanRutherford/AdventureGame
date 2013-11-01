@@ -61,12 +61,14 @@ void Game::getInput()
 		gameover = true;
 		return;
 	}
-	Creature* curCreature = map.get_current_room()->get_creature();
+	room* curRoom = map.get_current_room();
+	status curState = curRoom->getStatus();
+	Creature* curCreature = curRoom->get_creature();
 	stringstream ss;
 	string line, command;
 	getline(cin, line);
 	exCout.input_event(); // inform the IO manager that the user entered input
-	line = tolower(line);		//uncomment once all items etc. are case insensitive
+	line = tolower(line);
 	ss.str(line); // replace (empty) contents of stringstream with line input from console
 	ss >> command;
 	bool safe = !(curCreature->isValid() and curCreature->isHostile());
@@ -77,7 +79,7 @@ void Game::getInput()
 			command.clear();
 			ss >> command;
 		}
-		if (command == "at" or command == "in" or command == "check")
+		if ((command == "at" or command == "in" or command == "check") and curState == normal)
 		{
 			command.clear();
 			ss >> command;
@@ -92,32 +94,36 @@ void Game::getInput()
 					pitem->look();	//now we can look at items in inventory
 				else if (command == "health")
 					player.write_health();
-				else if(!map.get_current_room()->look_for(command))
+				else if(!curRoom->look_for(command))
 					exCout << "There isn't one of those here.\n";
 			}
 		}
-		else if (command.length() != 0)
+		else if (command.length() != 0 and curState == normal)
 			exCout << "Look at what?\n";
+		else if (curState == flooded)
+			exCout << "You can't get close enough.\n";
+		else if (curState == dark)
+			exCout << "It's too dark to see anything.\n";
 		else if (safe)
 			look();
 		else
 			exCout << "You can't do that, you have to fight!\n"; 
 	}
-	else if ((command == "take" or command == "grab") and safe)
+	else if ((command == "take" or command == "grab") and safe and curState == normal)
 	{
 		command.clear();
 		ss >> command;
-		if(player.stow(map.get_current_room()->take_item(command)))
+		if(player.stow(curRoom->take_item(command)))
 			exCout << "Added to inventory.\n";
 		else
 			exCout << "No such item.\n";
 	}
-	else if (command == "open" and safe)
+	else if (command == "open" and safe and curState == normal)
 	{
 		command.clear();
 		ss >> command;
-		Container* box = map.get_current_room()->search_container(command);
-		Interactive* object = map.get_current_room()->search_interactive(command);
+		Container* box = curRoom->search_container(command);
+		Interactive* object = curRoom->search_interactive(command);
 		if (box != NULL or object != NULL)
 		{
 			command.clear();
@@ -145,7 +151,7 @@ void Game::getInput()
 		else 
 			exCout << "No such object.\n";
 	}
-	else if (command == "use")
+	else if (command == "use" and curState == normal)
 	{
 		command.clear();
 		ss >> command;
@@ -164,8 +170,8 @@ void Game::getInput()
 				{
 					command.clear();
 					ss >> command;
-					Interactive* object = map.get_current_room()->search_interactive(command);
-					Container* box = map.get_current_room()->search_container(command);
+					Interactive* object = curRoom->search_interactive(command);
+					Container* box = curRoom->search_container(command);
 					if (box != NULL)
 					{
 						if (player.use(pItem, box))
@@ -174,7 +180,10 @@ void Game::getInput()
 							exCout << "This item doesn't work.\n";
 					}
 					else if (object != NULL)
-						player.use(pItem, object);
+					{
+						if (player.use(pItem, object))
+							curRoom->interact(object);
+					}
 					else
 						exCout << "No such object.\n";
 				}
@@ -216,7 +225,7 @@ void Game::getInput()
 		gameover = true;
 	else if (command == "pack" or command == "inventory")
 		player.look();
-	else if ((command == "go" or command == "travel") and safe)
+	else if ((command == "go" or command == "travel") and safe and curState == normal)
 	{
 		direction gotoDir;
 		command.clear(); // in case of failure
@@ -230,7 +239,7 @@ void Game::getInput()
 				exCout << consolea_fore_red << "There is no room to the " << command << "!" << consolea_normal << "\n";
 			else if ( !map.travel(gotoDir) )
 				exCout << consolea_fore_red << "You need to open the door to this room using " <<
-					map.get_current_room()->get_door(gotoDir).get_activator() << consolea_normal << '\n';
+					curRoom->get_door(gotoDir).get_activator() << consolea_normal << '\n';
 			else //if it works
 				look();
 		}
@@ -247,7 +256,7 @@ void Game::getInput()
 			ss >> command;
 			if (command.length() > 0)
 			{
-				NPC* pCharacter = map.get_current_room()->search_NPC(command);
+				NPC* pCharacter = curRoom->search_NPC(command);
 				if (pCharacter != NULL)
 					player.talk(pCharacter);
 				else
@@ -265,7 +274,7 @@ void Game::getInput()
 	{
 		command.clear();
 		ss >> command;
-		NPC* pCharacter = map.get_current_room()->search_NPC(command);
+		NPC* pCharacter = curRoom->search_NPC(command);
 		if (pCharacter != NULL)
 		{
 			command.clear();
@@ -299,7 +308,7 @@ void Game::getInput()
 				exCout << "Nothing to attack here.\n";
 		}
 	}
-	else if (command == "enter" and safe)
+	else if (command == "enter" and safe and curState == normal)
 	{
 		command.clear();
 		ss >> command;
@@ -307,14 +316,32 @@ void Game::getInput()
 		{
 			if (map.travel(command))
 				look();
-			else
+			else if (curState != flooded)
 				exCout << "There is no room of that name nearby.\n";
+			else
+				exCout << "It's too flooded to travel. You should go back the way you came.\n";
 		}
 		else
 			exCout << "Travel where?\n";
 	}
-	else if (safe)
+	else if (command == "clear")
+	{
+		exCout.clear_screen();
+		exCout.set_cursor_location(0,0);
+	}
+	else if (command == "return" and map.get_last_room() != NULL)
+	{
+		if (map.travel(map.get_last_room()->get_name()))
+			look();
+		else
+			exCout << "You can't go back!\n";
+	}
+	else if (safe and curState == normal)
 		exCout << "I don't know what that means.\nWhat would you like to do?\n";
+	else if (curState == dark)
+		exCout << "It's too dark to do that.\n";
+	else if (curState == flooded)
+		exCout << "There's too much water, you have to turn back.\n";
 	else
 		exCout << "You can't do that now, you're being attacked!\n";
 }

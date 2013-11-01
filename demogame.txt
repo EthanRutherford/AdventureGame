@@ -23,7 +23,8 @@
 		<name>Pedestal</name>
 		<desc>There's a pedestal in the center of the room with a slot on top. It seems like something should fit in the slot.</desc>
 		<activator>RodOfSuccess</activator>
-		<success-msg>The rod slides into place. You have won! Feel free to continue exploring the demo area.</success-msg>
+		<linkedroom>Secret Chamber</linkedroom>
+		<success-msg>The rod slides into place. You have won! Feel free to continue exploring the demo area. It sounds like something happened.</success-msg>
 		<fail-msg>It doesn't quite fit.</fail-msg>
 	</object>
 	<north Northern Corridor/>
@@ -96,7 +97,12 @@
 		<lock>Crowbar</lock>
 	</container>
 	<south Northern Corridor/>
-	
+	<north Secret Chamber/>
+</room>
+<room>
+	<name>Secret Chamber</name>
+	<text>Congrats on finding the secret area!</text>
+	<state>hidden</state>
 </room>
 
 <story>Enter the cave and complete the mission: get the <fblue RodOfSuccess/> to the pedestal. It may help to <fblue>-look-</fblue> around first.</story>

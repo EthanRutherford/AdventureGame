@@ -134,13 +134,21 @@ Interactive::Interactive()
 }
 bool Interactive::activate(const Item* item)
 {
-	if (item->compare_name(activatorItemName))
+	if (activated == false)
 	{
-		activated = true;
-		exCout << successMessage << "\n";
+		if (item->compare_name(activatorItemName))
+		{
+			activated = true;
+			exCout << successMessage << "\n";
+		}
+		else
+			exCout << failureMessage << "\n";
 	}
 	else
-		exCout << failureMessage << "\n";
+	{
+		exCout << "You already activated this.\n";
+		return false;
+	}
 	return activated;
 }
 void Interactive::_loadFromMarkup(const tag& tagObj)
@@ -166,6 +174,8 @@ void Interactive::_loadFromMarkup(const tag& tagObj)
 			successMessage = pIter->get_attribute().length()>0 ? pIter->get_attribute() : pIter->get_content();
 		else if (tagName == "fail-msg")
 			failureMessage = pIter->get_attribute().length()>0 ? pIter->get_attribute() : pIter->get_content();
+		else if (tagName == "linkedroom")
+			linkedRoomName = pIter->get_attribute().length()>0 ? pIter->get_attribute() : pIter->get_content();
 		pIter = tagObj.next_child();
 	}
 

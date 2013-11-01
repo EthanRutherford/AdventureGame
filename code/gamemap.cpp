@@ -5,7 +5,6 @@
 #include "gamemap.h"
 #include "custom_io.h"
 #include <fstream>
-#include <map>
 #include <queue>
 using namespace std;
 using namespace adventure_game;
@@ -74,10 +73,41 @@ const char* adventure_game::direction_to_string(direction d)
     return "";
 }
 
+status adventure_game::status_from_string(const std::string& in)
+{
+	if (in == "normal")
+		return normal;
+	if (in == "dark")
+		return dark;
+	if (in == "flooded")
+		return flooded;
+	if (in == "hidden")
+		return hidden;
+	return bad_status;
+}
+const char* adventure_game::status_to_string(status in)
+{
+	switch (in)
+	{
+	case normal:
+		return "normal";
+	case dark:
+		return "dark";
+	case flooded:
+		return "flooded";
+	case hidden:
+		return "hidden";
+	default:
+		return "bad status";
+	}
+	return "";
+}
+
 room::room()
 {
     for (int i = 0;i<8;i++)
         _neighbors[i] = NULL;
+	state = normal;
 }
 int room::get_item_count() const
 {
@@ -123,7 +153,7 @@ void room::check_lives()
 }
 const Interactive* room::search_interactive(const string& objName) const
 {
-    for (list<Interactive>::const_iterator iter = _interactives.begin(), end = _interactives.end();iter!=end;iter++)
+	for (list<Interactive>::const_iterator iter = _interactives.begin(), end = _interactives.end();iter!=end;iter++)
         if ( iter->compare_name(objName) )
             return &(*iter);
     for (int i = 0;i < 8;i++)
@@ -166,7 +196,7 @@ const NPC* room::search_NPC(const string& NPCName) const
 }
 NPC* room::search_NPC(const string& staticName)
 {
-    for (list<NPC>::iterator iter = _npcs.begin(), end = _npcs.end();iter!=end;iter++)
+	for (list<NPC>::iterator iter = _npcs.begin(), end = _npcs.end();iter!=end;iter++)
         if ( iter->compare_name(staticName) )
             return &*iter;
     return NULL;
@@ -230,6 +260,11 @@ bool room::look_for(const string& objName) const
         return true;
     }
     return false;
+}
+void room::interact(Interactive* object)
+{
+	if (object->getRoomName().length() > 0)
+		_linkedRooms[object->getRoomName()]->resetStatus();
 }
 void room::_loadFromMarkup(const tag& tagObj) // assume that tagObj has name "room"
 {
@@ -297,18 +332,22 @@ void room::_loadFromMarkup(const tag& tagObj) // assume that tagObj has name "ro
         }
         else if (tagName == "creature")
             _creature.load(*pSubTag);
+		else if (tagName == "state")
+			state = pSubTag->get_attribute().length()==0 ? status_from_string(pSubTag->get_content()) : status_from_string(pSubTag->get_attribute());
         pSubTag = tagObj.next_child();
     }
 }
 void room::_writeDescription() const
 {
-    // write the room description to exCout
-    exCout << _text << " ";
-    //list aesthetics.
-    if (_creature.isValid() && _creature.isHostile())
-        exCout << "There's a " << consolea_fore_white << consolea_normal << _creature.get_name() << " here!\n";
-    else
+	if (state == dark)
+		exCout << "It's so dark you can't see anything... You must turn back.\n";
+    else if (_creature.isValid() && _creature.isHostile())
+	// write the room description to exCout
+        exCout << _text << " " << "There's a " << consolea_fore_white << consolea_normal << _creature.get_name() << " here!\n";
+	else
     {
+        exCout << _text << ' ';
+		//list aesthetics.
         if ( _statics.size()>0 )
         {
             exCout << "There is ";
@@ -351,51 +390,59 @@ void room::_writeDescription() const
                     exCout << "a " << consolea_fore_yellow << iter->get_name() << consolea_normal << ", ";
             }
         }
-        // available places to go
-        exCout << "Looking around, you see that ";
-        for (int i = 0;i<8;i++)
-        {
-            if (_neighbors[i] != NULL)
-            {
-                if ( _doors[i].has_activator() && !_doors[i].isActive() )
-                    exCout << "the way " << consolea_fore_magenta << direction_to_string( direction(i) ) << consolea_normal << " is barred by the " << consolea_fore_cyan << _doors[i].get_name() << consolea_normal << ", ";
-                else
-                {
-                    exCout << "you can go ";
-                    highlight( direction_to_string( direction(i) ),consolea_fore_magenta);
-                    exCout << " to enter the ";
-                    highlight(_neighbors[i]->name,consolea_fore_cyan);
-                    exCout << ", ";
-                }
-            }
+        if (state != flooded)
+		{
+			// available places to go
+			exCout << "Looking around, you see that ";
+			for (int i = 0;i<8;i++)
+			{
+				if (_neighbors[i] != NULL and _neighbors[i]->getStatus() != hidden)
+				{
+					if ( _doors[i].has_activator() && !_doors[i].isActive() )
+						exCout << "the way " << consolea_fore_magenta << direction_to_string( direction(i) ) << consolea_normal << " is barred by the " << consolea_fore_cyan << _doors[i].get_name() << consolea_normal << ", ";
+					else
+					{
+						exCout << "you can go ";
+						highlight( direction_to_string( direction(i) ),consolea_fore_magenta);
+						exCout << " to enter the ";
+						highlight(_neighbors[i]->name,consolea_fore_cyan);
+						exCout << ", ";
+					}
+				}
+			}
+			exCout << "and ";
+			// items
+			if ( _roomItems.getCount() > 0 )
+			{
+				exCout << "lying about is ";
+				_roomItems.look();
+			}
+			else
+				exCout << "there are no items to be found.";
+			// npcs
+			if ( _npcs.size()>0 )
+			{
+				exCout << " Nearby you see ";
+				for (list<NPC>::const_iterator iter = _npcs.begin(), n = _npcs.end(), end = n--;iter!=end;iter++)
+				{
+					if (_npcs.size() == 1)
+						exCout << consolea_fore_white << iter->get_name() << consolea_normal << ". ";
+					else if (iter == n)
+						exCout << "and " << consolea_fore_white << iter->get_name() << consolea_normal << ". ";
+					else
+						exCout << consolea_fore_white << iter->get_name() << consolea_normal << ", ";
+				}
+			}
         }
-        exCout << "and ";
-        if ( _roomItems.getCount() > 0 )
-        {
-            exCout << "lying about is ";
-            _roomItems.look();
-        }
-        else
-            exCout << "there are no items to be found.";
-        if ( _npcs.size()>0 )
-        {
-            exCout << " Nearby you see ";
-            for (list<NPC>::const_iterator iter = _npcs.begin(), n = _npcs.end(), end = n--;iter!=end;iter++)
-            {
-                if (_npcs.size() == 1)
-                    exCout << consolea_fore_white << iter->get_name() << consolea_normal << ". ";
-                else if (iter == n)
-                    exCout << "and " << consolea_fore_white << iter->get_name() << consolea_normal << ". ";
-                else
-                    exCout << consolea_fore_white << iter->get_name() << consolea_normal << ", ";
-            }
-        }
-        exCout << endl;
+		if (state == flooded)
+			exCout << "It is flooded to the point you can't navigate. You must go back the way you came.";
+		exCout << endl;
     }
 }
 gamemap::gamemap(const char* markupFile)
 {
-    ifstream markupStream(markupFile);
+    _pLastRoom = NULL;
+	ifstream markupStream(markupFile);
     if (markupStream)
     {
         map<string,room*> loadedRooms;
@@ -465,9 +512,14 @@ gamemap::gamemap(const char* markupFile)
                 // perform the association
                 elem.originRoomPtr->_neighbors[d] = loadedRooms[elem.adjacentRoomNames[d]];
             }
+			// handle late-bound interactive room pointer binding
+			for (list<Interactive>::iterator iter = elem.originRoomPtr->_interactives.begin(), end = elem.originRoomPtr->_interactives.end();iter!=end;iter++)
+			{
+				elem.originRoomPtr->_linkedRooms[iter->getRoomName()] = loadedRooms[iter->getRoomName()];
+			}
             roomMapping.pop();
         }
-        // TODO: later might look for global <start-room> tag
+		// TODO: later might look for global <start-room> tag
         if (_rooms.size() > 0)
             _pCurRoom = &_rooms.front();
         else
@@ -524,6 +576,7 @@ bool gamemap::travel(direction go)
     {
         if ( _pCurRoom->_doors[go].has_activator() && !_pCurRoom->_doors[go].isActive() )
             return false;
+		_pLastRoom = _pCurRoom;
         _pCurRoom = _pCurRoom->_neighbors[go];
         return true;
     }
@@ -534,7 +587,7 @@ bool gamemap::travel(const string& roomName)
     if (_pCurRoom != NULL)
     {
         for (int i = 0;i<=7;i++)
-            if ( _pCurRoom->_neighbors[i]!=NULL && _pCurRoom->_neighbors[i]->compare_name(roomName) )
+            if ( _pCurRoom->_neighbors[i]!=NULL && _pCurRoom->_neighbors[i]->compare_name(roomName))
                 if ( travel( direction(i) ) )
                     return true;
     }
