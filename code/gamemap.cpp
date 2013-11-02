@@ -512,13 +512,12 @@ gamemap::gamemap(const char* markupFile)
                 // perform the association
                 elem.originRoomPtr->_neighbors[d] = loadedRooms[elem.adjacentRoomNames[d]];
             }
-			// handle late-bound interactive room pointer binding
-			for (list<Interactive>::iterator iter = elem.originRoomPtr->_interactives.begin(), end = elem.originRoomPtr->_interactives.end();iter!=end;iter++)
-			{
-				elem.originRoomPtr->_linkedRooms[iter->getRoomName()] = loadedRooms[iter->getRoomName()];
-			}
             roomMapping.pop();
         }
+		// handle late-bound interactive room pointer binding
+		for (list<room>::iterator rIter = _rooms.begin(), rEnd = _rooms.end();rIter!=rEnd;rIter++)
+			for (list<Interactive>::iterator iter = rIter->_interactives.begin(), end = rIter->_interactives.end();iter!=end;iter++)
+				rIter->_linkedRooms[iter->getRoomName()] = loadedRooms[iter->getRoomName()];
 		// TODO: later might look for global <start-room> tag
         if (_rooms.size() > 0)
             _pCurRoom = &_rooms.front();
@@ -596,6 +595,8 @@ bool gamemap::travel(const string& roomName)
 bool gamemap::can_travel(direction go) const
 {
     // is there a room in the specified direction
+	if (_pCurRoom->_neighbors[go]!=NULL && _pCurRoom->_neighbors[go]->getStatus() == hidden)
+		return false;
     return _pCurRoom!=NULL && _pCurRoom->_neighbors[go]!=NULL;
 }
 bool gamemap::can_travel(const string& roomName) const
@@ -609,4 +610,3 @@ bool gamemap::can_travel(const string& roomName) const
     }
     return false;
 }
-

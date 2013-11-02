@@ -1,9 +1,10 @@
-<story>You wake up in a densely packed forest, with no memory of who you are or how you got here. As you get up off the ground, you try to <fblue>look</fblue> around to get a feel for your surroundings.</story>
+<story>You wake up in a densely packed forest, with no memory of who you are or how you got here. As you get up off the ground, you try to <fblue>look</fblue> around to get a feel for your surroundings. (hint: In order to fully enjoy this game, look at everything, as everything in the game has a description)</story>
 <room>
 	<name Forest/>
 	<text>You are in a dense forest.</text>
 	<item>
 		<name>cookie</name>
+		<desc A tasty morsel, full of tiny bits of chocolate awesome./>
 		<consume>true</consume>
 		<edible>true</edible>
 		<power>10</power>
@@ -12,25 +13,38 @@
 </room>
 <room>
 	<name Meadow/>
-	<text>You are in a meadow.</text>
+	<text>You are in a meadow, the trees are a little less sparse here.</text>
+	<east>Forest</east>
+	<west>Woods</west>
+	<north>Clearing</north>
+	<south>path</south>
+</room>
+<room>
+	<name Woods/>
+	<text>There's nothing here but trees, trees, trees.</text>
 	<item>
 		<name>Shovel</name>
-		<desc>It's like a giant spoon, but without the power to fit in a soup bowl.</desc>
+		<desc>It's like a giant spoon, but without the power to fit in a soup bowl. Also it probably could be used to dig holes or something.</desc>
 		<consume>false</consume>
 		<power>3</power>
 	</item>
-	<east>Forest</east>
-	<north>Clearing</north>
+	<east>Meadow</east>
 </room>
 <room>
 	<name Clearing/>
 	<text>You find an open clearing, and something draws your eyes to the center.</text>
 	<object>
-		<name Dirt/>
-		<desc For some reason, you feel drawn to this particular patch of dirt/>
+		<name patch/>
+		<desc For some reason, you feel drawn to this particular patch of dirt.../>
 		<activator>Shovel</activator>
-		<success-msg>Something happens...</success-msg>
+		<linkedroom>path</linkedroom>
+		<success-msg>Something happens... You feel drawn southward...</success-msg>
 		<fail-msg>It would be easier if you had a shovel...</fail-msg>
 	</object>
 	<south>Meadow</south>
+</room>
+<room>
+	<name>path</name>
+	<text>As you walk into the opening in the trees, it seems to close behind you. You decide to keep moving forward.</text>
+	<state>hidden</state>
 </room>
