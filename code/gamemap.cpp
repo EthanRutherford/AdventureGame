@@ -393,32 +393,42 @@ void room::_writeDescription() const
         if (state != flooded)
 		{
 			// available places to go
-			exCout << "Looking around, you see that ";
+			int rooms = 0;
+			for (int i = 0;i<8;i++)
+			{
+				if (_neighbors[i] != NULL and _neighbors[i]->getStatus() != hidden)
+					rooms++;
+			}
+			if (rooms > 0 || _roomItems.getCount() > 0)
+				exCout << "Looking around, you see that ";
 			for (int i = 0;i<8;i++)
 			{
 				if (_neighbors[i] != NULL and _neighbors[i]->getStatus() != hidden)
 				{
 					if ( _doors[i].has_activator() && !_doors[i].isActive() )
-						exCout << "the way " << consolea_fore_magenta << direction_to_string( direction(i) ) << consolea_normal << " is barred by the " << consolea_fore_cyan << _doors[i].get_name() << consolea_normal << ", ";
+						exCout << "the way " << consolea_fore_magenta << direction_to_string( direction(i) ) << consolea_normal << " is barred by the " << consolea_fore_cyan << _doors[i].get_name() << consolea_normal;
 					else
 					{
 						exCout << "you can go ";
 						highlight( direction_to_string( direction(i) ),consolea_fore_magenta);
 						exCout << " to enter the ";
 						highlight(_neighbors[i]->name,consolea_fore_cyan);
-						exCout << ", ";
 					}
+					if (rooms == 1 and _roomItems.getCount() == 0 )
+						exCout << ". ";
+					else if ((rooms == 1 and _roomItems.getCount() > 0) or (rooms == 2 and _roomItems.getCount() == 0))
+						exCout << ", and ";
+					else
+						exCout << ", ";
+					rooms--;
 				}
 			}
-			exCout << "and ";
 			// items
 			if ( _roomItems.getCount() > 0 )
 			{
 				exCout << "lying about is ";
 				_roomItems.look();
 			}
-			else
-				exCout << "there are no items to be found.";
 			// npcs
 			if ( _npcs.size()>0 )
 			{
