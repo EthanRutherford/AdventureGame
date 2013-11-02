@@ -174,6 +174,8 @@ streamsize our_ostream_buffer::xsputn(const char* data,streamsize n)
             localBuf[i] = data[i];
             _charsOut++;
         }
+        if (_charsOut == _colCnt)
+            _charsOut = 0; // let the console add an new line on its own
         totalOut += _writeBuffer(localBuf,n);
         delete[] localBuf;
     }
