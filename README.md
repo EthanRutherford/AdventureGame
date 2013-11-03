@@ -3,9 +3,9 @@
 ## Bulletin
 * If you have a problem with the wrapping, please do not change it in custom_io.cpp. Let me fix it please. -Roger
 * Wrap test #1:
-![alt-text](https://github.com/RogerGee/AdventureGame/img/wrap1.png "This uses screen width of 30")
+![alt-text](https://github.com/RogerGee/AdventureGame/blob/master/img/wrap1.png "This uses screen width of 30")
 * Wrap test #2:
-![alt-text](https://github.com/RogerGee/AdventureGame/img/wrap2.png "This also uses a screen width of 30")
+![alt-text](https://github.com/RogerGee/AdventureGame/blob/master/img/wrap2.png "This also uses a screen width of 30")
 * Note about output: to keep style matching among output, try to portray all information to the user as plain text. Brackets break the immersion. Try to tell the user things in a descriptive way, rather than a bulleted list fashion.
 * Please only commit code that compiles! This will allow the people using the Windows build script to not go crazy. When a module compiles, I'll add it to the makefile.
 * Place puesdo-code in the root directory (AdventureGame), not AdventureGame/code. Place only things that compile, please!
