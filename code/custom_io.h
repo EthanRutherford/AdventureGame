@@ -76,13 +76,15 @@ namespace adventure_game
 
         void _applyAttribute();
         std::streamsize _writeBuffer(const char*,std::streamsize);
+	void _updateSz();
     };
 
     class our_ostream : public std::ostream
     {
     public:
         our_ostream(our_ostream_buffer&);
-
+	int test() const
+	{ return _pBuf->_charsOut; }
         void clear_screen();
         void set_attribute(console_attribute attrib);
         void restore_attribute()

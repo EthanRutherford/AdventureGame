@@ -99,34 +99,21 @@ our_ostream_buffer::our_ostream_buffer()
     // note: don't have to close these since they're standard
 #ifdef ADVENTUREGAME_XTERM
     _fdOutput = 1; // assign stdout descriptor
-    // cache original console dimensions
-    winsize wsz;
-    ioctl(0,TIOCGWINSZ,&wsz); // ask the Kernel what the terminal dimensions are
-    _colCnt = wsz.ws_col;
-    _rowCnt = wsz.ws_row;
 #else
     _hOutput = ::GetStdHandle(STD_OUTPUT_HANDLE); // get stdout handle
-    // cache console specifications for
-    // later use
     CONSOLE_SCREEN_BUFFER_INFO info;
     if ( ::GetConsoleScreenBufferInfo(_hOutput,&info) )
-    {
         _wAttributesOriginal = info.wAttributes;
-        _colCnt = info.dwSize.X;
-        _rowCnt = info.dwSize.Y;
-    }
     else
-    {
         _wAttributesOriginal = 0;
-        _colCnt = 0;
-        _rowCnt = 0;
-    }
 #endif
+    _updateSz();
     _trigger = false;
     _charsOut = 0;
 }
 streambuf::int_type our_ostream_buffer::overflow(int_type ch)
 {
+    /* Wrapping is not implemented in this method! */
     // handle color
     if (_trigger)
         _applyAttribute();
@@ -156,24 +143,27 @@ streamsize our_ostream_buffer::xsputn(const char* data,streamsize n)
     {
         // handle line-wrapping
         char* localBuf = new char[n];
+	_updateSz();
         for (int i = 0;i<n;i++)
         {
             if ( is_vertical_whitespace(data[i]) )
-                _charsOut = 0;
-            else if (_charsOut>0 && _charsOut==(_colCnt - 1)) // if we never let output reach the last column, we don't have to worry about squirrelly endline mess.
+                _charsOut = -1;
+            else if (_charsOut >= _colCnt) // wrap
             {
                 int j;
-                for (j = --i;j>=0 && !is_linear_whitespace(localBuf[j]);j--); // --i, because precedence! 
+                for (j = --i;j>=0 && !is_linear_whitespace(localBuf[j]);j--);
                 if (j >= 0)
                     localBuf[j] = '\n';
                 else
                     _writeBuffer("\n",1);
-                _charsOut = i-j; // this did the trick!
+                _charsOut = i-j;
                 continue;
             }
             localBuf[i] = data[i];
             _charsOut++;
         }
+	if (_charsOut >= _colCnt) // reset; the console moved the cursor to x-position 0
+	    _charsOut = 0;
         totalOut += _writeBuffer(localBuf,n);
         delete[] localBuf;
     }
@@ -206,6 +196,30 @@ streamsize our_ostream_buffer::_writeBuffer(const char* data,streamsize n)
     return streamsize(bytesOut);
 #endif
 }
+void our_ostream_buffer::_updateSz()
+{
+    // cache original console dimensions
+#ifdef ADVENTUREGAME_XTERM
+    winsize wsz;
+    // ask the Kernel what the terminal dimensions are
+    // (I can do this but can't get the cursor position without curses!)
+    ioctl(0,TIOCGWINSZ,&wsz);
+    _colCnt = wsz.ws_col;
+    _rowCnt = wsz.ws_row;
+#else // Win32
+    CONSOLE_SCREEN_BUFFER_INFO info;
+    if ( ::GetConsoleScreenBufferInfo(_hOutput,&info) )
+    {
+        _colCnt = info.dwSize.X;
+        _rowCnt = info.dwSize.Y;
+    }
+    else
+    {
+        _colCnt = 0;
+        _rowCnt = 0;
+    }
+#endif
+}
 
 our_ostream::our_ostream(our_ostream_buffer& buffer)
     : ostream(&buffer)
@@ -218,6 +232,7 @@ our_ostream::our_ostream(our_ostream_buffer& buffer)
 void our_ostream::clear_screen()
 {
 #ifdef ADVENTUREGAME_WIN32
+    CONSOLE_SCREEN_BUFFER_INFO info;
     CHAR_INFO* clearBuffer;
     COORD sz, origin;
     SMALL_RECT writeRect;
