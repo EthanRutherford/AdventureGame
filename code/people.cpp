@@ -13,6 +13,15 @@ void Person::takeDamage(int damage)
 {
 	health -= damage;
 }
+string NPC::talk()
+{
+	//NPCs can have multiple lines of text, and stop at final text.
+	string speech = *textIter;
+	textIter++;
+	if (textIter == text.end())
+		textIter--;
+	return speech;
+}
 void NPC::_loadFromMarkup(const tag& tagObj)
 {
 	// supported tags for NPC
@@ -31,9 +40,13 @@ void NPC::_loadFromMarkup(const tag& tagObj)
 		else if (tagName == "desc")
 			desc = pTagIter->get_attribute().length()>0 ? pTagIter->get_attribute() : pTagIter->get_content();
 		else if (tagName == "text")
-			text = pTagIter->get_attribute().length()>0 ? pTagIter->get_attribute() : pTagIter->get_content();
+		{
+			string txt = pTagIter->get_attribute().length()>0 ? pTagIter->get_attribute() : pTagIter->get_content();
+			text.push_back(txt);
+		}
 		pTagIter = tagObj.next_child();
 	}
+	textIter = text.begin();
 }
 void NPC::_writeDescription() const
 {

@@ -25,11 +25,12 @@ namespace adventure_game{
 	
 	class NPC: public Person{		//Non players have a description, maybe some other behavior
 		public:
-			String talk() const {return text;};
+			String talk();
 			NPC() {health=10;};
 		private:
 			String desc;
-			String text;
+			std::list<String> text;
+			std::list<String>::iterator textIter;
 
 			virtual void _loadFromMarkup(const tag&);
 			virtual void _writeDescription() const;
