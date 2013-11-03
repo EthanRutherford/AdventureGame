@@ -37,7 +37,8 @@ namespace adventure_game
 		normal,
 		dark,
 		flooded,
-		hidden
+		hidden,
+		transition
 	};
 
     direction direction_from_string(const std::string&);

@@ -83,6 +83,8 @@ status adventure_game::status_from_string(const std::string& in)
 		return flooded;
 	if (in == "hidden")
 		return hidden;
+	if (in == "transition")
+		return transition;
 	return bad_status;
 }
 const char* adventure_game::status_to_string(status in)
@@ -97,6 +99,8 @@ const char* adventure_game::status_to_string(status in)
 		return "flooded";
 	case hidden:
 		return "hidden";
+	case transition:
+		return "transition";
 	default:
 		return "bad status";
 	}
@@ -339,7 +343,9 @@ void room::_loadFromMarkup(const tag& tagObj) // assume that tagObj has name "ro
 }
 void room::_writeDescription() const
 {
-	if (state == dark)
+	if (state == transition)
+		exCout << _text << endl;
+	else if (state == dark)
 		exCout << "It's so dark you can't see anything... You must turn back.\n";
     else if (_creature.isValid() && _creature.isHostile())
 	// write the room description to exCout

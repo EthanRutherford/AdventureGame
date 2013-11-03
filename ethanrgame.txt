@@ -1,5 +1,5 @@
 <story>You wake up in a densely packed forest, with no memory of who you are or how you got here. As you get up off the ground, you want to <fblue>look</fblue> around to get a feel for your surroundings.</story>
-<room>
+<room>		//Forest
 	<name Forest/>
 	<text>You are in a dense forest.</text>
 	<item>
@@ -11,7 +11,7 @@
 	</item>
 	<east>Meadow</east>
 </room>
-<room>
+<room>		//Meadow
 	<name Meadow/>
 	<text>You are in a meadow, the trees are a little less dense here.</text>
 	<west>Forest</west>
@@ -19,7 +19,7 @@
 	<north>Clearing</north>
 	<south>path</south>
 </room>
-<room>
+<room>		//Woods
 	<name Woods/>
 	<text>There's nothing here but trees, trees, trees.</text>
 	<item>
@@ -30,7 +30,7 @@
 	</item>
 	<west>Meadow</west>
 </room>
-<room>
+<room>		//Clearing
 	<name Clearing/>
 	<text>You find an open clearing, and something draws your eyes to the center.</text>
 	<object>
@@ -43,7 +43,7 @@
 	</object>
 	<south>Meadow</south>
 </room>
-<room>
+<room>		//path
 	<name>path</name>
 	<text>As you walk into the opening in the trees, it seems to close behind you. You decide to keep moving forward.</text>
 	<state>hidden</state>
@@ -58,21 +58,27 @@
 	<south>path</south>
 	<north>Opening</north>
 </room>
-<room>
+<room>		//Opening
 	<name>Opening</name>
 	<state>hidden</state>
+	<text>You see a bright light.</text>
+	<north>Bright Light</north>
+</room>
+<room>		//Opening
+	<name>Bright Light</name>
+	<state>transition</state>
 	<text>Suddenly, your eyes open, and you lurch forward. Another strange dream...</text>
 	<north>Cell</north>
 </room>
-<room>
+<room>		//Cell
 	<name>Cell</name>
 	<text>You're in a prison cell. It's strange, there doesn't seem to be anyone else around..</text>
 	<object>
 		<name Wall/>
 		<desc>This wall is fairly weak.</desc>
 		<activator>Shovel</activator>
-		<linkedroom></linkedroom>
-		<success-msg>You dig northward, finally digging through the earthen wall.</success-msg>
+		<linkedroom>Yard</linkedroom>
+		<success-msg>That's strange.. How did you keep the shovel you got in your dream?.. You dig northward, finally digging through the earthen wall.</success-msg>
 		<fail-msg>I could probably dig through this.</fail-msg>
 	</object>
 	<container>
@@ -84,4 +90,72 @@
 		</item>
 		<lock>key</lock>
 	</container>
+	<north>Yard</north>
+</room>
+<room>		//Yard
+	<name>Yard</name>
+	<text>You're outside the Prison, but it's eerily quiet.</text>
+	<npc>
+		<name>Yselda</name>
+		<desc>She looks quite female.</desc>
+		<text>Hi.. how are you?</text>
+	</npc>
+	<door east>
+		<name door/>
+		<desc>The door is missing a handle.</desc>
+		<activator>handle</activator>
+		<success-msg>It fits in nicely, and now functions nicely.</success-msg>
+		<fail-msg>You try to fit it inside the missing handle, but it doesn't work.</fail-msg>
+	</door>
+	<state>hidden</state>
+	<north>road</north>
+	<east>Gatehouse</east>
+	<south>Cell</south>
+</room>
+<room>		//road
+	<name>road</name>
+	<text>This road leads to your house. Or.. at least, that's the first thing you think when seeing it. You can't remember why you know that.</text>
+	<north>bend</north>
+	<west>roadside</west>
+	<south>Yard</south>
+</room>
+<room>		//Gatehouse
+	<name>Gatehouse</name>
+	<text>It's a dank old prison gatehouse. It seems like it's been abandoned for years.</text>
+	<static>
+		<name>desk</name>
+		<desc>It's old and empty. It's amazing it's still in one piece, really.</desc>
+	</static>
+	<container>
+		<name>locker</name>
+		<item>
+			<name>Crowbar</name>
+			<desc>The favored weapon of the freeman.</desc>
+			<consume>false</consume>
+			<power>8</power>
+		</item>
+		<item>
+			<name key/>
+			<desc>It's quite a simple key. It's a wonder anything stays locked, considering these work on just about everything.</desc>
+			<consume>true</consume>
+			<power>1</power>
+		</item>
+	</container>
+	<west>Yard</west>
+</room>
+<room>		//roadside
+	<name roadside/>
+	<text>You notice something on the side of the road.</text>
+	<east>road</east>
+	<item>
+		<name key/>
+		<desc>It's quite a simple key. It's a wonder anything stays locked, considering these work on just about everything.</desc>
+		<consume>true</consume>
+		<power>1</power>
+	</item>
+</room>
+<room>		//bend
+	<name>bend</name>
+	<text>Just a little further down..</text>
+	<south>road</south>
 </room>

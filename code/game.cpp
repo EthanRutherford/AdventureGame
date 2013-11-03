@@ -63,6 +63,11 @@ void Game::getInput()
 	}
 	room* curRoom = map.get_current_room();
 	status curState = curRoom->getStatus();
+	if (curState == transition)
+	{
+		map.travel(north);
+		return;
+	}
 	Creature* curCreature = curRoom->get_creature();
 	stringstream ss;
 	string line, command;
@@ -230,6 +235,14 @@ void Game::getInput()
 		direction gotoDir;
 		command.clear(); // in case of failure
 		ss >> command;
+		if (command == "back" and map.get_last_room() != NULL)
+		{
+			if (map.travel(map.get_last_room()->get_name()))
+				look();
+			else
+				exCout << "You can't go back!\n";
+			return;
+		}
 		gotoDir = direction_from_string(command);
 		if (command.length() > 0)
 		{
