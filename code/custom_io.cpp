@@ -163,7 +163,7 @@ streamsize our_ostream_buffer::xsputn(const char* data,streamsize n)
             else if (_charsOut>0 && _charsOut==(_colCnt - 1)) // if we never let output reach the last column, we don't have to worry about squirrelly endline mess.
             {
                 int j;
-                for (j = i--;j>=0 && !is_linear_whitespace(localBuf[j]);j--);
+                for (j = --i;j>=0 && !is_linear_whitespace(localBuf[j]);j--); // --i, because precedence! 
                 if (j >= 0)
                     localBuf[j] = '\n';
                 else
@@ -174,8 +174,6 @@ streamsize our_ostream_buffer::xsputn(const char* data,streamsize n)
             localBuf[i] = data[i];
             _charsOut++;
         }
-        if (_charsOut == _colCnt)
-            _charsOut = 0; // let the console add an new line on its own
         totalOut += _writeBuffer(localBuf,n);
         delete[] localBuf;
     }
