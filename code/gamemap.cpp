@@ -444,11 +444,12 @@ void room::_writeDescription() const
             {
                 exCout << "lying about is ";
                 _roomItems.look();
+				exCout << ' ';
             }
             // npcs
             if ( _npcs.size()>0 )
             {
-                exCout << " Nearby you see ";
+                exCout << "Nearby you see ";
                 for (list<NPC>::const_iterator iter = _npcs.begin(), n = _npcs.end(), end = n--;iter!=end;iter++)
                 {
                     if (_npcs.size() == 1)

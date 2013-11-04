@@ -2,18 +2,32 @@
 <room>		//Forest
 	<name Forest/>
 	<text>You are in a dense forest.</text>
-	<item>
+	<item>			//cookie
 		<name>cookie</name>
 		<desc A tasty morsel, full of tiny bits of chocolate awesome./>
 		<consume>true</consume>
 		<edible>true</edible>
 		<power>10</power>
 	</item>
+	<npc>			//Gyde
+		<name Gyde/>
+		<desc>He looks helpful. Maybe you should talk to him, it looks like he could tell you many things.</desc>
+		<text>Hello there. Isn't looking at things so wonderful? So much information can be gleaned from taking a few extra moments to check things out. I mean, if we didn't look at things, we'd never know what to do! Ah, the power of using our keys. I mean eyes.. yes..</text>
+		<text>And taking things! Boy howdy, it seems like everything you can get your hands on has some sort of use! What can't these keys -eh, hands- do!</text>
+		<text>Woah, now, don't get me started on using things. It's like everything you can't pick up you use another thing on and it does something! What will they think of next? Things inside of things? Ha! wouldn't that be something!</text>
+		<text>Wait, you mean to tell me that's possible too?</text>
+		<text>Well, farewell. Good luck and all.</text>
+	</npc>
 	<east>Meadow</east>
 </room>
 <room>		//Meadow
 	<name Meadow/>
 	<text>You are in a meadow, the trees are a little less dense here.</text>
+	<item>			//Amulet
+		<name Amulet/>
+		<desc>It looks very important, you feel like you might get stuck if you don't take this.</desc>
+		<consume>true</consume>
+	</item>
 	<west>Forest</west>
 	<east>Woods</east>
 	<north>Clearing</north>
@@ -22,7 +36,7 @@
 <room>		//Woods
 	<name Woods/>
 	<text>There's nothing here but trees, trees, trees.</text>
-	<item>
+	<item>			//Shovel
 		<name>Shovel</name>
 		<desc>It's like a giant spoon, but without the power to fit in a soup bowl. Also it probably could be used to dig holes or something.</desc>
 		<consume>false</consume>
@@ -33,7 +47,7 @@
 <room>		//Clearing
 	<name Clearing/>
 	<text>You find an open clearing, and something draws your eyes to the center.</text>
-	<object>
+	<object>		//patch
 		<name patch/>
 		<desc For some reason, you feel drawn to this particular patch of dirt.../>
 		<activator>Shovel</activator>
@@ -47,10 +61,10 @@
 	<name>path</name>
 	<text>As you walk into the opening in the trees, it seems to close behind you. You decide to keep moving forward.</text>
 	<state>hidden</state>
-	<object>
+	<object>		//tree
 		<name tree/>
 		<desc The tree seems to be holding its hand out to you.../>
-		<activator>Cookie</activator>
+		<activator>Amulet</activator>
 		<linkedroom>Opening</linkedroom>
 		<success-msg>What was that noise? Something strange is going on...</success-msg>
 		<fail-msg>It doesn't work.</fail-msg>
@@ -64,7 +78,7 @@
 	<text>You see a bright light.</text>
 	<north>Bright Light</north>
 </room>
-<room>		//Opening
+<room>		//Bright Light
 	<name>Bright Light</name>
 	<state>transition</state>
 	<text>Suddenly, your eyes open, and you lurch forward. Another strange dream...</text>
@@ -73,7 +87,7 @@
 <room>		//Cell
 	<name>Cell</name>
 	<text>You're in a prison cell. It's strange, there doesn't seem to be anyone else around..</text>
-	<object>
+	<object>		//Wall
 		<name Wall/>
 		<desc>This wall is fairly weak.</desc>
 		<activator>Shovel</activator>
@@ -81,12 +95,18 @@
 		<success-msg>That's strange.. How did you keep the shovel you got in your dream?.. You dig northward, finally digging through the earthen wall.</success-msg>
 		<fail-msg>I could probably dig through this.</fail-msg>
 	</object>
-	<container>
+	<container>		//footlocker
 		<name footlocker/>
-		<item>
+		<item>			//ring
 			<name>ring</name>
 			<desc>It's your wedding ring.. But.. You're not sure why you know that.</desc>
 			<consume>false</consume>
+		</item>
+		<item>			//Crowbar
+			<name>Crowbar</name>
+			<desc>The favored weapon of the freeman.</desc>
+			<consume>false</consume>
+			<power>8</power>
 		</item>
 		<lock>key</lock>
 	</container>
@@ -95,16 +115,18 @@
 <room>		//Yard
 	<name>Yard</name>
 	<text>You're outside the Prison, but it's eerily quiet.</text>
-	<npc>
+	<npc>			//Yselda
 		<name>Yselda</name>
 		<desc>She looks quite female.</desc>
-		<text>Hi.. how are you?</text>
+		<text>Hi.. how are you? </text>
+		<text>So.. You don't remember who you are?.. well.. you look like a Spiarmf to me.</text>
+		<text>What? Spiarmf is a perfectly good name.</text>
 	</npc>
-	<door east>
+	<door east>		//door
 		<name door/>
 		<desc>The door is missing a handle.</desc>
 		<activator>handle</activator>
-		<success-msg>It fits in nicely, and now functions nicely.</success-msg>
+		<success-msg>It fits in nicely, and now you can enter the door.</success-msg>
 		<fail-msg>You try to fit it inside the missing handle, but it doesn't work.</fail-msg>
 	</door>
 	<state>hidden</state>
@@ -122,21 +144,21 @@
 <room>		//Gatehouse
 	<name>Gatehouse</name>
 	<text>It's a dank old prison gatehouse. It seems like it's been abandoned for years.</text>
-	<static>
+	<static>		//desk
 		<name>desk</name>
 		<desc>It's old and empty. It's amazing it's still in one piece, really.</desc>
 	</static>
-	<container>
+	<container>		//locker
 		<name>locker</name>
-		<item>
-			<name>Crowbar</name>
-			<desc>The favored weapon of the freeman.</desc>
-			<consume>false</consume>
-			<power>8</power>
-		</item>
-		<item>
+		<item>			//key
 			<name key/>
 			<desc>It's quite a simple key. It's a wonder anything stays locked, considering these work on just about everything.</desc>
+			<consume>true</consume>
+			<power>1</power>
+		</item>
+		<item>			//housekey
+			<name housekey/>
+			<desc>It's the key to my house.. strange that it was here.</desc>
 			<consume>true</consume>
 			<power>1</power>
 		</item>
@@ -147,7 +169,7 @@
 	<name roadside/>
 	<text>You notice something on the side of the road.</text>
 	<east>road</east>
-	<item>
+	<item>			//key
 		<name key/>
 		<desc>It's quite a simple key. It's a wonder anything stays locked, considering these work on just about everything.</desc>
 		<consume>true</consume>
@@ -156,6 +178,57 @@
 </room>
 <room>		//bend
 	<name>bend</name>
-	<text>Just a little further down..</text>
+	<text>Just a little further down the road.</text>
 	<south>road</south>
+	<northeast>House</northeast>
+</room>
+<room>		//House
+	<name>House</name>
+	<text>It's your house. Blue and boring.</text>
+	<static>		//Mailbox
+		<name Mailbox/>
+		<desc>There's no mail. Oh well.</desc>
+	</static>
+	<door east>		//Frontdoor
+		<name>Frontdoor</name>
+		<desc>The entrance to my house.</desc>
+		<activator>housekey</activator>
+		<success-msg>The key slips into the lock, and turns, opeining the door.</success-msg>
+		<fail-msg>You need to use the key, you'd rather not break into your own house.</fail-msg>
+	</door>
+	<door north>	//olddoor
+		<name>olddoor</name>
+		<desc>This dilapidated door could probably be pried off. The lock has long since rusted off.</desc>
+		<activator>Crowbar</activator>
+		<success-msg>Using the crowbar, you easily pry the door off its hinges.</success-msg>
+		<fail-msg>Without a crowbar, you really just can't get good enough leverage to pry the door off.</fail-msg>
+	</door>
+	<southwest>bend</southwest>
+	<east>Landing</east>
+	<north>shed</north>
+</room>
+<room>		//Landing
+	<name>Landing</name>
+	<text>The front room of your house.. but, something doesn't feel right..</text>
+</room>
+<room>		//shed
+	<name>shed</name>
+	<text>It's really musty in here.</text>
+	<static>		//nest
+		<name>nest</name>
+		<desc>It's a wasp nest. It's empty now...</desc>
+	</static>
+	<creature>		//wasp
+		<name wasp/>
+		<desc>Ugh, a wasp! There must have been a wasp nest in here!</desc>
+		<hostile>true</hostile>
+		<power>6</power>
+		<health>30</health>
+	</creature>
+	<item>			//handle
+		<name>handle</name>
+		<desc>This looks like the handle to that guard house.. Wait, why was this in my shed??</desc>
+		<consume>true</consume>
+	</item>
+	<south>House</south>
 </room>
