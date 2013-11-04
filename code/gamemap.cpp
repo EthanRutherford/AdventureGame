@@ -263,7 +263,17 @@ bool room::look_for(const string& objName) const
         _creature.look();
         return true;
     }
-    return false;
+    list<Container>::const_iterator iter = _containers.begin(), end = _containers.end();
+    while (iter != end)
+    {
+        const Item* r = iter->search_item(objName);
+        if (r != NULL)
+		{
+            r->look();
+			return true;
+		}
+    }
+	return false;
 }
 void room::interact(Interactive* object)
 {
