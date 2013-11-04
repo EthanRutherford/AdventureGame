@@ -273,7 +273,7 @@ bool room::look_for(const string& objName) const
 			return true;
 		}
     }
-	return false;
+    return false;
 }
 void room::interact(Interactive* object)
 {
