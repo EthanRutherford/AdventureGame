@@ -18,7 +18,7 @@
 
 namespace adventure_game
 {
-    enum direction // DO NOT change the order of elements in this enumeration!
+    enum direction
     {
         bad_direction = -1,
         north,
@@ -31,21 +31,21 @@ namespace adventure_game
         west
     };
 
-	enum status
-	{
-		bad_status = -1,
-		normal,
-		dark,
-		flooded,
-		hidden,
-		transition
-	};
+    enum status
+    {
+        bad_status = -1,
+        normal,
+        dark,
+        flooded,
+        hidden,
+        transition
+    };
 
     direction direction_from_string(const std::string&);
     const char* direction_to_string(direction);
 
-	status status_from_string(const std::string&);
-	const char* status_to_string(status);
+    status status_from_string(const std::string&);
+    const char* status_to_string(status);
 
     class room : public game_element
     {
@@ -97,15 +97,17 @@ namespace adventure_game
         // performs the 'look' operation for any game_element that 
         // matches the specified name; return false if none was found
         bool look_for(const String& obj) const;
-		
-		void interact(Interactive* object);
-		
-		status getStatus() {return state;}
-		void resetStatus() {state = normal;}
+
+        void interact(Interactive* object);
+
+        status getStatus() const
+        { return state; }
+        void resetStatus()
+        { state = normal; }
     private:
         status state;
 		
-		// gets 'name' from game_element (protected member)
+        // gets 'name' from game_element (protected member)
         String _text; // text the user sees when they look at a room
 
         // rooms adjacent to this room
@@ -121,7 +123,7 @@ namespace adventure_game
         std::list<Aesthetic> _statics; // Aesthetic objects in the room
         std::list<Container> _containers; // objects that contain items
         std::list<Interactive> _interactives; // other objects that are in the room
-		std::map<String,room*> _linkedRooms;
+        std::map<String,room*> _linkedRooms;
         std::list<NPC> _npcs;
         Creature _creature;
     };
@@ -139,7 +141,9 @@ namespace adventure_game
         { return _pCurRoom; }
         room* get_current_room()
         { return _pCurRoom; }
-		room* get_last_room()
+        const room* get_last_room() const
+        { return _pLastRoom; }
+        room* get_last_room()
         { return _pLastRoom; }
         unsigned int get_number_of_rooms() const
         { return _rooms.size(); }
@@ -155,7 +159,7 @@ namespace adventure_game
         bool can_travel(const String&) const; // determine if specified room lies to the specified direction
     private:
         room* _pCurRoom;
-		room* _pLastRoom;
+        room* _pLastRoom;
         std::list<room> _rooms;
         tag _storyTag; // optional story text
     };
