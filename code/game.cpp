@@ -44,7 +44,7 @@ void Game::run()
 		if (player.getHealth() <= 0)
 		{
 			gameover = true;
-			exCout << consolea_fore_red << "You have died...\nGAME OVER";
+			exCout << consolea_fore_red << "You have died...\nGAME OVER" << consolea_normal;
 		}
 	}
 }
@@ -293,6 +293,11 @@ void Game::getInput()
 		ss >> command;
 		NPC* pCharacter = curRoom->search_NPC(command);
 		if (pCharacter != NULL)
+		{
+			command.clear();
+			ss >> command;
+		}
+		if (curCreature != NULL and curCreature->compare_name(command))
 		{
 			command.clear();
 			ss >> command;
