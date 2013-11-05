@@ -272,6 +272,7 @@ bool room::look_for(const string& objName) const
             r->look();
 			return true;
 		}
+		iter++;
     }
     return false;
 }

@@ -100,7 +100,7 @@
 		<item>			//ring
 			<name>ring</name>
 			<desc>It's your wedding ring.. But.. You're not sure why you know that.</desc>
-			<consume>false</consume>
+			<consume true/>
 		</item>
 		<item>			//Crowbar
 			<name>Crowbar</name>
@@ -189,14 +189,14 @@
 		<name Mailbox/>
 		<desc>There's no mail. Oh well.</desc>
 	</static>
-	<door east>		//Frontdoor
+	<door north>	//Frontdoor
 		<name>Frontdoor</name>
 		<desc>The entrance to my house.</desc>
 		<activator>housekey</activator>
 		<success-msg>The key slips into the lock, and turns, opeining the door.</success-msg>
 		<fail-msg>You need to use the key, you'd rather not break into your own house.</fail-msg>
 	</door>
-	<door north>	//olddoor
+	<door east>		//olddoor
 		<name>olddoor</name>
 		<desc>This dilapidated door could probably be pried off. The lock has long since rusted off.</desc>
 		<activator>Crowbar</activator>
@@ -204,12 +204,8 @@
 		<fail-msg>Without a crowbar, you really just can't get good enough leverage to pry the door off.</fail-msg>
 	</door>
 	<southwest>bend</southwest>
-	<east>Landing</east>
-	<north>shed</north>
-</room>
-<room>		//Landing
-	<name>Landing</name>
-	<text>The front room of your house.. but, something doesn't feel right..</text>
+	<north>Landing</north>
+	<east>shed</east>
 </room>
 <room>		//shed
 	<name>shed</name>
@@ -222,7 +218,7 @@
 		<name wasp/>
 		<desc>Ugh, a wasp! There must have been a wasp nest in here!</desc>
 		<hostile>true</hostile>
-		<power>6</power>
+		<power>2</power>
 		<health>30</health>
 	</creature>
 	<item>			//handle
@@ -231,4 +227,200 @@
 		<consume>true</consume>
 	</item>
 	<south>House</south>
+</room>
+<room>		//Landing
+	<name>Landing</name>
+	<text>The front room of your house.. but, something doesn't feel right..</text>
+	<door north>	//door
+		<name>door</name>
+		<desc>You don't remember there being a door here...</desc>
+		<activator>key</activator>
+		<success-msg>You open the door.</success-msg>
+		<fail-msg>This really works best when using a key.</fail-msg>
+	</door>
+	<west>closet</west>
+	<east>washroom</east>
+	<north>Hall</north>
+</room>
+<room>		//closet
+	<name>closet</name>
+	<text>There's not much in here, but maybe there's something useful.</text>
+	<item>			//mothballs
+		<name>mothballs</name>
+		<desc>Very smelly insect repelling orbs.</desc>
+		<consume>true</consume>
+	</item>
+	<east>Landing</east>
+</room>
+<room>		//washroom
+	<name>washroom</name>
+	<text>It's your washroom.</text>
+	<state>flooded</state>
+	<object>		//breaker
+		<name>breaker</name>
+		<desc>It's the electrical breaker box.</desc>
+		<activator>fuse</activator>
+		<success-msg>There. That should fix the lights.</success-msg>
+		<fail-msg>Anything other than a fuse is probably a bad idea..</fail-msg>
+	</object>
+	<west>Landing</west>
+</room>
+<room>		//Hall
+	<name>Hall</name>
+	<text>You're in the hallway that connects most of the house's rooms.</text>
+	<north>Stairs</north>
+	<door east>		//door
+		<name>door</name>
+		<desc>You don't remember there being a door here either...</desc>
+		<activator>key</activator>
+		<success-msg>You open the door.</success-msg>
+		<fail-msg>This really works best when using a key.</fail-msg>
+	</door>
+	<east>parlor</east>
+	<west>bathroom</west>
+	<south>Landing</south>
+</room>
+<room>		//bathroom
+	<name>bathroom</name>
+	<text>It's a typical bathroom.</text>
+	<static>		//mirror
+		<name>mirror</name>
+		<desc>You look at yourself in the mirror, but you don't recognize what you see.</desc>
+	</static>
+	<item>			//key
+		<name key/>
+		<desc>It's quite a simple key. It's a wonder anything stays locked, considering these work on just about everything.</desc>
+		<consume>true</consume>
+		<power>1</power>
+	</item>
+	<east>Hall</east>
+</room>
+<room>		//parlor
+	<name>parlor</name>
+	<text>You're in the living room.</text>
+	<state>dark</state>
+	<creature>		//skeleton
+		<name>skeleton</name>
+		<desc>A freakish skeleton! How does it stay together with no sinew!</desc>
+		<hostile>true</hostile>
+		<power>10</power>
+		<health>80</health>
+	</creature>
+	<north>Portal</north>
+</room>
+<room>		//Stairs
+	<name>Stairs</name>
+	<text>You walk down the stairs.</text>
+	<state>transition</state>
+	<north>basement</north>
+</room>
+<room>		//basement
+	<name>basement</name>
+	<text>You're in the basement.</text>
+	<creature>		//beast
+		<name>beast</name>
+		<desc>It's a terrible looking beast, feral and canine.</desc>
+		<hostile>true</hostile>
+		<power>8</power>
+		<health>60</health>
+	</creature>
+	<door east>		//moths
+		<name>moths</name>
+		<desc>That's an enormous swarm of moths!</desc>
+		<activator>mothballs</activator>
+		<success-msg>The moths disperse as you toss the mothballs toward them.</success-msg>
+		<fail-msg>There's too many!</fail-msg>
+	</door>
+	<north>stairs</north>
+	<east>kitchen</east>
+	<west>plumbing</west>
+	<south>storeroom</south>
+</room>
+<room>		//stairs
+	<name>stairs</name>
+	<text>You walk back up the stairs.</text>
+	<state>transition</state>
+	<north>Hall</north>
+</room>
+<room>		//kitchen
+	<name>kitchen</name>
+	<text>It's the kitchen. Thank goodness there's no monters in here.</text>
+	<item>			//sammich
+		<name>sammich</name>
+		<desc A meal in itself. This should fill you up./>
+		<consume>true</consume>
+		<edible>true</edible>
+		<power>20</power>
+	</item>
+	<item>			//chips
+		<name>chips</name>
+		<desc Looks like doritos. Mmmmmmmmm./>
+		<consume>true</consume>
+		<edible>true</edible>
+		<power>10</power>
+	</item>
+	<item>			//taco
+		<name>taco</name>
+		<desc Mexican quisine at it's onliest. At least as far as Americans are concerned./>
+		<consume>true</consume>
+		<edible>true</edible>
+		<power>20</power>
+	</item>
+	<item>			//cheese
+		<name>cheese</name>
+		<desc An entire wheel of cheese. Are you really gonna eat it all at once?/>
+		<consume>true</consume>
+		<edible>true</edible>
+		<power>50</power>
+	</item>
+	<west>basement</west>
+</room>
+<room>		//plumbing
+	<name>plumbing</name>
+	<text>From here you should be able to drain the washroom.</text>
+	<object>		//pipe
+		<name pipe/>
+		<desc These pipes feed from the washroom upstairs./>
+		<activator>Wrench</activator>
+		<linkedroom>washroom</linkedroom>
+		<success-msg>You bang on the pipes a bit until you hear the sound of rushing water.</success-msg>
+		<fail-msg>It doesn't work.</fail-msg>
+	</object>
+	<east>basement</east>
+</room>
+<room>		//storeroom
+	<name>storeroom</name>
+	<text>This is the room you keep all your useful stuff in.</text>
+	<item>		//Wrench
+		<name>Wrench</name>
+		<desc>Some might call it a ratchet. Those people would be wrong.</desc>
+		<consume>false</consume>
+		<power>20</power>
+	</item>
+	<north>basement</north>
+</room>
+<room>		//Portal
+	<name>Portal</name>
+	<text>You walk through the portal.. or so you think.. You wake up lying next to your wife.</text>
+	<state>transition</state>
+	<north>bedroom</north>
+</room>
+<room>		//bedroom
+	<name>bedroom</name>
+	<text>You're lying next to your wife.</text>
+	<npc>			//Yselda
+		<name>Yselda</name>
+		<desc>You recognize your wife.</desc>
+		<text>What is it, dear?</text>
+		<text>Oh, another odd dream? I was in it, you say?</text>
+		<text>Well, you should try to get back to sleep.</text>
+		<text>Spiarmf, sleep. It's 3 AM.</text>
+	</npc>
+	<object>		//desk
+		<name desk/>
+		<desc It's your desk. You should put your ring back./>
+		<activator>Ring</activator>
+		<success-msg>That's the end of the game. Thanks for playing!</success-msg>
+		<fail-msg>That doesn't go there.</fail-msg>
+	</object>
 </room>

@@ -66,6 +66,8 @@ void Game::getInput()
 	if (curState == transition)
 	{
 		map.travel(north);
+		if (curRoom->get_creature()->isValid() and curRoom->get_creature()->isHostile())
+			look();	//make sure we look before we get attacked.
 		return;
 	}
 	Creature* curCreature = curRoom->get_creature();
@@ -230,7 +232,7 @@ void Game::getInput()
 		gameover = true;
 	else if (command == "pack" or command == "inventory")
 		player.look();
-	else if ((command == "go" or command == "travel") and safe and curState == normal)
+	else if ((command == "go" or command == "travel") and safe)
 	{
 		direction gotoDir;
 		command.clear(); // in case of failure
@@ -244,7 +246,7 @@ void Game::getInput()
 			return;
 		}
 		gotoDir = direction_from_string(command);
-		if (command.length() > 0)
+		if (command.length() > 0 and curState == normal)
 		{
 			if (gotoDir == bad_direction)
 				exCout << consolea_fore_red << "You gave an incorrect direction '" << command << "'!" << consolea_normal << "\n";
@@ -256,6 +258,8 @@ void Game::getInput()
 			else //if it works
 				look();
 		}
+		else if (curState != normal)
+			exCout << "You can't go there.\n";
 		else
 			exCout << consolea_fore_red << "Sytax Error: expect: go direction\n" << consolea_normal;
 	}
