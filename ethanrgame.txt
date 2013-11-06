@@ -193,7 +193,7 @@
 		<name>Frontdoor</name>
 		<desc>The entrance to my house.</desc>
 		<activator>housekey</activator>
-		<success-msg>The key slips into the lock, and turns, opeining the door.</success-msg>
+		<success-msg>The key slips into the lock, and turns, opening the door.</success-msg>
 		<fail-msg>You need to use the key, you'd rather not break into your own house.</fail-msg>
 	</door>
 	<door east>		//olddoor
