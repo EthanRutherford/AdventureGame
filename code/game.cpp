@@ -36,7 +36,7 @@ void Game::run()
 		getInput();
 		map.get_current_room()->check_lives();
 		Creature* curCreature = map.get_current_room()->get_creature();
-		if (curCreature->isValid())
+		if (curCreature->isValid() and map.get_current_room()->getStatus() == normal)
 		{
 			player.takeDamage(curCreature->attack());
 			player.write_health();
