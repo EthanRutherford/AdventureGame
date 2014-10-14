@@ -397,6 +397,11 @@
 		<consume>false</consume>
 		<power>20</power>
 	</item>
+	<item>		//fuse
+		<name>fuse</name>
+		<desc>This is your replacement fuse. you should probably have invested in more than one.</desc>
+		<consume>true</consume>
+	</item>
 	<north>basement</north>
 </room>
 <room>		//Portal
