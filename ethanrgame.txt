@@ -260,6 +260,7 @@
 		<name>breaker</name>
 		<desc>It's the electrical breaker box.</desc>
 		<activator>fuse</activator>
+		<linkedroom>parlor</linkedroom>
 		<success-msg>There. That should fix the lights.</success-msg>
 		<fail-msg>Anything other than a fuse is probably a bad idea..</fail-msg>
 	</object>

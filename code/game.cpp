@@ -78,7 +78,7 @@ void Game::getInput()
 	line = tolower(line);
 	ss.str(line); // replace (empty) contents of stringstream with line input from console
 	ss >> command;
-	bool safe = !(curCreature->isValid() and curCreature->isHostile());
+	bool safe = !(curCreature->isValid() and curCreature->isHostile()) or curState == dark;
 	if (command == "look" or command == "check")
 	{
 		if (command == "look")
